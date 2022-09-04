@@ -1,0 +1,44 @@
+General Properties:
+	Output Folder:
+		$(SolutionDir)$(Platform)\$(Configuration)\
+	Intermediate Folder:
+		$(ProjectDir)\Intermediate\$(Platform)\$(Configuration)\
+
+C/C++:
+	Additional include Folders:
+		Libraries/raylib/include; %(AdditionalIncludeDirectories)
+		
+		* Libraries/raylib/include/external/glfw/include;
+
+Linker:
+	Additional libraries Folders
+		Libraries/raylib/bin/$(Platform)/$(Configuration)/
+
+	Input:
+		raylib.lib;winmm.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)
+
+
+* To include in main.cpp: 
+#if defined _WIN32 && !_DEBUG
+#pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
+#endif
+
+
+* copy /y ".\resources\*.*" "$(OutDir)"
+
+* Just in case Original raylib projecet Linker Input:
+..\raylib\MinSizeRel\raylib.lib
+opengl32.lib
+glu32.lib
+winmm.lib
+..\raylib\external\glfw\src\MinSizeRel\glfw3.lib
+kernel32.lib
+user32.lib
+gdi32.lib
+winspool.lib
+shell32.lib
+ole32.lib
+oleaut32.lib
+uuid.lib
+comdlg32.lib
+advapi32.lib

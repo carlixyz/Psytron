@@ -1,0 +1,11 @@
+# exclude all these below
+.vs
+gameTemplate/.vs
+gameTemplate/Intermediate
+Intermediate
+
+*.db
+./x64
+
+# need these libs
+!*.lib
