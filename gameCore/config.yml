@@ -1,0 +1,28 @@
+﻿Application:
+  Window:
+    Properties:
+      _Name: Engin3d!
+      _Width: '1080'
+      _Height: '720'
+      _Bits: '32'
+      _FPS: '60'
+      _Fullscreen: 'false'
+  Resources:
+    Material:
+     _name: Test
+     _effect: Simple
+     _technique: Technique0
+    Scene:
+     - _name: Dragon
+       _file: ./Src/Data/Scene/dragonsmall.DAE
+       _info: staticModel
+     - _name: LoadFailed
+       _file: ./Src/Data/Scene/fail.DAE
+       _info: staticModel
+     - _name: Ring
+       _file: ./Src/Data/Scene/RingO.dae
+       _info: staticModel
+    Font:
+      _name: Font1
+      _file: ./Src/Data/Fonts/Test1.fnt
+      _info: Font

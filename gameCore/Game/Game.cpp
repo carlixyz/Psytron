@@ -7,7 +7,7 @@
 bool Game::Init()
 {
 	DEBUG_FILE("fileDebug.txt", DAY << PLACE << "Compilation number: " << GET_COMP_NUM("Compilations.txt") << "\n");
-	DEBUG_COUT(" Last Compilation was " << GET_COMP_NUM("Compilations.txt") << "\n");
+	DEBUG_COUT("\n Last Compilation was " << GET_COMP_NUM("Compilations.txt") << "\n\n");
 
 	appProperties.LoadConfiguration("config.yml");
 	bool result = Graphics::Get().Init(&appProperties);
@@ -44,7 +44,7 @@ void Game::Update()
 	}
 
 	//if(States.IsLoaded()) 
-		States.CurrentState().OnUpdate();	/// statesStack.top()->OnUpdate(timeStep);
+		States.CurrentState().OnUpdate();						/// statesStack.top()->OnUpdate(timeStep);
 }
 
 void Game::Render()
@@ -53,7 +53,7 @@ void Game::Render()
 	ClearBackground(RAYWHITE);
 
 	//if (States.IsLoaded())
-		States.CurrentState().OnRender();			/// statesStack.top()->OnRender();
+		States.CurrentState().OnRender();						/// statesStack.top()->OnRender();
 
 	DrawText("Congrats! Your Game is up & running!", 190, 200, 20, LIGHTGRAY);
 

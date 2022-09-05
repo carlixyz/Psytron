@@ -1,0 +1,1 @@
+Compiled with MSVC 2022 x64 & it isn't granted to work elsewhere

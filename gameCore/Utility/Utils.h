@@ -33,12 +33,10 @@ inline int GetCompNum(std::string name) { int x; std::ifstream inFile(name); inF
 //... etc
 #else 
 #include <sstream>
-//#include <fstream>
-//#include <iostream>
-
 
 #define DEBUG_COUT( x )
-#define DEBUG_OUT( x ){  std::ostringstream os; os << x; ::OutputDebugStringA(os.str().c_str()); }
+//#define DEBUG_OUT( x ){  std::ostringstream os; os << x; ::OutputDebugStringA(os.str().c_str()); }
+#define DEBUG_OUT( x )
 #define DEBUG_FILE( NAME, x)
 #define CHECK( x )
 

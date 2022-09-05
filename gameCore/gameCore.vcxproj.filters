@@ -185,10 +185,132 @@
     <ClInclude Include="Utility\Utils.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\contrib\anchordict.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\contrib\graphbuilder.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\node\detail\impl.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\node\detail\iterator.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\node\detail\iterator_fwd.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\node\detail\memory.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\node\detail\node.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\node\detail\node_data.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\node\detail\node_iterator.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\node\detail\node_ref.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\node\convert.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\node\emit.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\node\impl.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\node\iterator.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\node\node.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\node\parse.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\node\ptr.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\node\type.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\anchor.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\binary.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\depthguard.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\dll.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\emitfromevents.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\emitter.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\emitterdef.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\emittermanip.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\emitterstyle.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\eventhandler.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\exceptions.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\mark.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\noexcept.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\null.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\ostream_wrapper.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\parser.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\stlemitter.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\traits.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\yaml.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="raylib_logo.png">
       <Filter>Archivos de recursos</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Libraries\yaml-cpp\lib\Win32\yaml-cpp.lib" />
+    <Library Include="Libraries\yaml-cpp\lib\Win32\yaml-cppd.lib" />
+    <Library Include="Libraries\yaml-cpp\lib\x64\yaml-cpp.lib" />
+    <Library Include="Libraries\yaml-cpp\lib\x64\yaml-cppd.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Libraries\yaml-cpp\lib\Win32\yaml-cppd.pdb" />
+    <None Include="Libraries\yaml-cpp\lib\x64\yaml-cppd.pdb" />
+    <None Include="config.yml" />
   </ItemGroup>
 </Project>

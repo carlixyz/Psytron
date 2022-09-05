@@ -1,9 +1,6 @@
 #pragma once
 
 #include <string>
-//#include "../Utility/Utils.h"
-//#include <assert.h>
-//#include <yaml-cpp/yaml.h>
 
 struct ApplicationProperties
 {
