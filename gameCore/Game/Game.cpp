@@ -1,14 +1,13 @@
 #include "Game.h"
 
-#include "raylib-cpp.hpp"
+//#include "raylib-cpp.hpp"
 #include "../Graphics/Graphics.h"
-//#include "../Utility/Utils.h"
-//#include <assert.h>
+#include "../Utility/Utils.h"
 
 bool Game::Init()
 {
-	//DEBUG_FILE("fileDebug.txt", DAY << PLACE << "Compilation number: " << GET_COMP_NUM("Compilations.txt") << "\n");
-	//DEBUG_OUT(" Last Compilation was " << GET_COMP_NUM("Compilations.txt") << "\n");
+	DEBUG_FILE("fileDebug.txt", DAY << PLACE << "Compilation number: " << GET_COMP_NUM("Compilations.txt") << "\n");
+	DEBUG_COUT(" Last Compilation was " << GET_COMP_NUM("Compilations.txt") << "\n");
 
 	appProperties.LoadConfiguration("config.yml");
 	bool result = Graphics::Get().Init(&appProperties);
@@ -24,7 +23,7 @@ bool Game::Init()
 
 bool Game::Deinit()
 {
-	//SET_COMP_NUM("Compilations.txt");
+	SET_COMP_NUM("Compilations.txt");
 
 	bool result = States.Deinit();								// cleanup the all states
 

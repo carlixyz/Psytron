@@ -1,0 +1,6 @@
+Sep  4 2022, 20:26:42 - E:\Mis Documentos\GitHub\Psytron\gameCore\Game\Game.cpp(10) Compilation number: -858993460
+Sep  4 2022, 20:26:42 - E:\Mis Documentos\GitHub\Psytron\gameCore\Game\Game.cpp(10) Compilation number: 125
+Sep  4 2022, 20:29:32 - E:\Mis Documentos\GitHub\Psytron\gameCore\Game\Game.cpp(10) Compilation number: 125
+Sep  4 2022, 21:26:21 - E:\Mis Documentos\GitHub\Psytron\gameCore\Game\Game.cpp(10) Compilation number: 125
+Sep  4 2022, 21:32:42 - E:\Mis Documentos\GitHub\Psytron\gameCore\Game\Game.cpp(10) Compilation number: 126
+Sep  4 2022, 21:37:23 - E:\Mis Documentos\GitHub\Psytron\gameCore\Game\Game.cpp(9) Compilation number: 126

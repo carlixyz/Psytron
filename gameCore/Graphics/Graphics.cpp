@@ -7,6 +7,7 @@ bool Graphics::Init(ApplicationProperties* appProperties)
  // Initialize the library 
 	bool Result = true;
 
+	//SetConfigFlags(FLAG_WINDOW_RESIZABLE);    
 	window = new raylib::Window(	appProperties->Width,
 									appProperties->Height, 
 									appProperties->ApplicationName);
