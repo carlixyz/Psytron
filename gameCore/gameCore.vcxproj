@@ -99,6 +99,9 @@
       <AdditionalLibraryDirectories>Libraries/raylib/bin/$(Platform)/$(Configuration)/;Libraries/yaml-cpp/lib/$(Platform)/</AdditionalLibraryDirectories>
       <AdditionalDependencies>raylib.lib;winmm.lib;$(CoreLibraryDependencies);yaml-cppd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /y ".\Data\*.*" "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -133,6 +136,9 @@
       <AdditionalLibraryDirectories>Libraries/raylib/bin/$(Platform)/$(Configuration)/;Libraries/yaml-cpp/lib/$(Platform)/</AdditionalLibraryDirectories>
       <AdditionalDependencies>raylib.lib;winmm.lib;$(CoreLibraryDependencies);yaml-cppd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /y ".\Data\*.*" "$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -154,6 +160,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\ConversationManager.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Game\States\FSM.cpp" />
     <ClCompile Include="Game\States\IntroState.cpp" />
@@ -163,6 +170,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\ConversationManager.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Game\States\FSM.h" />
     <ClInclude Include="Game\States\GameState.h" />
@@ -261,6 +269,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="config.yml" />
+    <None Include="Data\dialogTest.yml" />
     <None Include="Libraries\yaml-cpp\lib\Win32\yaml-cppd.pdb" />
     <None Include="Libraries\yaml-cpp\lib\x64\yaml-cppd.pdb" />
   </ItemGroup>

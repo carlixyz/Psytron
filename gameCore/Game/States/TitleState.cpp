@@ -29,5 +29,5 @@ void TitleState::OnRender()
 {
 	logo.Draw();
 
-	DrawText("TITLE STATE", 190, 160, 40, RED);
+	//DrawText("TITLE STATE", 190, 160, 40, RED);
 }

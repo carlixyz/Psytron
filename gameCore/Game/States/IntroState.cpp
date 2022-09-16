@@ -12,7 +12,7 @@ void IntroState::OnDeinit()
 void IntroState::OnUpdate()
 {
 
-	float deltatTime = GetFrameTime();
+	//float deltaTime = GetFrameTime();
 	if (IsKeyPressed(KEY_SPACE))
 	{
 		Game::Get().States.ChangeState(Game::Get().States.titleState);
@@ -24,7 +24,7 @@ void IntroState::OnUpdate()
 
 void IntroState::OnRender()
 {
-	DrawText("INTRO STATE", 190, 250, 20, SKYBLUE);
+	//DrawText("INTRO STATE", 190, 250, 20, SKYBLUE);
 
 }
 

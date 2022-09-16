@@ -36,6 +36,9 @@
     <ClCompile Include="main.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="Game\ConversationManager.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\States\FSM.h">
@@ -296,6 +299,9 @@
     <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\yaml.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="Game\ConversationManager.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="raylib_logo.png">
@@ -312,5 +318,6 @@
     <None Include="Libraries\yaml-cpp\lib\Win32\yaml-cppd.pdb" />
     <None Include="Libraries\yaml-cpp\lib\x64\yaml-cppd.pdb" />
     <None Include="config.yml" />
+    <None Include="Data\dialogTest.yml" />
   </ItemGroup>
 </Project>

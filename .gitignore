@@ -9,3 +9,4 @@ Intermediate
 
 # need these libs
 !*.lib
+x64/

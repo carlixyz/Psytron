@@ -8,9 +8,8 @@ void ApplicationProperties::LoadConfiguration(const std::string filename)
 	///...
 	YAML::Node configFile = YAML::LoadFile(filename); // load file
 
-	//assert(configFile.Type() == YAML::NodeType::Map);
-	CHECK(!configFile.IsNull());  // a shortcut!
-
+	CHECK(!configFile.IsNull());  //assert(configFile.Type() == YAML::NodeType::Map);
+		
 	YAML::Node AppNode = configFile["Application"];	// as a Map;
 
 	if (AppNode)

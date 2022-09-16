@@ -1,0 +1,47 @@
+Dialogs:
+  Characters:
+    0 : Gandalf
+    1 : Frodo
+  Conversations:
+    Setup: 
+      - 1: Esto es solo un test... es solo un test
+        time: 5.0 # Optional parametters! 
+      - 0: Esto es otro test...
+      - 1: "Esto es solo un test... es solo un test"
+      - ChooseTalk :
+        - Option:
+          - 1: Esta es una sola opcion
+          - 0: una es mejor que ninguna!.
+    Comienzo:
+      - 0: El camino sigue sin cesar... 
+      - 1: pero sin demora haz de continuar...
+      - 0: El camino sigue sin cesar... pero sin demora he de continuar...
+      - ChooseTalk :
+        - Option:
+          - 1: Llegas tarde!
+          - 0: Un mago nunca llega tarde, Frodo Bolson.
+          - 1: Ni pronto, llega exactamente cuando se lo propone.
+          - ChooseTalk:
+            - Option:
+              - 1: Sera prepotente! Vete por donde has venido!
+              - 0: Te arrepentiras de esta!
+            - Option:
+              - 1: Cuanto me alegro de verte Gandalf!
+              - 0: No me iba a perder el cumpleaños de tu tio Bilbo.
+              - 0: Como esta mi viejo amigo?
+              - 0: He oido que va a dar una fiesta de especial importancia.
+        - Option:
+          - 1: Eh! Tu! Viejo! Donde crees que vas?
+          - 0: Que falta de respeto, ya no te acuerdas de mi?
+          - ChooseTalk:
+            - Option:
+              - 1: Papa Noel?
+              - 0: Acaso voy vestido de rojo y llevo renos?
+            - Option:
+              - 1: Ah! Cuanto me alegro de verte Gandalf!
+              - 0: Eso esta mejor.
+            - Option:
+              - 1: Eehhh, cual era la pregunta?
+                time: 8.0
+              - 0: ..., Da igual.
+              - 1: Te Felicito que bien actuas!

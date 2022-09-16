@@ -3,6 +3,7 @@
 //#include "raylib-cpp.hpp"
 #include "../Graphics/Graphics.h"
 #include "../Utility/Utils.h"
+#include "ConversationManager.h"
 
 bool Game::Init()
 {
@@ -16,6 +17,10 @@ bool Game::Init()
 
 	SetExitKey(KEY_Q);
 
+	ConversationManager::Get().Init("Data/dialogTest.yml");
+	ConversationManager::Get().StartConversation("Comienzo"); // Activar este para realizar una comica charla al iniciar el juego
+
+
 	result = result && States.Init();							//	States.Init(States.introState);
 
 	return result;
@@ -26,6 +31,8 @@ bool Game::Deinit()
 	SET_COMP_NUM("Compilations.txt");
 
 	bool result = States.Deinit();								// cleanup the all states
+
+	ConversationManager::Get().Deinit();
 
 	result = result && Graphics::Get().Deinit();
 
@@ -44,7 +51,9 @@ void Game::Update()
 	}
 
 	//if(States.IsLoaded()) 
-		States.CurrentState().OnUpdate();						/// statesStack.top()->OnUpdate(timeStep);
+	States.CurrentState().OnUpdate();						/// statesStack.top()->OnUpdate(timeStep);
+
+	ConversationManager::Get().Update();
 }
 
 void Game::Render()
@@ -55,7 +64,10 @@ void Game::Render()
 	//if (States.IsLoaded())
 		States.CurrentState().OnRender();						/// statesStack.top()->OnRender();
 
-	DrawText("Congrats! Your Game is up & running!", 190, 200, 20, LIGHTGRAY);
+	//DrawText("Congrats! Your Game is up & running!", 190, 200, 20, LIGHTGRAY);
+	
+		ConversationManager::Get().Render();
+
 
 	EndDrawing();
 }
