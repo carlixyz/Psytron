@@ -12,6 +12,10 @@ Dialogs:
         - Option:
           - 1: Esta es una sola opcion
           - 0: una es mejor que ninguna!.
+          - JumpBack: # jumpback returns 1 level  back
+        - Option:
+          - 1: Esta es otra opcion
+          - 0: definitivamente la ultima!.
     Comienzo:
       - 0: El camino sigue sin cesar... 
       - 1: pero sin demora haz de continuar...
@@ -25,11 +29,13 @@ Dialogs:
             - Option:
               - 1: Sera prepotente! Vete por donde has venido!
               - 0: Te arrepentiras de esta!
+              - JumpBack: 1 # Optional parameter returns 1 level
             - Option:
               - 1: Cuanto me alegro de verte Gandalf!
               - 0: No me iba a perder el cumpleaños de tu tio Bilbo.
               - 0: Como esta mi viejo amigo?
               - 0: He oido que va a dar una fiesta de especial importancia.
+              - JumpBack: 2 # Optional parameter returns 2 level
         - Option:
           - 1: Eh! Tu! Viejo! Donde crees que vas?
           - 0: Que falta de respeto, ya no te acuerdas de mi?
@@ -37,11 +43,16 @@ Dialogs:
             - Option:
               - 1: Papa Noel?
               - 0: Acaso voy vestido de rojo y llevo renos?
+              - JumpBack: 3 # Optional parameter bail off
             - Option:
               - 1: Ah! Cuanto me alegro de verte Gandalf!
               - 0: Eso esta mejor.
+              - 1: Te Felicito que bien actuas!
             - Option:
               - 1: Eehhh, cual era la pregunta?
-                time: 8.0
               - 0: ..., Da igual.
-              - 1: Te Felicito que bien actuas!
+                time: 28.0
+              - JumpBack:
+        - Option:
+          - 1: Si bueno, nos vemos!
+          - 0: Nos vemos querido!

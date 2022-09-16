@@ -2,6 +2,7 @@
 
 #include "../Utility/Singleton.h"
 #include <vector>
+#include <stack>
 #include <list>
 #include <string>
 #include "yaml-cpp/yaml.h"
@@ -11,6 +12,7 @@ enum ConversationNodeType	//tipo de conversación
 {
 	NormalTalk,
 	ChooseTalk,
+	JumpBack,
 	EndConversation
 };
 
@@ -60,7 +62,8 @@ class ConversationManager : public Singleton<ConversationManager>
     float MessageTime;
     //Selected option in a choose conversation
     unsigned ChooseOption;
-    ConversationNode* ChooseConversationNode;
+
+    std::stack<ConversationNode*> ChooseTalkStack;
 
     void ParseCharacter(const YAML::const_iterator& element);
     void ParseConversation(const YAML::const_iterator& element);

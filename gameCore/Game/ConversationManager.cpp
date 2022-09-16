@@ -98,8 +98,6 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	//Get the type of node from the YML
 	if (!strKey.empty() && strKey.find_first_not_of("-.0123456789") == std::string::npos) 	//if (strKey[0] == '0' || (atoi(strKey.c_str())))
 	{
-		//DEBUG_COUT(" >: " << talkIt->first << " " << talkIt->second << "\n");
-
 		//Set the type
 		currentNode->Type = NormalTalk;
 		//Get the text
@@ -111,10 +109,7 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 		CHECK(currentNode->CharacterId < (int)Characters.size());
 
 		if (talkNode["time"]) 		//Get the duration (optional parametter)
-		{
 			currentNode->Duration = talkNode["time"].as<float>();
-			//DEBUG_COUT("	Additional Prop: " << std::fixed << currentNode->Duration << "\n");
-		}
 
 		//Preparare the next node
 		ConversationNode node;
@@ -126,8 +121,6 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	}
 	else if (talkIt->first.as<string>() == "ChooseTalk")
 	{
-		//DEBUG_COUT("\n >: ChooseTalk \n");
-
 		//Set the type
 		currentNode->Type = ChooseTalk;
 
@@ -135,7 +128,6 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 		for (auto optionIt : talkIt->second)
 		{
 			auto subOptionIt = optionIt.begin();
-			//DEBUG_COUT("	->: " << subOptionIt->first << " \n");	// OPTION TAG
 			CHECK(subOptionIt->first.as<string>() == "Option");
 
 			if (subOptionIt->second.IsSequence())
@@ -150,10 +142,23 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 				//Recursive call
 				size_t lastIndex = currentNode->Children.size() - 1;
 				ParseNode(subTalkIt, subTalkEnd, &(currentNode->Children[lastIndex]));
-
-				//DEBUG_COUT(" ->: " << subTalkIt->begin()->first << " " << subTalkIt->begin()->second << " \n");	// TALK NODE
 			}
 		}
+	}
+	else if (talkIt->first.as<string>() == "JumpBack")
+	{
+		//Set the type
+		currentNode->Type = JumpBack;
+
+		// Keep as Param for JumpLevels
+		currentNode->Text = !talkIt->second.IsNull() ? talkIt->second.as<string>() : "1";
+
+		//Preparare the next node
+		ConversationNode node;
+		currentNode->Children.push_back(node);
+
+		//Recursive call
+		ParseNode(++iterator, end, &(currentNode->Children[0]));
 	}
 	else
 	{
@@ -172,10 +177,36 @@ void ConversationManager::NextMessage(unsigned nextMessageIndex)
 	bool IsChooseNode = (CurrentConversationNode->Type == ChooseTalk);
 	CurrentConversationNode = &(CurrentConversationNode->Children[nextMessageIndex]);
 
+	if (CurrentConversationNode->Type == JumpBack && !ChooseTalkStack.empty())
+	{
+		//JumpLevel is the amount of jumps backs We want
+		int levelJumps = stoi(CurrentConversationNode->Text); 
+		if (ChooseTalkStack.size() < levelJumps)
+		{
+			// If the total jumps is bigger than the stack size then bail off
+			//ChooseTalkStack = std::stack<ConversationNode*>();
+			//CurrentConversationNode = nullptr;
+			 
+			// If the total jumps is bigger jump at the main root ChooseTalk
+			while (ChooseTalkStack.size() > 1)
+				ChooseTalkStack.pop();
+			//CurrentConversationNode = ChooseTalkStack.top();
+		}
+		else
+		{
+			while (--levelJumps)
+				ChooseTalkStack.pop();
+			//CurrentConversationNode = ChooseTalkStack.top();
+		}
+			CurrentConversationNode = ChooseTalkStack.top();
+		return;
+	}
+
 	//Finish the conversation if we reach to the leaf node
 	if (CurrentConversationNode->Type == EndConversation)
 	{
-		CurrentConversationNode = nullptr;
+		ChooseTalkStack = std::stack<ConversationNode*>();
+		CurrentConversationNode =  nullptr;
 		return;
 	}
 
@@ -209,6 +240,9 @@ void ConversationManager::Update()
 
 	case ChooseTalk:
 		//Only if the user has accepted an option, change to that branch
+		if(ChooseTalkStack.empty() || CurrentConversationNode != ChooseTalkStack.top())
+			ChooseTalkStack.push(CurrentConversationNode);
+
 		if (IsKeyPressed(KEY_ENTER))
 			NextMessage(ChooseOption);
 		if (IsKeyPressed(KEY_UP) && ChooseOption > 0)
@@ -233,7 +267,6 @@ void ConversationManager::Render()
 	std::string characterName;
 	//Counter for children
 	unsigned counter = 0;
-
 
 	switch (CurrentConversationNode->Type)
 	{
