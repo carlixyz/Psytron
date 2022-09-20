@@ -4,6 +4,7 @@
 
 using namespace std;
 
+
 //Initializate Conversation Manager
 void ConversationManager::Init(const std::string& conversationFile)
 {
@@ -99,7 +100,8 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	if (!strKey.empty() && strKey.find_first_not_of("-.0123456789") == std::string::npos) 	//if (strKey[0] == '0' || (atoi(strKey.c_str())))
 	{
 		//Set the type
-		currentNode->Type = NormalTalk;
+		if (currentNode->Type != Conditional) // If true this means We are carring some conditionals already
+			currentNode->Type = NormalTalk;
 		//Get the text
 		currentNode->Text = talkIt->second.as<string>();
 
@@ -107,6 +109,8 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 		currentNode->CharacterId = talkIt->first.as<int>();
 		CHECK(currentNode->CharacterId >= 0);
 		CHECK(currentNode->CharacterId < (int)Characters.size());
+
+		//DEBUG_COUT("CharacterId: " << currentNode->CharacterId << " value:  " << currentNode->Text << "\n ");
 
 		if (talkNode["time"]) 		//Get the duration (optional parametter)
 			currentNode->Duration = talkNode["time"].as<float>();
@@ -119,25 +123,90 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 		ParseNode(++iterator, end, &(currentNode->Children[0]));
 
 	}
-	else if (talkIt->first.as<string>() == "ChooseTalk")
+	else if (strKey == "Option")
+	{
+		//Set the type
+		currentNode->Type = Optional;
+
+		//Get all options
+		if (talkIt->second.IsSequence())
+		{
+			//Add node to the childrens vector
+			ConversationNode node;
+
+			YAML::const_iterator subTalkIt = talkIt->second.begin();
+			YAML::const_iterator subTalkEnd = talkIt->second.end();
+
+			/// We're going to group all sucessive conditionals into the first talk element
+			while (subTalkIt != subTalkEnd)
+			{
+				string nextKey = subTalkIt->begin()->first.as<string>();
+				string nextValue = subTalkIt->begin()->second.as<string>();
+
+				//DEBUG_COUT("nextKey: " << nextKey << " value:  " << nextValue << "\n ");
+
+				if (nextKey != "Condition")
+					break;
+
+				node.Type = Conditional;
+				node.ParseCondition(nextValue); //node.ConditionsEntries.push_back(nextValue);
+				subTalkIt++;
+				//DEBUG_COUT("nextKey: " << nextKey << " value:  " << nextValue << "\n ");
+			}
+
+			// --------------------------------------------------------------------------- //
+			currentNode->Children.push_back(node);
+
+			//Recursive call
+			ParseNode(subTalkIt, subTalkEnd, &(currentNode->Children[0]));
+		}
+
+		//Preparare the next node
+		ConversationNode nextNode;
+		currentNode->Children.push_back(nextNode);
+
+		//Recursive call
+		ParseNode(++iterator, end, &(currentNode->Children[1]));
+	}
+	else if (strKey == "ChooseTalk")
 	{
 		//Set the type
 		currentNode->Type = ChooseTalk;
 
 		//Get all options
-		for (auto optionIt : talkIt->second)
+		for (auto optionIt : talkIt->second) // inside ChooseTalk: list of Options
 		{
-			auto subOptionIt = optionIt.begin();
+			auto subOptionIt = optionIt.begin(); // First option item 
 			CHECK(subOptionIt->first.as<string>() == "Option");
 
 			if (subOptionIt->second.IsSequence())
 			{
 				//Add node to the childrens vector
 				ConversationNode node;
-				currentNode->Children.push_back(node);
 
 				YAML::const_iterator subTalkIt = subOptionIt->second.begin();
 				YAML::const_iterator subTalkEnd = subOptionIt->second.end();
+
+				/// We're going to group all sucessive conditionals into the first talk element
+				while (subTalkIt != subTalkEnd)
+				{
+					string nextKey = subTalkIt->begin()->first.as<string>();
+					string nextValue = subTalkIt->begin()->second.as<string>();
+
+					//DEBUG_COUT("nextKey: " << nextKey << " value:  " << nextValue << "\n ");
+
+					if (nextKey != "Condition")
+						break;
+
+					node.Type = Conditional;
+					//node.ConditionsEntries.push_back(nextValue);
+					node.ParseCondition(nextValue);
+					subTalkIt++;
+				}
+
+				// --------------------------------------------------------------------------- //
+
+				currentNode->Children.push_back(node);
 
 				//Recursive call
 				size_t lastIndex = currentNode->Children.size() - 1;
@@ -145,13 +214,29 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 			}
 		}
 	}
-	else if (talkIt->first.as<string>() == "JumpBack")
+	else if (strKey == "JumpBack")
 	{
 		//Set the type
 		currentNode->Type = JumpBack;
 
 		// Keep as Param for JumpLevels
 		currentNode->Text = !talkIt->second.IsNull() ? talkIt->second.as<string>() : "1";
+
+		//Preparare the next node
+		ConversationNode node;
+		currentNode->Children.push_back(node);
+
+		//Recursive call
+		ParseNode(++iterator, end, &(currentNode->Children[0]));
+	}
+	else if (strKey == "SetTrue" || strKey == "SetFalse")
+	{
+		//Set the type
+		if (currentNode->Type != Conditional) // If true this means We are carring some conditionals already
+			currentNode->Type = Action;
+
+		currentNode->Action.first = talkIt->second.as<string>();
+		currentNode->Action.second = (strKey == "SetTrue" ? true : false);
 
 		//Preparare the next node
 		ConversationNode node;
@@ -167,6 +252,7 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	}
 }
 
+
 // Jump to the next Node
 void ConversationManager::NextMessage(unsigned nextMessageIndex)
 {
@@ -175,38 +261,27 @@ void ConversationManager::NextMessage(unsigned nextMessageIndex)
 
 	//Change to the next node
 	bool IsChooseNode = (CurrentConversationNode->Type == ChooseTalk);
+
 	CurrentConversationNode = &(CurrentConversationNode->Children[nextMessageIndex]);
 
-	if (CurrentConversationNode->Type == JumpBack && !ChooseTalkStack.empty())
+	if (CurrentConversationNode->Type == JumpBack)
 	{
 		//JumpLevel is the amount of jumps backs We want
-		int levelJumps = stoi(CurrentConversationNode->Text); 
-		if (ChooseTalkStack.size() < levelJumps)
+		int levelJumps = stoi(CurrentConversationNode->Text);
+		while (TalkStack.size() > 1 && --levelJumps > 0)
 		{
-			// If the total jumps is bigger than the stack size then bail off
-			//ChooseTalkStack = std::stack<ConversationNode*>();
-			//CurrentConversationNode = nullptr;
-			 
-			// If the total jumps is bigger jump at the main root ChooseTalk
-			while (ChooseTalkStack.size() > 1)
-				ChooseTalkStack.pop();
-			//CurrentConversationNode = ChooseTalkStack.top();
+			TalkStack.pop();
 		}
-		else
-		{
-			while (--levelJumps)
-				ChooseTalkStack.pop();
-			//CurrentConversationNode = ChooseTalkStack.top();
-		}
-			CurrentConversationNode = ChooseTalkStack.top();
+
+		CurrentConversationNode = TalkStack.top();
 		return;
 	}
 
 	//Finish the conversation if we reach to the leaf node
 	if (CurrentConversationNode->Type == EndConversation)
 	{
-		ChooseTalkStack = std::stack<ConversationNode*>();
-		CurrentConversationNode =  nullptr;
+		TalkStack = std::stack<ConversationNode*>();
+		CurrentConversationNode = nullptr;
 		return;
 	}
 
@@ -229,6 +304,13 @@ void ConversationManager::Update()
 
 	switch (CurrentConversationNode->Type)
 	{
+	case Action:
+		if (!CurrentConversationNode->Action.second || !CurrentConversationNode->Action.first.empty())
+		{
+			CurrentConversationNode->ExecuteAction();
+			NextMessage(0);
+		}
+	case Conditional:
 	case NormalTalk:
 		//Reduce show time
 		MessageTime -= GetFrameTime();
@@ -240,8 +322,8 @@ void ConversationManager::Update()
 
 	case ChooseTalk:
 		//Only if the user has accepted an option, change to that branch
-		if(ChooseTalkStack.empty() || CurrentConversationNode != ChooseTalkStack.top())
-			ChooseTalkStack.push(CurrentConversationNode);
+		if (TalkStack.empty() || CurrentConversationNode != TalkStack.top())
+			TalkStack.push(CurrentConversationNode);
 
 		if (IsKeyPressed(KEY_ENTER))
 			NextMessage(ChooseOption);
@@ -250,6 +332,23 @@ void ConversationManager::Update()
 		if (IsKeyPressed(KEY_DOWN) && ChooseOption < (CurrentConversationNode->Children.size() - 1))
 			ChooseOption++;
 		return;
+
+	case Optional:
+	{
+		ConversationNode& childNode = CurrentConversationNode->Children[0];
+		if (childNode.Type == Conditional && childNode.EvalConditions())
+		{
+			if (childNode.Action.second || !childNode.Action.first.empty())
+				childNode.ExecuteAction();
+
+			if (TalkStack.empty() || CurrentConversationNode != TalkStack.top())
+				TalkStack.push(&(CurrentConversationNode->Children[1]));
+			NextMessage(0);
+		}
+		else
+			NextMessage(1);
+	}
+	break;
 
 	default:
 		break;
@@ -271,13 +370,18 @@ void ConversationManager::Render()
 	switch (CurrentConversationNode->Type)
 	{
 	case NormalTalk:
+	case Conditional:
 		//Write the name
 		characterName = Characters[(CurrentConversationNode->CharacterId)].CharacterName + ": ";
 		DrawText(characterName.c_str(), 50, 100, 20, SKYBLUE);
 
+
 		//Draw the text
 		message = CurrentConversationNode->Text;
-		DrawText(message.c_str(), 100, 120, 20, SKYBLUE);
+		if (CurrentConversationNode->ConditionsEntries.size() > 0)
+			DrawText(message.c_str(), 100, 120, 20, RED);
+		else
+			DrawText(message.c_str(), 100, 120, 20, SKYBLUE);
 		break;
 
 	case ChooseTalk:
@@ -291,9 +395,14 @@ void ConversationManager::Render()
 			//Set the propper color to the selected option
 			Color color = (counter == ChooseOption) ? VIOLET : SKYBLUE;
 
+			//if (cIt->ConditionsKeys.size() > 0)
+			if (cIt->Type == Conditional)
+				color = RED;
+
 			//Draw the child
 			message = cIt->Text;
 			DrawText(message.c_str(), 100, 120 + (counter * 20), 20, color);
+
 
 			counter++;
 		}

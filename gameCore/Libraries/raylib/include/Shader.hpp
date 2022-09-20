@@ -133,7 +133,7 @@ class Shader : public ::Shader {
      *
      * @see SetShaderValue()
      */
-    inline Shader& SetValue(int uniformLoc, const void* value, int uniformType) {
+    inline Shader& SetupValue(int uniformLoc, const void* value, int uniformType) {
         ::SetShaderValue(*this, uniformLoc, value, uniformType);
         return *this;
     }
@@ -143,7 +143,7 @@ class Shader : public ::Shader {
      *
      * @see SetShaderValueV()
      */
-    inline Shader& SetValue(int uniformLoc, const void* value, int uniformType, int count) {
+    inline Shader& SetupValue(int uniformLoc, const void* value, int uniformType, int count) {
         ::SetShaderValueV(*this, uniformLoc, value, uniformType, count);
         return *this;
     }
@@ -153,7 +153,7 @@ class Shader : public ::Shader {
      *
      * @see SetShaderValueMatrix()
      */
-    inline Shader& SetValue(int uniformLoc, const ::Matrix& mat) {
+    inline Shader& SetupValue(int uniformLoc, const ::Matrix& mat) {
         ::SetShaderValueMatrix(*this, uniformLoc, mat);
         return *this;
     }
@@ -163,7 +163,7 @@ class Shader : public ::Shader {
      *
      * @see SetShaderValueTexture()
      */
-    inline Shader& SetValue(int uniformLoc, const ::Texture2D& texture) {
+    inline Shader& SetupValue(int uniformLoc, const ::Texture2D& texture) {
         ::SetShaderValueTexture(*this, uniformLoc, texture);
         return *this;
     }

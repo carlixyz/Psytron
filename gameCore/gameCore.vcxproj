@@ -168,6 +168,7 @@
     <ClCompile Include="Graphics\ApplicationProperties.cpp" />
     <ClCompile Include="Graphics\Graphics.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Game\Register.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\ConversationManager.h" />
@@ -255,6 +256,7 @@
     <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\stlemitter.h" />
     <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\traits.h" />
     <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\yaml.h" />
+    <ClInclude Include="Game\Register.h" />
     <ClInclude Include="Utility\Singleton.h" />
     <ClInclude Include="Utility\Utils.h" />
   </ItemGroup>

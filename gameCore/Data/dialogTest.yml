@@ -5,14 +5,27 @@ Dialogs:
   Conversations:
     Setup: 
       - 1: Esto es solo un test... es solo un test
-        time: 5.0 # Optional parametters! 
       - 0: Esto es otro test...
-      - 1: "Esto es solo un test... es solo un test"
+      - 1: "Ok, Esto es solo un test... es solo un test"
+      - SetTrue: one_shot
+      - 0: Hagamos un Branch...
+      - Option:
+        - Condition: "one_shot"     # saddly Yaml uses '!' to represent some Tag thing... whatever!
+        - Condition: "!two_shot"    # default value is false when there isn't a previous entry
+        - 1: We're inside an option!
+        - 0: Ok, let's jump back to main branch..
+        - SetFalse: one_shot
+        - SetTrue: two_shot
+        - JumpBack:
+      - 1: Test completado
+      - 0: Parece que resulto exitoso
       - ChooseTalk :
         - Option:
+          - Condition: hidden_option
+          - Condition: random_value
           - 1: Esta es una sola opcion
           - 0: una es mejor que ninguna!.
-          - JumpBack: # jumpback returns 1 level  back
+          - JumpBack:               # jumpback returns 1 level back by default
         - Option:
           - 1: Esta es otra opcion
           - 0: definitivamente la ultima!.

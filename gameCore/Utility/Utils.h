@@ -7,6 +7,11 @@
 //#include <Windows.h>		// or any library that uses Windows.h
 //#endif
 
+//
+//bool IsNumber(const std::string& s)
+//{
+//	return (!s.empty() && s.find_first_not_of("-.0123456789") == std::string::npos);
+//}
 
 #ifdef _DEBUG
 #include <sstream>

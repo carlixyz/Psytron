@@ -39,6 +39,9 @@
     <ClCompile Include="Game\ConversationManager.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Register.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\States\FSM.h">
@@ -300,6 +303,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="Game\ConversationManager.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Register.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

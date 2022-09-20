@@ -18,7 +18,8 @@ bool Game::Init()
 	SetExitKey(KEY_Q);
 
 	ConversationManager::Get().Init("Data/dialogTest.yml");
-	ConversationManager::Get().StartConversation("Comienzo"); // Activar este para realizar una comica charla al iniciar el juego
+	//ConversationManager::Get().StartConversation("Comienzo"); // Activar este para realizar una comica charla al iniciar el juego
+	ConversationManager::Get().StartConversation("Setup"); // Activar este para realizar una comica charla al iniciar el juego
 
 
 	result = result && States.Init();							//	States.Init(States.introState);
