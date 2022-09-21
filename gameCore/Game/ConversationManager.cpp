@@ -43,6 +43,14 @@ void ConversationManager::Deinit(void)
 	Conversations.clear();
 }
 
+void ConversationManager::ProcessChildOptions()
+{
+	DisplayedChildren.clear();
+	for (ConversationNode& child : CurrentConversationNode->Children)
+		if (child.EvalConditions())
+			DisplayedChildren.push_back(&child);
+}
+
 // Parse yml to process a character
 void ConversationManager::ParseCharacter(const YAML::const_iterator& element)
 {
@@ -149,12 +157,11 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 					break;
 
 				node.Type = Conditional;
-				node.ParseCondition(nextValue); //node.ConditionsEntries.push_back(nextValue);
+				ParseCondition(nextValue, &node);
 				subTalkIt++;
 				//DEBUG_COUT("nextKey: " << nextKey << " value:  " << nextValue << "\n ");
 			}
 
-			// --------------------------------------------------------------------------- //
 			currentNode->Children.push_back(node);
 
 			//Recursive call
@@ -199,8 +206,7 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 						break;
 
 					node.Type = Conditional;
-					//node.ConditionsEntries.push_back(nextValue);
-					node.ParseCondition(nextValue);
+					ParseCondition(nextValue, &node);
 					subTalkIt++;
 				}
 
@@ -252,6 +258,19 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	}
 }
 
+void ConversationManager::ParseCondition(const std::string& cond, ConversationNode* currentNode)
+{
+	std::string keyStr = cond;
+	size_t negationPos = keyStr.find('!');
+	bool isNegated = false;
+	if (negationPos != std::string::npos && negationPos == 0)
+	{
+		keyStr = keyStr.substr(1, keyStr.size() - 1);
+		isNegated = true;
+	}
+	currentNode->ConditionsEntries[keyStr] = (isNegated == false);
+}
+
 
 // Jump to the next Node
 void ConversationManager::NextMessage(unsigned nextMessageIndex)
@@ -262,7 +281,10 @@ void ConversationManager::NextMessage(unsigned nextMessageIndex)
 	//Change to the next node
 	bool IsChooseNode = (CurrentConversationNode->Type == ChooseTalk);
 
-	CurrentConversationNode = &(CurrentConversationNode->Children[nextMessageIndex]);
+	if (!IsChooseNode)
+		CurrentConversationNode = &(CurrentConversationNode->Children[nextMessageIndex]);
+	else
+		CurrentConversationNode = (DisplayedChildren[nextMessageIndex]);
 
 	if (CurrentConversationNode->Type == JumpBack)
 	{
@@ -302,14 +324,17 @@ void ConversationManager::Update()
 	if (!IsInConversation())
 		return;
 
+	ProcessChildOptions();
+
 	switch (CurrentConversationNode->Type)
 	{
 	case Action:
-		if (!CurrentConversationNode->Action.second || !CurrentConversationNode->Action.first.empty())
+		if (!CurrentConversationNode->Action.first.empty())
 		{
 			CurrentConversationNode->ExecuteAction();
 			NextMessage(0);
 		}
+		break;
 	case Conditional:
 	case NormalTalk:
 		//Reduce show time
@@ -329,7 +354,7 @@ void ConversationManager::Update()
 			NextMessage(ChooseOption);
 		if (IsKeyPressed(KEY_UP) && ChooseOption > 0)
 			ChooseOption--;
-		if (IsKeyPressed(KEY_DOWN) && ChooseOption < (CurrentConversationNode->Children.size() - 1))
+		if (IsKeyPressed(KEY_DOWN) && ChooseOption < (DisplayedChildren.size() - 1))
 			ChooseOption++;
 		return;
 
@@ -386,23 +411,20 @@ void ConversationManager::Render()
 
 	case ChooseTalk:
 		//Draw the options
-		for (ConversationChildrenIt cIt = CurrentConversationNode->Children.begin();
-			 cIt != CurrentConversationNode->Children.end(); cIt++)
+		for (ConversationNode* child : DisplayedChildren)
 		{
-			characterName = Characters[(cIt->CharacterId)].CharacterName + ": ";
+			characterName = Characters[child->CharacterId].CharacterName + ": ";
 			DrawText(characterName.c_str(), 50, 100, 20, SKYBLUE);
 
 			//Set the propper color to the selected option
 			Color color = (counter == ChooseOption) ? VIOLET : SKYBLUE;
 
-			//if (cIt->ConditionsKeys.size() > 0)
-			if (cIt->Type == Conditional)
-				color = RED;
+			//if (child->Type == Conditional)
+			//	color = RED;
 
 			//Draw the child
-			message = cIt->Text;
+			message = child->Text;
 			DrawText(message.c_str(), 100, 120 + (counter * 20), 20, color);
-
 
 			counter++;
 		}

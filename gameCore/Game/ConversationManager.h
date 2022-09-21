@@ -8,7 +8,6 @@
 #include "yaml-cpp/yaml.h"
 #include "Register.h"
 
-
 enum ConversationNodeType	//tipo de conversación
 {
 	NormalTalk,
@@ -35,8 +34,8 @@ struct ConversationNode     // SubNodos de la conversación
 
 	typedef std::vector<ConversationNode> ConversationChildren;
 	ConversationChildren Children;
-    std::map<std::string, bool> ConditionsEntries;
-    std::pair<std::string, bool> Action;
+    std::map<const std::string, bool> ConditionsEntries;
+    std::pair< std::string, bool> Action;
 
     bool EvalConditions()
     {
@@ -45,7 +44,7 @@ struct ConversationNode     // SubNodos de la conversación
         {
             bool RegisterValue = Register::Get().GetValue(cond.first);
             result = result && 
-                (RegisterValue  == ConditionsEntries[cond.first]);
+                (RegisterValue == ConditionsEntries[cond.first]);
         }
 
         return result;
@@ -54,19 +53,6 @@ struct ConversationNode     // SubNodos de la conversación
     void ExecuteAction()
     {
         Register::Get().SetValue(Action.first, Action.second);
-    }
-
-    void ParseCondition(const std::string& cond)
-    {
-        std::string keyStr = cond;
-        size_t negationPos = keyStr.find('!');
-        bool isNegated = false;
-        if (negationPos != std::string::npos && negationPos == 0)
-        {
-            keyStr = keyStr.substr(1, keyStr.size() - 1);
-            isNegated = true;
-        }
-        ConditionsEntries[keyStr] = (isNegated == false);
     }
 };
 
@@ -101,11 +87,15 @@ class ConversationManager : public Singleton<ConversationManager>
     unsigned ChooseOption;
 
     std::stack<ConversationNode*> TalkStack;
+    std::vector<ConversationNode*> DisplayedChildren;
 
     void ParseCharacter(const YAML::const_iterator& element);
     void ParseConversation(const YAML::const_iterator& element);
     void ParseNode(YAML::const_iterator& iterator, YAML::const_iterator& end, ConversationNode* currentNode);
+    void ParseCondition(const std::string& cond, ConversationNode* currentNode);
+
     void NextMessage(unsigned nextMessageIndex);
+    void ProcessChildOptions();
 
 public:
     void Init(const std::string& conversationFile);
@@ -114,6 +104,5 @@ public:
     void Render();
     void StartConversation(const std::string& lconversationId);
     bool IsInConversation();
-
 };
 

@@ -8,10 +8,12 @@ Dialogs:
       - 0: Esto es otro test...
       - 1: "Ok, Esto es solo un test... es solo un test"
       - SetTrue: one_shot
+      - SetFalse: two_shot
       - 0: Hagamos un Branch...
       - Option:
         - Condition: "one_shot"     # saddly Yaml uses '!' to represent some Tag thing... whatever!
         - Condition: "!two_shot"    # default value is false when there isn't a previous entry
+        - Condition: "!extra_shot"    # default value is false when there isn't a previous entry
         - 1: We're inside an option!
         - 0: Ok, let's jump back to main branch..
         - SetFalse: one_shot
@@ -21,12 +23,13 @@ Dialogs:
       - 0: Parece que resulto exitoso
       - ChooseTalk :
         - Option:
-          - Condition: hidden_option
-          - Condition: random_value
           - 1: Esta es una sola opcion
           - 0: una es mejor que ninguna!.
-          - JumpBack:               # jumpback returns 1 level back by default
+          - SetTrue: hidden_option
+          - JumpBack:         # jumpback returns 1 level back by default
         - Option:
+          - Condition: "hidden_option"
+          - Condition: "!random_value"
           - 1: Esta es otra opcion
           - 0: definitivamente la ultima!.
     Comienzo:
@@ -48,6 +51,7 @@ Dialogs:
               - 0: No me iba a perder el cumpleaños de tu tio Bilbo.
               - 0: Como esta mi viejo amigo?
               - 0: He oido que va a dar una fiesta de especial importancia.
+              - SetTrue: finish_talk
               - JumpBack: 2 # Optional parameter returns 2 level
         - Option:
           - 1: Eh! Tu! Viejo! Donde crees que vas?
@@ -67,5 +71,6 @@ Dialogs:
                 time: 28.0
               - JumpBack:
         - Option:
+          - Condition: finish_talk     # saddly Yaml uses '!' to represent some Tag thing... whatever!
           - 1: Si bueno, nos vemos!
           - 0: Nos vemos querido!
