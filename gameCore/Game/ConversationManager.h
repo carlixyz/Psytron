@@ -35,7 +35,7 @@ struct ConversationNode     // SubNodos de la conversación
 	typedef std::vector<ConversationNode> ConversationChildren;
 	ConversationChildren Children;
     std::map<const std::string, bool> ConditionsEntries;
-    std::pair< std::string, bool> Action;
+    std::pair<std::string, bool> Action;
 
     bool EvalConditions()
     {
@@ -95,7 +95,7 @@ class ConversationManager : public Singleton<ConversationManager>
     void ParseCondition(const std::string& cond, ConversationNode* currentNode);
 
     void NextMessage(unsigned nextMessageIndex);
-    void ProcessChildOptions();
+    void ProcessDisplayedOptions();
 
 public:
     void Init(const std::string& conversationFile);

@@ -4,10 +4,12 @@
 
 using namespace std;
 
-
 //Initializate Conversation Manager
 void ConversationManager::Init(const std::string& conversationFile)
 {
+	Characters.reserve(5);
+	DisplayedChildren.reserve(5);
+
 	YAML::Node dialogFile = YAML::LoadFile(conversationFile); // load file
 
 	CHECK(!dialogFile.IsNull());  // the file is wrongly loaded!
@@ -43,7 +45,7 @@ void ConversationManager::Deinit(void)
 	Conversations.clear();
 }
 
-void ConversationManager::ProcessChildOptions()
+void ConversationManager::ProcessDisplayedOptions()
 {
 	DisplayedChildren.clear();
 	for (ConversationNode& child : CurrentConversationNode->Children)
@@ -258,6 +260,7 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	}
 }
 
+// Parse yml to  group conditions
 void ConversationManager::ParseCondition(const std::string& cond, ConversationNode* currentNode)
 {
 	std::string keyStr = cond;
@@ -281,10 +284,9 @@ void ConversationManager::NextMessage(unsigned nextMessageIndex)
 	//Change to the next node
 	bool IsChooseNode = (CurrentConversationNode->Type == ChooseTalk);
 
-	if (!IsChooseNode)
-		CurrentConversationNode = &(CurrentConversationNode->Children[nextMessageIndex]);
-	else
-		CurrentConversationNode = (DisplayedChildren[nextMessageIndex]);
+	CurrentConversationNode = (IsChooseNode ?
+							   DisplayedChildren[nextMessageIndex] :
+							   &(CurrentConversationNode->Children[nextMessageIndex]));
 
 	if (CurrentConversationNode->Type == JumpBack)
 	{
@@ -324,7 +326,7 @@ void ConversationManager::Update()
 	if (!IsInConversation())
 		return;
 
-	ProcessChildOptions();
+	ProcessDisplayedOptions();
 
 	switch (CurrentConversationNode->Type)
 	{
@@ -345,19 +347,6 @@ void ConversationManager::Update()
 			NextMessage(0);
 		break;
 
-	case ChooseTalk:
-		//Only if the user has accepted an option, change to that branch
-		if (TalkStack.empty() || CurrentConversationNode != TalkStack.top())
-			TalkStack.push(CurrentConversationNode);
-
-		if (IsKeyPressed(KEY_ENTER))
-			NextMessage(ChooseOption);
-		if (IsKeyPressed(KEY_UP) && ChooseOption > 0)
-			ChooseOption--;
-		if (IsKeyPressed(KEY_DOWN) && ChooseOption < (DisplayedChildren.size() - 1))
-			ChooseOption++;
-		return;
-
 	case Optional:
 	{
 		ConversationNode& childNode = CurrentConversationNode->Children[0];
@@ -374,6 +363,21 @@ void ConversationManager::Update()
 			NextMessage(1);
 	}
 	break;
+
+	case ChooseTalk:
+		//Only if the user has accepted an option, change to that branch
+		if (TalkStack.empty() || CurrentConversationNode != TalkStack.top())
+			TalkStack.push(CurrentConversationNode);
+
+		if (IsKeyPressed(KEY_ENTER))
+			NextMessage(ChooseOption);
+		if (IsKeyPressed(KEY_UP) && ChooseOption > 0)
+			ChooseOption--;
+		if (IsKeyPressed(KEY_DOWN) && ChooseOption < (DisplayedChildren.size() - 1))
+			ChooseOption++;
+		return;
+
+
 
 	default:
 		break;
@@ -399,7 +403,6 @@ void ConversationManager::Render()
 		//Write the name
 		characterName = Characters[(CurrentConversationNode->CharacterId)].CharacterName + ": ";
 		DrawText(characterName.c_str(), 50, 100, 20, SKYBLUE);
-
 
 		//Draw the text
 		message = CurrentConversationNode->Text;

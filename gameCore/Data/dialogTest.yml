@@ -3,6 +3,7 @@ Dialogs:
     0 : Gandalf
     1 : Frodo
   Conversations:
+  ###############################################################################################
     Setup: 
       - 1: Esto es solo un test... es solo un test
       - 0: Esto es otro test...
@@ -13,7 +14,7 @@ Dialogs:
       - Option:
         - Condition: "one_shot"     # saddly Yaml uses '!' to represent some Tag thing... whatever!
         - Condition: "!two_shot"    # default value is false when there isn't a previous entry
-        - Condition: "!extra_shot"    # default value is false when there isn't a previous entry
+        - Condition: "!extra_shot"    
         - 1: We're inside an option!
         - 0: Ok, let's jump back to main branch..
         - SetFalse: one_shot
@@ -32,6 +33,9 @@ Dialogs:
           - Condition: "!random_value"
           - 1: Esta es otra opcion
           - 0: definitivamente la ultima!.
+
+  ###############################################################################################
+
     Comienzo:
       - 0: El camino sigue sin cesar... 
       - 1: pero sin demora haz de continuar...
@@ -54,6 +58,7 @@ Dialogs:
               - SetTrue: finish_talk
               - JumpBack: 2 # Optional parameter returns 2 level
         - Option:
+
           - 1: Eh! Tu! Viejo! Donde crees que vas?
           - 0: Que falta de respeto, ya no te acuerdas de mi?
           - ChooseTalk:
