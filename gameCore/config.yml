@@ -2,7 +2,7 @@
   Window:
     Properties:
       _Name: Engin3d!
-      _Width: '1080'
+      _Width: '720'
       _Height: '720'
       _Bits: '32'
       _FPS: '60'

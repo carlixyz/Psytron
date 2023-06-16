@@ -48,6 +48,7 @@ void ConversationManager::Deinit(void)
 void ConversationManager::ProcessDisplayedOptions()
 {
 	DisplayedChildren.clear();
+
 	for (ConversationNode& child : CurrentConversationNode->Children)
 		if (child.EvalConditions())
 			DisplayedChildren.push_back(&child);
@@ -266,11 +267,13 @@ void ConversationManager::ParseCondition(const std::string& cond, ConversationNo
 	std::string keyStr = cond;
 	size_t negationPos = keyStr.find('!');
 	bool isNegated = false;
+
 	if (negationPos != std::string::npos && negationPos == 0)
 	{
 		keyStr = keyStr.substr(1, keyStr.size() - 1);
 		isNegated = true;
 	}
+
 	currentNode->ConditionsEntries[keyStr] = (isNegated == false);
 }
 
@@ -406,9 +409,10 @@ void ConversationManager::Render()
 
 		//Draw the text
 		message = CurrentConversationNode->Text;
-		if (CurrentConversationNode->ConditionsEntries.size() > 0)
-			DrawText(message.c_str(), 100, 120, 20, RED);
-		else
+
+		//if (CurrentConversationNode->ConditionsEntries.size() > 0)	// Show me which entries has conditionals beforehand
+		//	DrawText(message.c_str(), 100, 120, 20, RED);
+		//else
 			DrawText(message.c_str(), 100, 120, 20, SKYBLUE);
 		break;
 
