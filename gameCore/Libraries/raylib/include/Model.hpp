@@ -111,14 +111,6 @@ class Model : public ::Model {
     }
 
     /**
-     * Unload model (but not meshes) from memory (RAM and/or VRAM)
-     */
-    inline Model& UnloadKeepMeshes() {
-        ::UnloadModelKeepMeshes(*this);
-        return *this;
-    }
-
-    /**
      * Set material for a mesh
      */
     inline Model& SetMeshMaterial(int meshId, int materialId) {
@@ -144,47 +136,43 @@ class Model : public ::Model {
     /**
      * Draw a model (with texture if set)
      */
-    inline Model& Draw(::Vector3 position,
+    inline void Draw(::Vector3 position,
             float scale = 1.0f,
-            ::Color tint = {255, 255, 255, 255}) {
+            ::Color tint = {255, 255, 255, 255}) const {
         ::DrawModel(*this, position, scale, tint);
-        return *this;
     }
 
     /**
      * Draw a model with extended parameters
      */
-    inline Model& Draw(
+    inline void Draw(
             ::Vector3 position,
             ::Vector3 rotationAxis,
             float rotationAngle = 0.0f,
             ::Vector3 scale = {1.0f, 1.0f, 1.0f},
-            ::Color tint = {255, 255, 255, 255}) {
+            ::Color tint = {255, 255, 255, 255}) const {
         ::DrawModelEx(*this, position, rotationAxis, rotationAngle, scale, tint);
-        return *this;
     }
 
     /**
      * Draw a model wires (with texture if set)
      */
-    inline Model& DrawWires(::Vector3 position,
+    inline void DrawWires(::Vector3 position,
             float scale = 1.0f,
-            ::Color tint = {255, 255, 255, 255}) {
+            ::Color tint = {255, 255, 255, 255}) const {
         ::DrawModelWires(*this, position, scale, tint);
-        return *this;
     }
 
     /**
      * Draw a model wires (with texture if set) with extended parameters
      */
-    inline Model& DrawWires(
+    inline void DrawWires(
             ::Vector3 position,
             ::Vector3 rotationAxis,
             float rotationAngle = 0.0f,
             ::Vector3 scale = {1.0f, 1.0f, 1.0f},
-            ::Color tint = {255, 255, 255, 255}) {
+            ::Color tint = {255, 255, 255, 255}) const {
         ::DrawModelWiresEx(*this, position, rotationAxis, rotationAngle, scale, tint);
-        return *this;
     }
 
     /**
@@ -205,7 +193,7 @@ class Model : public ::Model {
      * Determines whether or not the Model has data in it.
      */
     bool IsReady() const {
-        return meshCount > 0 || materialCount > 0 || boneCount > 0;
+        return ::IsModelReady(*this);
     }
 
     /**

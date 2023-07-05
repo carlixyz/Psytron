@@ -202,20 +202,6 @@ class Vector2 : public ::Vector2 {
     }
 
     /**
-     * Calculate vector length
-     */
-    inline float Length() const {
-        return Vector2Length(*this);
-    }
-
-    /**
-     * Calculate vector square length
-     */
-    inline float LengthSqr() const {
-        return Vector2LengthSqr(*this);
-    }
-
-    /**
      * Normalize provided vector
      */
     inline Vector2 Normalize() const {
@@ -223,24 +209,10 @@ class Vector2 : public ::Vector2 {
     }
 
     /**
-     * Calculate two vectors dot product
+     * Transforms a Vector2 by a given Matrix
      */
-    inline float DotProduct(const ::Vector2& vector2) const {
-        return Vector2DotProduct(*this, vector2);
-    }
-
-    /**
-     * Calculate angle from two vectors in X-axis
-     */
-    inline float Angle(const ::Vector2& vector2) const {
-        return Vector2Angle(*this, vector2);
-    }
-
-    /**
-     * Calculate distance between two vectors
-     */
-    inline float Distance(const ::Vector2& vector2) const {
-        return Vector2Distance(*this, vector2);
+    inline Vector2 Transform(::Matrix mat) {
+        return ::Vector2Transform(*this, mat);
     }
 
     /**
@@ -272,6 +244,76 @@ class Vector2 : public ::Vector2 {
     }
 
     /**
+     * Invert the given vector
+     */
+    inline Vector2 Invert() {
+        return ::Vector2Invert(*this);
+    }
+
+    /**
+     * Clamp the components of the vector between
+     */
+    inline Vector2 Clamp(::Vector2 min, ::Vector2 max) {
+        return ::Vector2Clamp(*this, min, max);
+    }
+
+    /**
+     * // Clamp the magnitude of the vector between two min and max values
+     */
+    inline Vector2 Clamp(float min, float max) {
+        return ::Vector2ClampValue(*this, min, max);
+    }
+
+    /**
+     * Check whether two given vectors are almost equal
+     */
+    inline int Equals(::Vector2 q) {
+        return ::Vector2Equals(*this, q);
+    }
+
+    /**
+     * Calculate vector length
+     */
+    inline float Length() const {
+        return Vector2Length(*this);
+    }
+
+    /**
+     * Calculate vector square length
+     */
+    inline float LengthSqr() const {
+        return Vector2LengthSqr(*this);
+    }
+
+    /**
+     * Calculate two vectors dot product
+     */
+    inline float DotProduct(const ::Vector2& vector2) const {
+        return Vector2DotProduct(*this, vector2);
+    }
+
+    /**
+     * Calculate distance between two vectors
+     */
+    inline float Distance(const ::Vector2& vector2) const {
+        return Vector2Distance(*this, vector2);
+    }
+
+    /**
+     * Calculate square distance between two vectors
+     */
+    inline float DistanceSqr(::Vector2 v2) {
+        return ::Vector2DistanceSqr(*this, v2);
+    }
+
+    /**
+     * Calculate angle from two vectors in X-axis
+     */
+    inline float Angle(const ::Vector2& vector2) const {
+        return Vector2Angle(*this, vector2);
+    }
+
+    /**
      * Vector with components value 0.0f
      */
     static inline Vector2 Zero() {
@@ -286,54 +328,46 @@ class Vector2 : public ::Vector2 {
     }
 #endif
 
-    inline Vector2& DrawPixel(::Color color = {0, 0, 0, 255}) {
+    inline void DrawPixel(::Color color = {0, 0, 0, 255}) const {
         ::DrawPixelV(*this, color);
-        return *this;
     }
 
-    inline Vector2& DrawLine(::Vector2 endPos, ::Color color = {0, 0, 0, 255}) {
+    inline void DrawLine(::Vector2 endPos, ::Color color = {0, 0, 0, 255}) const {
         ::DrawLineV(*this, endPos, color);
-        return *this;
     }
 
-    inline Vector2& DrawLine(::Vector2 endPos, float thick, ::Color color = {0, 0, 0, 255}) {
+    inline void DrawLine(::Vector2 endPos, float thick, ::Color color = {0, 0, 0, 255}) const {
         ::DrawLineEx(*this, endPos, thick, color);
-        return *this;
     }
 
-    inline Vector2& DrawLineBezier(::Vector2 endPos, float thick, ::Color color = {0, 0, 0, 255}) {
+    inline void DrawLineBezier(::Vector2 endPos, float thick, ::Color color = {0, 0, 0, 255}) const {
         ::DrawLineBezier(*this, endPos, thick, color);
-        return *this;
     }
 
     /**
      * Draw line using quadratic bezier curves with a control point.
      */
-    inline Vector2& DrawLineBezierQuad(
+    inline void DrawLineBezierQuad(
             ::Vector2 endPos,
             ::Vector2 controlPos,
             float thick,
-            ::Color color = {0, 0, 0, 255}) {
+            ::Color color = {0, 0, 0, 255}) const {
        ::DrawLineBezierQuad(*this, endPos, controlPos, thick, color);
-       return *this;
     }
 
     /**
      * Draw a color-filled circle (Vector version)
      */
-    inline Vector2& DrawCircle(float radius, ::Color color = {0, 0, 0, 255}) {
+    inline void DrawCircle(float radius, ::Color color = {0, 0, 0, 255}) const {
         ::DrawCircleV(*this, radius, color);
-        return *this;
     }
 
-    inline Vector2& DrawRectangle(::Vector2 size, ::Color color = {0, 0, 0, 255}) {
+    inline void DrawRectangle(::Vector2 size, ::Color color = {0, 0, 0, 255}) const {
         ::DrawRectangleV(*this, size, color);
-        return *this;
     }
 
-    inline Vector2& DrawPoly(int sides, float radius, float rotation, ::Color color = {0, 0, 0, 255}) {
+    inline void DrawPoly(int sides, float radius, float rotation, ::Color color = {0, 0, 0, 255}) const {
         ::DrawPoly(*this, sides, radius, rotation, color);
-        return *this;
     }
 
     /**

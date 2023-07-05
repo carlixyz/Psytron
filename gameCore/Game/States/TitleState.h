@@ -5,9 +5,12 @@
 
 class TitleState : public GameState//, public Singleton<TitleState>
 {
-	raylib::Texture logo;
+	raylib::TextureUnmanaged logo;
+	//raylib::Texture logo;
+
 public:
 	//friend class Singleton<IntroState>;
+
 	void OnInit();
 	void OnDeinit();
 

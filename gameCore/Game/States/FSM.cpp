@@ -10,7 +10,6 @@ bool FSM::Init(GameState& state)
 bool FSM::Init()
 {
 	PushState(introState);
-	//PushState(&introState);
 
 	return statesStack.size();
 }

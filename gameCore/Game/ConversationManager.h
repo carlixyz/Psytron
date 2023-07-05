@@ -7,22 +7,42 @@
 #include <string>
 #include "yaml-cpp/yaml.h"
 #include "Register.h"
+#include "Game.h"
 
-enum ConversationNodeType	//tipo de conversación
+enum ConversationNodeType	
 {
 	NormalTalk,
 	ChooseTalk,
     Optional,
     Conditional,
-    Action,
+    //Action,
+    SetBool,
+    SetImage,
+    SetImageVisibility,
+    SetImageSize,
+    SetImageFade,
+
+    SetImageLeft,
+    SetImageRight,
+    SetImageCenter,
+
+    SetImageSlide,
+    SetImageSwipe,
+
 	JumpBack,
 	EndConversation
 };
 
-struct CharacterSpeaker		// Personajes que Hablan
+struct CharacterSpeaker	
 {
 	int CharacterId             = 0;
 	std::string CharacterName   = "";
+};
+
+struct ImageResource		
+{
+    std::string ImageID = "";
+    std::string file = "";
 };
 
 struct ConversationNode     // SubNodos de la conversación
@@ -40,7 +60,7 @@ struct ConversationNode     // SubNodos de la conversación
     bool EvalConditions()
     {
         bool result = true;
-        for (auto cond : ConditionsEntries)
+        for (auto& cond : ConditionsEntries)
         {
             bool RegisterValue = Register::Get().GetValue(cond.first);
             result = result && 
@@ -52,7 +72,67 @@ struct ConversationNode     // SubNodos de la conversación
 
     void ExecuteAction()
     {
-        Register::Get().SetValue(Action.first, Action.second);
+        switch (Type)
+        {
+        case SetBool:
+            Register::Get().SetValue(Action.first, Action.second);
+            break;
+        case SetImage:
+            if(!Text.empty())
+                Game::Get().States.dialogState.LoadImage(Action.first, Text);               // LoadImage
+            Game::Get().States.dialogState.SetImageVisible( Action.first, Action.second);   
+            break;
+
+        case SetImageVisibility:
+            Game::Get().States.dialogState.SetImageVisible(Action.first, Action.second);    // Set it Visible or not
+            break;
+
+        case SetImageSize:
+            Game::Get().States.dialogState.SetFullSize(Action.first, Action.second);    // Set it Visible or not
+            break;
+
+        case SetImageFade:
+            if (Action.second == true) // Fade In else Out
+                Game::Get().States.dialogState.SetEasing( Action.first, DialogState::EActionEasing::EFadeIn);
+            else
+                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::EFadeOut);
+            break;
+
+        case SetImageLeft:
+            if (Action.second == true) // Set inside Screen else set it Out
+                Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionLeft);
+            else
+                Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionLeftOut);
+            break;
+
+        case SetImageRight:
+            if (Action.second == true) // Set inside Screen else set it Out
+                Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionRight);
+            else
+                Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionRightOut);
+            break;
+
+        case SetImageCenter:
+            Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionCenter);
+            break;
+
+        case SetImageSlide:
+            if (Action.second == true) // Set inside Screen else set it Out
+                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::ESlideRight);
+            else
+                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::ESlideLeft);
+            break;
+
+        case SetImageSwipe:
+            if (Action.second == true) // Set inside Screen else set it Out
+                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::ESwipeLeftOut);
+            else
+                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::ESwipeRightOut);
+            break;
+
+        default:
+            break;
+        }
     }
 };
 
@@ -80,11 +160,11 @@ class ConversationManager : public Singleton<ConversationManager>
     //List of conversations 
     ConversationsList Conversations;
     //Current conversation node
-    ConversationNode* CurrentConversationNode;
+    ConversationNode* CurrentConversationNode = nullptr;
     //Time to show the conversation
-    float MessageTime;
+    float MessageTime = 5.f;
     //Selected option in a choose conversation
-    unsigned ChooseOption;
+    unsigned ChooseOption = 0;
 
     std::stack<ConversationNode*> TalkStack;
     std::vector<ConversationNode*> DisplayedChildren;
@@ -105,4 +185,3 @@ public:
     void StartConversation(const std::string& lconversationId);
     bool IsInConversation();
 };
-

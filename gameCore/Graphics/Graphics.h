@@ -29,6 +29,8 @@ public:
 	//void SetWorldMatrix(const cMatrix& matrix);
 	//void RefreshWorldView();
 
+	const Rectangle& GetWindowArea() { return windowArea; }
+
 	bool GetCloseApplication();
 
 protected:

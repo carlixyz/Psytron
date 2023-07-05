@@ -126,6 +126,10 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 		if (talkNode["time"]) 		//Get the duration (optional parametter)
 			currentNode->Duration = talkNode["time"].as<float>();
 
+
+		//if (talkNode["visible"]) 		//Get the visualization state (optional parametter)
+		//	currentNode->Action.second = talkNode["visible"].as<string>() == "false";
+
 		//Preparare the next node
 		ConversationNode node;
 		currentNode->Children.push_back(node);
@@ -242,10 +246,143 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	{
 		//Set the type
 		if (currentNode->Type != Conditional) // If true this means We are carring some conditionals already
-			currentNode->Type = Action;
+			currentNode->Type = SetBool;
 
 		currentNode->Action.first = talkIt->second.as<string>();
 		currentNode->Action.second = (strKey == "SetTrue" ? true : false);
+
+		//Preparare the next node
+		ConversationNode node;
+		currentNode->Children.push_back(node);
+
+		//Recursive call
+		ParseNode(++iterator, end, &(currentNode->Children[0]));
+	}
+	else if (strKey == "SetImage")
+	{
+		//Set the type (If true this means We are carring some conditionals already)
+		if (currentNode->Type != Conditional) 
+			currentNode->Type = SetImage;
+
+		// Get the Image ID
+		currentNode->Action.first = talkIt->second.as<string>();	 
+
+		// Optional 1: Load this file  (I know it's an ugly approach but let's roll with it)
+		currentNode->Text = talkNode["file"] ? talkNode["file"].as<string>() : "";
+
+		// Optional 2: If there's a visibility property use it
+		if (talkNode["visible"])									
+		{
+			currentNode->Action.second = talkNode["visible"].as<string>() == "true";
+		}
+		else if (Game::Get().States.dialogState.ImagesMap.contains(currentNode->Action.first))	
+		{
+			// else use the previous value if We had one
+			currentNode->Action.second = Game::Get().States.dialogState.ImagesMap[currentNode->Action.first]->GetIsVisible();
+		}
+
+		//Preparare the next node
+		ConversationNode node;
+		currentNode->Children.push_back(node);
+
+		//Recursive call
+		ParseNode(++iterator, end, &(currentNode->Children[0]));
+	}
+	else if (strKey == "ShowImage" || strKey == "HideImage")
+	{
+		//Set the type  (If true this means We are carring some conditionals already)
+		if (currentNode->Type != Conditional) 
+			currentNode->Type = SetImageVisibility;
+
+		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to show/hide
+		currentNode->Action.second = strKey == "ShowImage" ? true : false;
+
+		//Preparare the next node
+		ConversationNode node;
+		currentNode->Children.push_back(node);
+
+		//Recursive call
+		ParseNode(++iterator, end, &(currentNode->Children[0]));
+	}
+	else if (strKey == "SetImageFullSize" || strKey == "SetImageNormalSize")
+	{
+		//Set the type  (If true this means We are carring some conditionals already)
+		if (currentNode->Type != Conditional)
+			currentNode->Type = SetImageSize;
+
+		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to show/hide
+		currentNode->Action.second = strKey == "SetImageFullSize" ? true : false;
+
+		//Preparare the next node
+		ConversationNode node;
+		currentNode->Children.push_back(node);
+
+		//Recursive call
+		ParseNode(++iterator, end, &(currentNode->Children[0]));
+	}
+	else if (strKey == "FadeImageIn" || strKey == "FadeImageOut")
+	{
+		//Set the type  (If true this means We are carring some conditionals already)
+		if (currentNode->Type != Conditional)
+			currentNode->Type = SetImageFade;
+
+		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to fade in/out
+		currentNode->Action.second = strKey == "FadeImageIn" ? true : false;
+
+		//Preparare the next node
+		ConversationNode node;
+		currentNode->Children.push_back(node);
+
+		//Recursive call
+		ParseNode(++iterator, end, &(currentNode->Children[0]));
+	}
+	else if (strKey.find("SetImageLeft") != string::npos || strKey == "SetImageCenter" || strKey.find("SetImageRight") != string::npos)
+	{
+		//Set the type  (If true this means We are carring some conditionals already)
+		if (currentNode->Type != Conditional)
+		{
+			currentNode->Type = SetImageCenter;
+
+			if (strKey.find("Left") != string::npos)
+				currentNode->Type = SetImageLeft;
+			if (strKey.find("Right") != string::npos)
+				currentNode->Type = SetImageRight;
+		}
+
+		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to be inside screen or else out
+		currentNode->Action.second = strKey.find("Out") == string::npos ? true : false;
+
+		//Preparare the next node
+		ConversationNode node;
+		currentNode->Children.push_back(node);
+
+		//Recursive call
+		ParseNode(++iterator, end, &(currentNode->Children[0]));
+	}
+	else if (strKey == "SlideImageRight" || strKey == "SlideImageLeft")
+	{
+		//Set the type  (If true this means We are carring some conditionals already)
+		if (currentNode->Type != Conditional)
+			currentNode->Type =  SetImageSlide;
+
+		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to fade in/out
+		currentNode->Action.second = strKey.find("Right") != string::npos ? true : false; // it's Right else is Left
+
+		//Preparare the next node
+		ConversationNode node;
+		currentNode->Children.push_back(node);
+
+		//Recursive call
+		ParseNode(++iterator, end, &(currentNode->Children[0]));
+	}
+	else if (strKey == "SwipeImageRight" || strKey == "SwipeImageLeft")
+	{
+		//Set the type  (If true this means We are carring some conditionals already)
+		if (currentNode->Type != Conditional)
+			currentNode->Type = SetImageSwipe;
+
+		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to fade in/out
+		currentNode->Action.second = strKey.find("Right") != string::npos ? true : false; // it's Right else is Left
 
 		//Preparare the next node
 		ConversationNode node;
@@ -333,7 +470,17 @@ void ConversationManager::Update()
 
 	switch (CurrentConversationNode->Type)
 	{
-	case Action:
+	//case Action:
+	case SetBool:
+	case SetImage:
+	case SetImageVisibility:
+	case SetImageSize:
+	case SetImageFade:
+	case SetImageLeft:
+	case SetImageRight:
+	case SetImageCenter:
+	case SetImageSlide:
+	case SetImageSwipe:
 		if (!CurrentConversationNode->Action.first.empty())
 		{
 			CurrentConversationNode->ExecuteAction();

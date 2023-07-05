@@ -15,7 +15,8 @@ void IntroState::OnUpdate()
 	//float deltaTime = GetFrameTime();
 	if (IsKeyPressed(KEY_SPACE))
 	{
-		Game::Get().States.ChangeState(Game::Get().States.titleState);
+		Game::Get().States.ChangeState(Game::Get().States.dialogState);
+		//Game::Get().States.ChangeState(Game::Get().States.titleState);
 		
 		//Game::Get().States.PopState();
 		//Game::Get().States.PushState(Game::Get().States.titleState);

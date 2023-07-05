@@ -2,6 +2,7 @@
 
 #include <stack>
 #include "GameState.h"
+#include "DialogState.h"
 #include "IntroState.h"
 #include "TitleState.h"
 //#include "../../Utility/Utils.h"
@@ -29,6 +30,7 @@ public:
 
 	/// All states instances included below here
 
+	DialogState dialogState;
 	IntroState introState;
 	TitleState titleState;
 };

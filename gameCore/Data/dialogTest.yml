@@ -2,23 +2,66 @@ Dialogs:
   Characters:
     0 : Gandalf
     1 : Frodo
-  Conversations:
   ###############################################################################################
+  # - SetImage: "ID"            # ActorLeft, ActorRight, BGLayer1 ~ BGLayer5  (They're drawn 'in last order of Creation)
+  #   visible: false       
+  #   file: "kyo.png"
+
+  # - ShowImage: ID             # Show/Hide Visibility on Image
+  # - HideImage: ID
+  # - SetImageFullSize: ID      # Useful for Backgrounds
+  # - SetImageNormalSize: ID
+
+  # - FadeImageIn: ID           # Fade In/Out Image
+  # - FadeImageOut: ID
+
+  # - SetImageLeftOut: ID       # Change Image Position regardless visibility
+  # - SetImageLeft: ID
+  # - SetImageCenter: ID
+  # - SetImageRight: ID
+  # - SetImageRightOut: ID
+
+  # - SlideImageLeft: ID        # Slide Image from outside into the scene
+  # - SlideImageRight: ID
+
+  # - SwipeImageLeft: ID        # Do a slow pass of image into scene and then leave it out
+  # - SwipeImageRight: ID
+  ###############################################################################################
+  Conversations:
     Setup: 
+      - SetImage: "Background"       # ActorLeft, ActorRight, BGLayer1 ~ BGLayer5  
+        visible: false
+        file: "kyo.png"
+      - SetImageFullSize: Background
+      #- SetImageNormalSize: Background
+      - SetImageLeftOut: Background
+      #- SlideImageRight: Background
+      - SwipeImageRight: Background
+
       - 1: Esto es solo un test... es solo un test
       - 0: Esto es otro test...
       - 1: "Ok, Esto es solo un test... es solo un test"
+      - SetImage: "ActorLeft"       # ActorLeft, ActorRight, BGLayer1 ~ BGLayer5  
+        visible: true
+        file: "george.png"
+
+      - SetImageCenter: ActorLeft
       - SetTrue: one_shot
       - SetFalse: two_shot
+      #- SlideImageLeft: Background
+      #- SwipeImageRight: Background
+
       - 0: Hagamos un Branch...
       - Option:
         - Condition: "one_shot"     # saddly Yaml uses '!' to represent some Tag thing... whatever!
         - Condition: "!two_shot"    # default value is false when there isn't a previous entry
         - Condition: "!extra_shot"    
         - 1: We're inside an option!
+        - SetImageLeft: ActorLeft
         - 0: Ok, let's jump back to main branch..
         - SetFalse: one_shot
         - SetTrue: two_shot
+        - HideImage: ActorLeft      ###
         - JumpBack:
       - 1: Test completado
       - 0: Parece que resulto exitoso
@@ -27,12 +70,17 @@ Dialogs:
           - 1: Esta es una sola opcion
           - 0: una es mejor que ninguna!.
           - SetTrue: hidden_option
+          - SetImageRight: ActorLeft
+          - FadeImageIn: ActorLeft
+          - ShowImage: ActorLeft    ###
           - JumpBack:         # jumpback returns 1 level back by default
         - Option:
           - Condition: "hidden_option"
           - Condition: "!random_value"
           - 1: Esta es otra opcion
           - 0: definitivamente la ultima!.
+          - FadeImageOut: ActorLeft
+
 
   ###############################################################################################
 
