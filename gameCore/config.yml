@@ -4,6 +4,8 @@
       _Name: Engin3d!
       _Width: '1080'
       _Height: '720'
+      #_Width: '1920'
+      #_Height: '1080'
       _Bits: '32'
       _FPS: '60'
       _Fullscreen: 'false'

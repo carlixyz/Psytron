@@ -3,10 +3,10 @@
 #include "../../Graphics/Graphics.h"
 
 #define PADDING 100
-#define POS_CENTER ((Graphics::Get().GetWindowArea().width * 0.5f) - (ImagesMap[imageId]->GetWidth() * 0.5f))
+#define POS_CENTER ((Graphics::Get().GetWindowArea().width * 0.5f) - (ImagesMap[imageId]->Size.width * 0.5f))
 #define POS_LEFT (PADDING)
-#define POS_RIGHT (Graphics::Get().GetWindowArea().width - ImagesMap[imageId]->GetWidth() - PADDING)
-#define POS_LEFT_OUT ((float)-ImagesMap[imageId]->GetWidth() - PADDING)
+#define POS_RIGHT (Graphics::Get().GetWindowArea().width - ImagesMap[imageId]->Size.width - PADDING)
+#define POS_LEFT_OUT ((float)-ImagesMap[imageId]->Size.width - PADDING)
 #define POS_RIGHT_OUT (Graphics::Get().GetWindowArea().width + PADDING)
 
 void DialogState::OnInit()
@@ -15,6 +15,20 @@ void DialogState::OnInit()
 	ConversationManager::Get().Init("Data/dialogTest.yml");
 	//ConversationManager::Get().StartConversation("Comienzo"); // Activar este para realizar una comica charla al iniciar el juego
 	ConversationManager::Get().StartConversation("Setup");		// Activar este para realizar una interesante charla con acciones y logica
+
+	//LoadImage( "logo", "Back1.png");
+	LoadImage( "logo", "Back2.png");
+	//SetPosition("logo", EPositionCenter);
+	SetFullSize("logo");
+	//SetFullSize("logo", ENormal);
+	//SetFullSize("logo",false);
+	//MovePosition("logo", EPositionRight);
+	 
+	//SetEasing("logo", EActionEasing::EScrollRightCap);
+	//SetEasing("logo", EActionEasing::EScrollLeftCap);
+	SetEasing("logo", EActionEasing::EScrollCycle);
+	//SetEasing("logo", EActionEasing::EScrollRight);
+	//SetEasing("logo", EActionEasing::EShakeQuake);
 }
 
 void DialogState::OnDeinit()
@@ -40,11 +54,9 @@ void DialogState::OnUpdate()
 void DialogState::OnRender()
 {
 	//for (auto const& img : ImagesMap)
-	//{
 	//	img.second->Draw();
-	//}
 
-	// Iterate in reverse to draw stuff in order of creation
+	// Iterate in reverse to draw stuff in order of last created
 	for (auto it = ImagesMap.rbegin(); it != ImagesMap.rend(); it++) 
 	{
 		it->second->Draw();
@@ -56,16 +68,18 @@ void DialogState::LoadImage(std::string imageId, std::string file)
 	//if(ImagesMap.find(imageId) != ImagesMap.end())
 	//if (ImagesMap[imageId] == nullptr)
 	if(!ImagesMap.contains(imageId))
-		ImagesMap[imageId] = new ImageMove();
+		ImagesMap[imageId] = new ImageEase();
 
 	ImagesMap[imageId]->Load(file);
-	//ImagesMap[imageId]->SetAlpha(0.0f);
 
-	ImagesMap[imageId]->Size.x = (float)ImagesMap[imageId]->GetWidth();
-	ImagesMap[imageId]->Size.y = (float)ImagesMap[imageId]->GetHeight();
+	ImagesMap[imageId]->Size.width = (float)ImagesMap[imageId]->GetWidth();
+	ImagesMap[imageId]->Size.height = (float)ImagesMap[imageId]->GetHeight();
 
-	ImagesMap[imageId]->PositionX = (Graphics::Get().GetWindowArea().width * 0.5f) - (ImagesMap[imageId]->GetWidth() * 0.5f);
-	ImagesMap[imageId]->PositionY = (Graphics::Get().GetWindowArea().height - ImagesMap[imageId]->GetHeight());
+	ImagesMap[imageId]->FileSize.width = ImagesMap[imageId]->Size.width;
+	ImagesMap[imageId]->FileSize.height = ImagesMap[imageId]->Size.height;
+
+	ImagesMap[imageId]->PositionX = (Graphics::Get().GetWindowArea().width * 0.5f) - (ImagesMap[imageId]->Size.width * 0.5f);
+	ImagesMap[imageId]->PositionY = (Graphics::Get().GetWindowArea().height - ImagesMap[imageId]->Size.height);
 }
 
 void DialogState::SetImageVisible(std::string imageId, bool enabled)
@@ -79,18 +93,18 @@ void DialogState::SetPosition(std::string imageId, EScreenPosition position)
 	if (!ImagesMap.contains(imageId))
 		return;	
 
-	switch (position)
+	switch (position)	// This jumps our image right into a new position
 	{
 		case EScreenPosition::EPositionLeft:
 			ImagesMap[imageId]->PositionX = PADDING;
 			break;
 
 		case EScreenPosition::EPositionLeftOut:
-			ImagesMap[imageId]->PositionX = (float)-ImagesMap[imageId]->GetWidth() - PADDING;
+			ImagesMap[imageId]->PositionX = (float)-ImagesMap[imageId]->Size.width - PADDING;
 			break;
 
 		case EScreenPosition::EPositionRight:
-			ImagesMap[imageId]->PositionX = Graphics::Get().GetWindowArea().width - ImagesMap[imageId]->GetWidth() - PADDING;
+			ImagesMap[imageId]->PositionX = Graphics::Get().GetWindowArea().width - ImagesMap[imageId]->Size.width - PADDING;
 			break;
 
 		case EScreenPosition::EPositionRightOut:
@@ -99,7 +113,45 @@ void DialogState::SetPosition(std::string imageId, EScreenPosition position)
 
 		case EScreenPosition::EPositionCenter:
 		default:
-			ImagesMap[imageId]->PositionX = (Graphics::Get().GetWindowArea().width * 0.5f) - (ImagesMap[imageId]->GetWidth() * 0.5f);
+			ImagesMap[imageId]->PositionX = (Graphics::Get().GetWindowArea().width * 0.5f) - (ImagesMap[imageId]->Size.width * 0.5f);
+			break;
+	}
+}
+
+void DialogState::MovePosition(std::string imageId, EScreenPosition position)
+{
+	if (!ImagesMap.contains(imageId))	// Moves our image towards a new position with a smooth easing 
+		return;
+
+	bool isOutScreen = ImagesMap[imageId]->PositionX < -PADDING ||
+		ImagesMap[imageId]->PositionX > Graphics::Get().GetWindowArea().width + PADDING;
+
+	switch (position)	// This Slide something from current position to a new one.
+	{
+		case EScreenPosition::EPositionLeft:
+			ImagesMap[imageId]->Easing = isOutScreen ? &ImageEase::ActionSlideInScreen : &ImageEase::ActionSlide;
+			ImagesMap[imageId]->StartValues(ImagesMap[imageId]->PositionX, POS_LEFT, 2);
+			break;
+
+		case EScreenPosition::EPositionLeftOut:
+			ImagesMap[imageId]->Easing = &ImageEase::ActionSlideOutScreen;
+			ImagesMap[imageId]->StartValues(ImagesMap[imageId]->PositionX, POS_LEFT_OUT, 2);
+			break;
+
+		case EScreenPosition::EPositionRight:
+			ImagesMap[imageId]->Easing = isOutScreen ? &ImageEase::ActionSlideInScreen : &ImageEase::ActionSlide;
+			ImagesMap[imageId]->StartValues(ImagesMap[imageId]->PositionX, POS_RIGHT, 2);
+			break;
+
+		case EScreenPosition::EPositionRightOut:
+			ImagesMap[imageId]->Easing = &ImageEase::ActionSlideOutScreen;
+			ImagesMap[imageId]->StartValues(ImagesMap[imageId]->PositionX, POS_RIGHT_OUT, 2);
+			break;
+
+		case EScreenPosition::EPositionCenter:
+		default:
+			ImagesMap[imageId]->Easing = isOutScreen ? &ImageEase::ActionSlideInScreen : &ImageEase::ActionSlide;
+			ImagesMap[imageId]->StartValues(ImagesMap[imageId]->PositionX, POS_CENTER, 2);
 			break;
 	}
 }
@@ -112,39 +164,64 @@ void DialogState::SetEasing(std::string imageId, EActionEasing easing)
 	switch (easing)
 	{
 		case EActionEasing::EFadeIn:
-			ImagesMap[imageId]->Easing = &ImageMove::ActionFade;
 			ImagesMap[imageId]->Alpha = 0.0f;
+			ImagesMap[imageId]->Easing = &ImageEase::ActionFade;
 			ImagesMap[imageId]->StartValues(0.0f, 1.0f, 2);
 			break;
 
 		case EActionEasing::EFadeOut:
-			ImagesMap[imageId]->Easing = &ImageMove::ActionFade;
 			ImagesMap[imageId]->Alpha = 1.0f;
+			ImagesMap[imageId]->Easing = &ImageEase::ActionFade;
 			ImagesMap[imageId]->StartValues(1.0f, 0.0f, 2);
 			break;
 
-		case EActionEasing::ESlideLeft:
-			ImagesMap[imageId]->Easing = &ImageMove::ActionSlideInScreen;
+		case EActionEasing::ESlideFromLeft:
 			ImagesMap[imageId]->PositionX = POS_LEFT_OUT;
-			ImagesMap[imageId]->StartValues(POS_LEFT_OUT, POS_CENTER, 2);
+			MovePosition(imageId);
 			break;
 
-		case EActionEasing::ESlideRight:
-			ImagesMap[imageId]->Easing = &ImageMove::ActionSlideInScreen;
+		case EActionEasing::ESlideFromRight:
 			ImagesMap[imageId]->PositionX = POS_RIGHT_OUT;
-			ImagesMap[imageId]->StartValues(POS_RIGHT_OUT, POS_CENTER, 2);
+			MovePosition(imageId);
 			break;
 
-		case EActionEasing::ESwipeLeftOut:
-			ImagesMap[imageId]->Easing = &ImageMove::ActionSwipeThroughScreen;
-			ImagesMap[imageId]->PositionX = POS_LEFT_OUT;
-			ImagesMap[imageId]->StartValues(POS_LEFT_OUT, POS_CENTER, 3);
+		case EActionEasing::EScrollLeft:
+			SetFullSize(imageId);
+			ImagesMap[imageId]->Easing = &ImageEase::ActionScroll;
+			ImagesMap[imageId]->StartValues(100, 0, 1.0f);
 			break;
 
-		case EActionEasing::ESwipeRightOut:
-			ImagesMap[imageId]->Easing = &ImageMove::ActionSwipeThroughScreen;
-			ImagesMap[imageId]->PositionX = POS_RIGHT_OUT;
-			ImagesMap[imageId]->StartValues(POS_RIGHT_OUT, POS_CENTER, 3);
+		case EActionEasing::EScrollRight:
+			SetFullSize(imageId);
+			ImagesMap[imageId]->Easing = &ImageEase::ActionScroll;
+			ImagesMap[imageId]->StartValues(0, 100, 1.0f);
+			break;
+
+		case EActionEasing::EScrollLeftCap:
+			SetFullSize(imageId);
+			ImagesMap[imageId]->PositionX = 0;
+			ImagesMap[imageId]->Easing = &ImageEase::ActionScrollClamp;
+			ImagesMap[imageId]->StartValues(ImagesMap[imageId]->Size.width - Graphics::Get().GetWindowArea().width,	0, 30.0f);
+			break;
+
+		case EActionEasing::EScrollRightCap:
+			SetFullSize(imageId);
+			ImagesMap[imageId]->PositionX = 0;
+			ImagesMap[imageId]->Easing = &ImageEase::ActionScrollClamp;
+			ImagesMap[imageId]->StartValues(0, ImagesMap[imageId]->Size.width - Graphics::Get().GetWindowArea().width, 30.0f);
+			break;
+
+		case EActionEasing::EScrollCycle:
+			SetFullSize(imageId);
+			ImagesMap[imageId]->PositionX = 0;
+			ImagesMap[imageId]->Easing = &ImageEase::ActionScrollLoop;
+			ImagesMap[imageId]->StartValues(0, ImagesMap[imageId]->Size.width - Graphics::Get().GetWindowArea().width, 10.0f);
+			break;
+
+		case EActionEasing::EShakeQuake:
+			SetFullSize(imageId);
+			ImagesMap[imageId]->Easing = &ImageEase::ActionShake;
+			ImagesMap[imageId]->StartValues(0, 50, 2.0f);
 			break;
 
 		case EActionEasing::EActionNone:
@@ -156,25 +233,48 @@ void DialogState::SetEasing(std::string imageId, EActionEasing easing)
 
 }
 
-void DialogState::SetFullSize(std::string imageId, bool fullSize)
+void DialogState::SetFullSize(std::string imageId, EImageSize formatSize)
 {
 	if (!ImagesMap.contains(imageId))
 		return;
 
-	if (fullSize)
+	if (formatSize == EImageSize::EStrechProportion) // Scale up to Viewport height and the rescale width in proportion
 	{
-		ImagesMap[imageId]->SetWidth((int)Graphics::Get().GetWindowArea().width);
+		float proportionalWidth = ImagesMap[imageId]->Size.width * 
+			Graphics::Get().GetWindowArea().height / ImagesMap[imageId]->Size.height;
+
+		ImagesMap[imageId]->SetWidth((int)proportionalWidth);
 		ImagesMap[imageId]->SetHeight((int)Graphics::Get().GetWindowArea().height);
-		//ImagesMap[imageId]->PositionY = 0;
+
+		ImagesMap[imageId]->Size.width = proportionalWidth;
+		ImagesMap[imageId]->Size.height = Graphics::Get().GetWindowArea().height;
 	}
-	else
+	//else if (formatSize == EImageSize::EStrechAll) // stretch up widht & heigh to Viewport (looks ugly)
+	//{
+	//	ImagesMap[imageId]->SetWidth((int)Graphics::Get().GetWindowArea().width);
+	//	ImagesMap[imageId]->SetHeight((int)Graphics::Get().GetWindowArea().height);
+
+	//	ImagesMap[imageId]->Size.width = Graphics::Get().GetWindowArea().width;
+	//	ImagesMap[imageId]->Size.height = Graphics::Get().GetWindowArea().height;
+	//}
+	else if (formatSize == EImageSize::EExtend)		// stretch up just UV map width & heigh to Viewport
 	{
-		ImagesMap[imageId]->SetWidth((int)ImagesMap[imageId]->Size.x);
-		ImagesMap[imageId]->SetHeight((int)ImagesMap[imageId]->Size.y);
+		ImagesMap[imageId]->Size.width = Graphics::Get().GetWindowArea().width;
+		ImagesMap[imageId]->Size.height = Graphics::Get().GetWindowArea().height;
+
+		ImagesMap[imageId]->SetWidth((int)ImagesMap[imageId]->FileSize.width);
+		ImagesMap[imageId]->SetHeight((int)ImagesMap[imageId]->FileSize.height);
+	}
+	else // (formatSize == EImageSize::ENormal)		// Restore Texture original file size
+	{
+		ImagesMap[imageId]->SetWidth((int)ImagesMap[imageId]->FileSize.width);
+		ImagesMap[imageId]->SetHeight((int)ImagesMap[imageId]->FileSize.height);
+
+		ImagesMap[imageId]->Size.width = (float)ImagesMap[imageId]->GetWidth();
+		ImagesMap[imageId]->Size.height = (float)ImagesMap[imageId]->GetHeight();
 	}
 
-	ImagesMap[imageId]->PositionX = (Graphics::Get().GetWindowArea().width * 0.5f) - (ImagesMap[imageId]->GetWidth() * 0.5f);
-	ImagesMap[imageId]->PositionY = Graphics::Get().GetWindowArea().height - ImagesMap[imageId]->GetHeight();
-
+	ImagesMap[imageId]->PositionX = (Graphics::Get().GetWindowArea().width * 0.5f) - (ImagesMap[imageId]->Size.width * 0.5f);
+	ImagesMap[imageId]->PositionY = Graphics::Get().GetWindowArea().height - ImagesMap[imageId]->Size.height;
 }
 

@@ -7,36 +7,47 @@ Dialogs:
   #   visible: false       
   #   file: "kyo.png"
 
-  # - ShowImage: ID             # Show/Hide Visibility on Image
-  # - HideImage: ID
-  # - SetImageFullSize: ID      # Useful for Backgrounds
-  # - SetImageNormalSize: ID
+  # - ShowImage:        ID      # Show/Hide Visibility on Image
+  # - HideImage:        ID
+  # - SetFullHeight:    ID      # Useful for Backgrounds
+  # - SetSizeExtend:    ID
 
-  # - FadeImageIn: ID           # Fade In/Out Image
-  # - FadeImageOut: ID
+  # - FadeImageIn:      ID      # Fade In/Out Image
+  # - FadeImageOut:     ID
 
-  # - SetImageLeftOut: ID       # Change Image Position regardless visibility
-  # - SetImageLeft: ID
-  # - SetImageCenter: ID
-  # - SetImageRight: ID
+  # - SetImageLeftOut:  ID      # Change Image Position regardless visibility
+  # - SetImageLeft:     ID
+  # - SetImageCenter:   ID
+  # - SetImageRight:    ID
   # - SetImageRightOut: ID
 
-  # - SlideImageLeft: ID        # Slide Image from outside into the scene
-  # - SlideImageRight: ID
+  # - MoveImageLeftOut: ID      # Change Image Position regardless visibility
+  # - MoveImageLeft:    ID
+  # - MoveImageCenter:  ID
+  # - MoveImageRight:   ID
+  # - MoveImageRightOut:ID
 
-  # - SwipeImageLeft: ID        # Do a slow pass of image into scene and then leave it out
-  # - SwipeImageRight: ID
+  # - ScrollLeft:       ID      # Scroll Image until the end of times
+  # - ScrollLeftEnd:    ID      # Scroll Image until the end of it.
+  # - ScrollRight:      ID
+  # - ScrollRightEnd:   ID
+  # - ScrollLoop:       ID      # Scroll image inbetween both sides
+
+  # - SlideImageLeft:   ID      # Slide Image from outside into the scene
+  # - SlideImageRight:  ID
+
   ###############################################################################################
   Conversations:
     Setup: 
       - SetImage: "Background"       # ActorLeft, ActorRight, BGLayer1 ~ BGLayer5  
         visible: false
         file: "kyo.png"
-      - SetImageFullSize: Background
-      #- SetImageNormalSize: Background
+      - SetFullHeight: Background
+      #- SetSizeExtend: Background
       - SetImageLeftOut: Background
       #- SlideImageRight: Background
-      - SwipeImageRight: Background
+      #- SwipeImageRight: Background
+      - MoveImageCenter: Background
 
       - 1: Esto es solo un test... es solo un test
       - 0: Esto es otro test...
@@ -48,6 +59,7 @@ Dialogs:
       - SetImageCenter: ActorLeft
       - SetTrue: one_shot
       - SetFalse: two_shot
+      - MoveImageRightOut: Background
       #- SlideImageLeft: Background
       #- SwipeImageRight: Background
 
@@ -57,22 +69,23 @@ Dialogs:
         - Condition: "!two_shot"    # default value is false when there isn't a previous entry
         - Condition: "!extra_shot"    
         - 1: We're inside an option!
-        - SetImageLeft: ActorLeft
+        - MoveImageLeft: ActorLeft
         - 0: Ok, let's jump back to main branch..
         - SetFalse: one_shot
         - SetTrue: two_shot
         - HideImage: ActorLeft      ###
+        #- FadeImageOut: Background
         - JumpBack:
       - 1: Test completado
       - 0: Parece que resulto exitoso
       - ChooseTalk :
         - Option:
           - 1: Esta es una sola opcion
+          - FadeImageIn: ActorLeft
+          #- ShowImage: ActorLeft    ###
           - 0: una es mejor que ninguna!.
           - SetTrue: hidden_option
-          - SetImageRight: ActorLeft
-          - FadeImageIn: ActorLeft
-          - ShowImage: ActorLeft    ###
+          - MoveImageRightOut: ActorLeft
           - JumpBack:         # jumpback returns 1 level back by default
         - Option:
           - Condition: "hidden_option"

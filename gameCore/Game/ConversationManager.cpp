@@ -4,7 +4,6 @@
 
 using namespace std;
 
-//Initializate Conversation Manager
 void ConversationManager::Init(const std::string& conversationFile)
 {
 	Characters.reserve(5);
@@ -107,6 +106,9 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	const auto& talkIt = iterator->begin();
 	string strKey = talkIt->first.as<string>();
 
+	//Preparare the next node
+	ConversationNode node;
+
 	//Get the type of node from the YML
 	if (!strKey.empty() && strKey.find_first_not_of("-.0123456789") == std::string::npos) 	//if (strKey[0] == '0' || (atoi(strKey.c_str())))
 	{
@@ -125,18 +127,6 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 
 		if (talkNode["time"]) 		//Get the duration (optional parametter)
 			currentNode->Duration = talkNode["time"].as<float>();
-
-
-		//if (talkNode["visible"]) 		//Get the visualization state (optional parametter)
-		//	currentNode->Action.second = talkNode["visible"].as<string>() == "false";
-
-		//Preparare the next node
-		ConversationNode node;
-		currentNode->Children.push_back(node);
-
-		//Recursive call
-		ParseNode(++iterator, end, &(currentNode->Children[0]));
-
 	}
 	else if (strKey == "Option")
 	{
@@ -181,6 +171,7 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 
 		//Recursive call
 		ParseNode(++iterator, end, &(currentNode->Children[1]));
+		return;
 	}
 	else if (strKey == "ChooseTalk")
 	{
@@ -226,6 +217,7 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 				ParseNode(subTalkIt, subTalkEnd, &(currentNode->Children[lastIndex]));
 			}
 		}
+		return;
 	}
 	else if (strKey == "JumpBack")
 	{
@@ -234,13 +226,6 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 
 		// Keep as Param for JumpLevels
 		currentNode->Text = !talkIt->second.IsNull() ? talkIt->second.as<string>() : "1";
-
-		//Preparare the next node
-		ConversationNode node;
-		currentNode->Children.push_back(node);
-
-		//Recursive call
-		ParseNode(++iterator, end, &(currentNode->Children[0]));
 	}
 	else if (strKey == "SetTrue" || strKey == "SetFalse")
 	{
@@ -250,13 +235,6 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 
 		currentNode->Action.first = talkIt->second.as<string>();
 		currentNode->Action.second = (strKey == "SetTrue" ? true : false);
-
-		//Preparare the next node
-		ConversationNode node;
-		currentNode->Children.push_back(node);
-
-		//Recursive call
-		ParseNode(++iterator, end, &(currentNode->Children[0]));
 	}
 	else if (strKey == "SetImage")
 	{
@@ -280,13 +258,6 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 			// else use the previous value if We had one
 			currentNode->Action.second = Game::Get().States.dialogState.ImagesMap[currentNode->Action.first]->GetIsVisible();
 		}
-
-		//Preparare the next node
-		ConversationNode node;
-		currentNode->Children.push_back(node);
-
-		//Recursive call
-		ParseNode(++iterator, end, &(currentNode->Children[0]));
 	}
 	else if (strKey == "ShowImage" || strKey == "HideImage")
 	{
@@ -296,29 +267,15 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 
 		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to show/hide
 		currentNode->Action.second = strKey == "ShowImage" ? true : false;
-
-		//Preparare the next node
-		ConversationNode node;
-		currentNode->Children.push_back(node);
-
-		//Recursive call
-		ParseNode(++iterator, end, &(currentNode->Children[0]));
 	}
-	else if (strKey == "SetImageFullSize" || strKey == "SetImageNormalSize")
+	else if (strKey == "SetFullHeight" || strKey == "SetSizeExtend" /*|| strKey == "SetImageSizeNormal"*/)
 	{
 		//Set the type  (If true this means We are carring some conditionals already)
 		if (currentNode->Type != Conditional)
 			currentNode->Type = SetImageSize;
 
 		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to show/hide
-		currentNode->Action.second = strKey == "SetImageFullSize" ? true : false;
-
-		//Preparare the next node
-		ConversationNode node;
-		currentNode->Children.push_back(node);
-
-		//Recursive call
-		ParseNode(++iterator, end, &(currentNode->Children[0]));
+		currentNode->Action.second = strKey == "SetSizeExtend" ? true : false;
 	}
 	else if (strKey == "FadeImageIn" || strKey == "FadeImageOut")
 	{
@@ -328,13 +285,6 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 
 		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to fade in/out
 		currentNode->Action.second = strKey == "FadeImageIn" ? true : false;
-
-		//Preparare the next node
-		ConversationNode node;
-		currentNode->Children.push_back(node);
-
-		//Recursive call
-		ParseNode(++iterator, end, &(currentNode->Children[0]));
 	}
 	else if (strKey.find("SetImageLeft") != string::npos || strKey == "SetImageCenter" || strKey.find("SetImageRight") != string::npos)
 	{
@@ -345,19 +295,51 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 
 			if (strKey.find("Left") != string::npos)
 				currentNode->Type = SetImageLeft;
-			if (strKey.find("Right") != string::npos)
+			else if (strKey.find("Right") != string::npos)
 				currentNode->Type = SetImageRight;
 		}
 
 		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to be inside screen or else out
 		currentNode->Action.second = strKey.find("Out") == string::npos ? true : false;
+	}
+	else if (strKey.find("MoveImageLeft") != string::npos || strKey == "MoveImageCenter" || strKey.find("MoveImageRight") != string::npos)
+	{
+		//Set the type  (If true this means We are carring some conditionals already)
+		if (currentNode->Type != Conditional)
+		{
+			currentNode->Type = MoveImageCenter;
 
-		//Preparare the next node
-		ConversationNode node;
-		currentNode->Children.push_back(node);
+			if (strKey.find("Left") != string::npos)
+				currentNode->Type = MoveImageLeft;
+			else if (strKey.find("Right") != string::npos)
+				currentNode->Type = MoveImageRight;
+		}
 
-		//Recursive call
-		ParseNode(++iterator, end, &(currentNode->Children[0]));
+		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to be inside screen or else out
+		currentNode->Action.second = strKey.find("Out") == string::npos ? true : false;
+	}
+	else if (strKey.find("ScrollLeft") != string::npos || strKey == "ScrollLoop" || strKey.find("ScrollRight") != string::npos)
+	{
+		if (currentNode->Type != Conditional)
+		{
+			currentNode->Type = ScrollCycle;
+
+			if (strKey.find("Left") != string::npos)
+				currentNode->Type = ScrollLeft;
+			else if (strKey.find("Right") != string::npos)
+				currentNode->Type = ScrollRight;
+		}
+
+		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to be inside screen or else out
+		currentNode->Action.second = strKey.find("End") == string::npos ? true : false;
+	}
+	else if (strKey == "ShakeImage" )
+	{
+		if (currentNode->Type != Conditional)
+			currentNode->Type = ShakeImage;
+
+		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to fade in/out
+		currentNode->Action.second = true; // it's Right else is Left
 	}
 	else if (strKey == "SlideImageRight" || strKey == "SlideImageLeft")
 	{
@@ -367,35 +349,17 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 
 		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to fade in/out
 		currentNode->Action.second = strKey.find("Right") != string::npos ? true : false; // it's Right else is Left
-
-		//Preparare the next node
-		ConversationNode node;
-		currentNode->Children.push_back(node);
-
-		//Recursive call
-		ParseNode(++iterator, end, &(currentNode->Children[0]));
-	}
-	else if (strKey == "SwipeImageRight" || strKey == "SwipeImageLeft")
-	{
-		//Set the type  (If true this means We are carring some conditionals already)
-		if (currentNode->Type != Conditional)
-			currentNode->Type = SetImageSwipe;
-
-		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to fade in/out
-		currentNode->Action.second = strKey.find("Right") != string::npos ? true : false; // it's Right else is Left
-
-		//Preparare the next node
-		ConversationNode node;
-		currentNode->Children.push_back(node);
-
-		//Recursive call
-		ParseNode(++iterator, end, &(currentNode->Children[0]));
 	}
 	else
 	{
 		//Invalid tag found
 		CHECK(0 && "Wrong character tag ID\n");
 	}
+
+	currentNode->Children.push_back(node);
+
+	//Recursive call
+	ParseNode(++iterator, end, &(currentNode->Children[0]));
 }
 
 // Parse yml to  group conditions
@@ -479,8 +443,14 @@ void ConversationManager::Update()
 	case SetImageLeft:
 	case SetImageRight:
 	case SetImageCenter:
+	case MoveImageLeft:
+	case MoveImageRight:
+	case MoveImageCenter:
+	case ScrollLeft:
+	case ScrollRight:
+	case ScrollCycle:
+	case ShakeImage:
 	case SetImageSlide:
-	case SetImageSwipe:
 		if (!CurrentConversationNode->Action.first.empty())
 		{
 			CurrentConversationNode->ExecuteAction();
@@ -526,7 +496,6 @@ void ConversationManager::Update()
 		if (IsKeyPressed(KEY_DOWN) && ChooseOption < (DisplayedChildren.size() - 1))
 			ChooseOption++;
 		return;
-
 
 
 	default:

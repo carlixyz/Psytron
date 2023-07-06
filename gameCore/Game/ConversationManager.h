@@ -15,7 +15,8 @@ enum ConversationNodeType
 	ChooseTalk,
     Optional,
     Conditional,
-    //Action,
+    
+    //Actions
     SetBool,
     SetImage,
     SetImageVisibility,
@@ -26,8 +27,16 @@ enum ConversationNodeType
     SetImageRight,
     SetImageCenter,
 
+    MoveImageLeft,
+    MoveImageRight,
+    MoveImageCenter,
+
+    ScrollLeft,
+    ScrollRight,
+    ScrollCycle,
+    ShakeImage,
+
     SetImageSlide,
-    SetImageSwipe,
 
 	JumpBack,
 	EndConversation
@@ -45,7 +54,7 @@ struct ImageResource
     std::string file = "";
 };
 
-struct ConversationNode     // SubNodos de la conversación
+struct ConversationNode     // Conversation SubNodes
 {
     ConversationNodeType Type   = ConversationNodeType::EndConversation;
     std::string Text            = "";
@@ -77,18 +86,22 @@ struct ConversationNode     // SubNodos de la conversación
         case SetBool:
             Register::Get().SetValue(Action.first, Action.second);
             break;
+
         case SetImage:
             if(!Text.empty())
-                Game::Get().States.dialogState.LoadImage(Action.first, Text);               // LoadImage
+                Game::Get().States.dialogState.LoadImage(Action.first, Text);                       // LoadImage
             Game::Get().States.dialogState.SetImageVisible( Action.first, Action.second);   
             break;
 
         case SetImageVisibility:
-            Game::Get().States.dialogState.SetImageVisible(Action.first, Action.second);    // Set it Visible or not
+            Game::Get().States.dialogState.SetImageVisible(Action.first, Action.second);            // Set it Visible or not
             break;
 
         case SetImageSize:
-            Game::Get().States.dialogState.SetFullSize(Action.first, Action.second);    // Set it Visible or not
+            if(Action.second)
+                Game::Get().States.dialogState.SetFullSize(Action.first, DialogState::EStrechProportion);    // Strech it along screen
+            else
+                Game::Get().States.dialogState.SetFullSize(Action.first, DialogState::EExtend);    // Else Extend tiles too 
             break;
 
         case SetImageFade:
@@ -97,6 +110,7 @@ struct ConversationNode     // SubNodos de la conversación
             else
                 Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::EFadeOut);
             break;
+
 
         case SetImageLeft:
             if (Action.second == true) // Set inside Screen else set it Out
@@ -116,18 +130,54 @@ struct ConversationNode     // SubNodos de la conversación
             Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionCenter);
             break;
 
-        case SetImageSlide:
-            if (Action.second == true) // Set inside Screen else set it Out
-                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::ESlideRight);
+
+        case MoveImageLeft:
+            if (Action.second == true) // Move inside Screen else set it Out
+                Game::Get().States.dialogState.MovePosition(Action.first, DialogState::EScreenPosition::EPositionLeft);
             else
-                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::ESlideLeft);
+                Game::Get().States.dialogState.MovePosition(Action.first, DialogState::EScreenPosition::EPositionLeftOut);
             break;
 
-        case SetImageSwipe:
+        case MoveImageRight:
             if (Action.second == true) // Set inside Screen else set it Out
-                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::ESwipeLeftOut);
+                Game::Get().States.dialogState.MovePosition(Action.first, DialogState::EScreenPosition::EPositionRight);
             else
-                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::ESwipeRightOut);
+                Game::Get().States.dialogState.MovePosition(Action.first, DialogState::EScreenPosition::EPositionRightOut);
+            break;
+
+        case MoveImageCenter:
+            Game::Get().States.dialogState.MovePosition(Action.first, DialogState::EScreenPosition::EPositionCenter);
+            break;
+
+
+        case SetImageSlide:
+            if (Action.second == true)      // Set Slide From Right else Slide From Left
+                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::ESlideFromRight);
+            else
+                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::ESlideFromLeft);
+            break;
+
+
+        case ScrollLeft:
+            if (Action.second == true)      // Move inside Screen cap else leave it scroll free Out undefinedly
+                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::EScrollLeftCap);
+            else
+                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::EScrollLeft);
+            break;
+
+        case ScrollRight:
+            if (Action.second == true)  // Move inside Screen cap else leave it free Out undefinedly
+                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::EScrollRightCap);
+            else
+                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::EScrollRight);
+            break;
+
+        case ScrollCycle:                   // Move inside Screen cap undefinedly
+            Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::EScrollCycle);
+            break;
+
+        case ShakeImage:
+            Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::EShakeQuake);
             break;
 
         default:
@@ -136,7 +186,7 @@ struct ConversationNode     // SubNodos de la conversación
     }
 };
 
-struct Conversation         // Raíz del arbol de subconversaciones, en nuestro ejemplo tenemos un par
+struct Conversation         // SubConversation Root tree, In our example We have a pair
 {
     std::string  Name           = "";
 	ConversationNode Root;

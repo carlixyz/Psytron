@@ -269,7 +269,10 @@
     <ClInclude Include="Utility\Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Back1.png" />
+    <Image Include="Back2.png" />
     <Image Include="raylib_logo.png" />
+    <Image Include="UV.png" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Libraries\yaml-cpp\lib\Win32\yaml-cpp.lib" />
