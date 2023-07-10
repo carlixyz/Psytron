@@ -7,9 +7,10 @@
 #include <string>
 #include "yaml-cpp/yaml.h"
 #include "Register.h"
+#include "../Audio/Audio.h"
 #include "Game.h"
 
-enum ConversationNodeType	
+enum class ConversationNodeType	
 {
 	NormalTalk,
 	ChooseTalk,
@@ -35,8 +36,13 @@ enum ConversationNodeType
     ScrollRight,
     ScrollCycle,
     ShakeImage,
+    CleanUp,
 
     SetImageSlide,
+
+    PlayMusic,
+    SetMusic,
+    PlaySound,
 
 	JumpBack,
 	EndConversation
@@ -83,28 +89,28 @@ struct ConversationNode     // Conversation SubNodes
     {
         switch (Type)
         {
-        case SetBool:
+        case ConversationNodeType::SetBool:
             Register::Get().SetValue(Action.first, Action.second);
             break;
 
-        case SetImage:
+        case ConversationNodeType::SetImage:
             if(!Text.empty())
                 Game::Get().States.dialogState.LoadImage(Action.first, Text);                       // LoadImage
             Game::Get().States.dialogState.SetImageVisible( Action.first, Action.second);   
             break;
 
-        case SetImageVisibility:
+        case ConversationNodeType::SetImageVisibility:
             Game::Get().States.dialogState.SetImageVisible(Action.first, Action.second);            // Set it Visible or not
             break;
 
-        case SetImageSize:
+        case ConversationNodeType::SetImageSize:
             if(Action.second)
                 Game::Get().States.dialogState.SetFullSize(Action.first, DialogState::EStrechProportion);    // Strech it along screen
             else
                 Game::Get().States.dialogState.SetFullSize(Action.first, DialogState::EExtend);    // Else Extend tiles too 
             break;
 
-        case SetImageFade:
+        case ConversationNodeType::SetImageFade:
             if (Action.second == true) // Fade In else Out
                 Game::Get().States.dialogState.SetEasing( Action.first, DialogState::EActionEasing::EFadeIn);
             else
@@ -112,45 +118,45 @@ struct ConversationNode     // Conversation SubNodes
             break;
 
 
-        case SetImageLeft:
+        case ConversationNodeType::SetImageLeft:
             if (Action.second == true) // Set inside Screen else set it Out
                 Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionLeft);
             else
                 Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionLeftOut);
             break;
 
-        case SetImageRight:
+        case ConversationNodeType::SetImageRight:
             if (Action.second == true) // Set inside Screen else set it Out
                 Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionRight);
             else
                 Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionRightOut);
             break;
 
-        case SetImageCenter:
+        case ConversationNodeType::SetImageCenter:
             Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionCenter);
             break;
 
 
-        case MoveImageLeft:
+        case ConversationNodeType::MoveImageLeft:
             if (Action.second == true) // Move inside Screen else set it Out
                 Game::Get().States.dialogState.MovePosition(Action.first, DialogState::EScreenPosition::EPositionLeft);
             else
                 Game::Get().States.dialogState.MovePosition(Action.first, DialogState::EScreenPosition::EPositionLeftOut);
             break;
 
-        case MoveImageRight:
+        case ConversationNodeType::MoveImageRight:
             if (Action.second == true) // Set inside Screen else set it Out
                 Game::Get().States.dialogState.MovePosition(Action.first, DialogState::EScreenPosition::EPositionRight);
             else
                 Game::Get().States.dialogState.MovePosition(Action.first, DialogState::EScreenPosition::EPositionRightOut);
             break;
 
-        case MoveImageCenter:
+        case ConversationNodeType::MoveImageCenter:
             Game::Get().States.dialogState.MovePosition(Action.first, DialogState::EScreenPosition::EPositionCenter);
             break;
 
 
-        case SetImageSlide:
+        case ConversationNodeType::SetImageSlide:
             if (Action.second == true)      // Set Slide From Right else Slide From Left
                 Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::ESlideFromRight);
             else
@@ -158,28 +164,46 @@ struct ConversationNode     // Conversation SubNodes
             break;
 
 
-        case ScrollLeft:
+        case ConversationNodeType::ScrollLeft:
             if (Action.second == true)      // Move inside Screen cap else leave it scroll free Out undefinedly
                 Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::EScrollLeftCap);
             else
                 Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::EScrollLeft);
             break;
 
-        case ScrollRight:
+        case ConversationNodeType::ScrollRight:
             if (Action.second == true)  // Move inside Screen cap else leave it free Out undefinedly
                 Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::EScrollRightCap);
             else
                 Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::EScrollRight);
             break;
 
-        case ScrollCycle:                   // Move inside Screen cap undefinedly
+        case ConversationNodeType::ScrollCycle:                   // Move inside Screen cap undefinedly
             Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::EScrollCycle);
             break;
 
-        case ShakeImage:
+        case ConversationNodeType::ShakeImage:
             Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::EShakeQuake);
             break;
 
+        case ConversationNodeType::CleanUp:
+            if (Action.second == true)  // Move inside Screen cap else leave it free Out undefinedly
+                Game::Get().States.dialogState.Unload(Action.first);
+            else
+                Game::Get().States.dialogState.UnLoadAll();
+            break;
+        case ConversationNodeType::PlayMusic:   // PlayMusic with looping On/Off
+                Audio::Get().PlayMusic(Action.first, Action.second);
+            break;
+        case ConversationNodeType::SetMusic:  // Stop music or just toggle pause/resume it
+            if (Action.second == true)  
+                Audio::Get().StopMusic();
+            else
+                Audio::Get().PauseMusic();
+            break;
+        case ConversationNodeType::PlaySound:   
+                Audio::Get().PlaySound(Action.first);
+            break;
         default:
             break;
         }
@@ -196,6 +220,9 @@ struct Conversation         // SubConversation Root tree, In our example We have
 class ConversationManager : public Singleton<ConversationManager>
 {
 	friend class Singleton<ConversationManager>;
+
+    Rectangle TextBoxArea;
+    Rectangle TextArea;
 
     //Type definition to simplify the syntax
     typedef std::vector<CharacterSpeaker> CharactersVector;

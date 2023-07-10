@@ -29,10 +29,17 @@ void DialogState::OnInit()
 	SetEasing("logo", EActionEasing::EScrollCycle);
 	//SetEasing("logo", EActionEasing::EScrollRight);
 	//SetEasing("logo", EActionEasing::EShakeQuake);
+	//RemoveImage("logo");
+
 }
 
 void DialogState::OnDeinit()
 {
+	UnLoadAll();
+}
+
+void DialogState::UnLoadAll()
+{	
 	for (auto& img : ImagesMap)
 	{
 		img.second->SetIsVisible(false);
@@ -41,6 +48,17 @@ void DialogState::OnDeinit()
 	}
 
 	ImagesMap.clear();
+}
+
+void DialogState::Unload(std::string imageId)
+{
+	if (!ImagesMap.contains(imageId))
+		return;
+
+	ImagesMap[imageId]->Visible = false;
+	ImagesMap[imageId]->Unload();
+	delete ImagesMap[imageId];
+	ImagesMap.erase(imageId);
 }
 
 void DialogState::OnUpdate()

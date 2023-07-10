@@ -2,6 +2,7 @@
 
 //#include "raylib-cpp.hpp"
 #include "../Graphics/Graphics.h"
+#include "../Audio/Audio.h"
 #include "../Utility/Utils.h"
 #include "ConversationManager.h"
 

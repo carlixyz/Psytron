@@ -4,6 +4,8 @@
 
 using namespace std;
 
+/// TODO: General Code CleanUp here
+
 void ConversationManager::Init(const std::string& conversationFile)
 {
 	Characters.reserve(5);
@@ -33,15 +35,23 @@ void ConversationManager::Init(const std::string& conversationFile)
 
 	CurrentConversationNode = nullptr;
 	ChooseOption = 0;
+
+	TextBoxArea = {
+		Graphics::Get().GetWindowArea().width * 0.025f,	Graphics::Get().GetWindowArea().height * 0.8f,
+		  Graphics::Get().GetWindowArea().width * 0.95f, Graphics::Get().GetWindowArea().height * 0.2f
+	};
+
+	TextArea = {
+	TextBoxArea.x, TextBoxArea.y + 20,
+	  TextBoxArea.width, TextBoxArea.height
+	};
 }
 
 void ConversationManager::Deinit(void)
 {
-	//Free characters
-	Characters.clear();
+	Characters.clear();			//Free characters
 
-	//Free conversations
-	Conversations.clear();
+	Conversations.clear();		//Free conversations
 }
 
 void ConversationManager::ProcessDisplayedOptions()
@@ -98,7 +108,7 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	//Base case
 	if (iterator == end)
 	{
-		currentNode->Type = EndConversation;
+		currentNode->Type = ConversationNodeType::EndConversation;
 		return;
 	}
 
@@ -113,8 +123,8 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	if (!strKey.empty() && strKey.find_first_not_of("-.0123456789") == std::string::npos) 	//if (strKey[0] == '0' || (atoi(strKey.c_str())))
 	{
 		//Set the type
-		if (currentNode->Type != Conditional) // If true this means We are carring some conditionals already
-			currentNode->Type = NormalTalk;
+		if (currentNode->Type != ConversationNodeType::Conditional) // If true this means We are carring some conditionals already
+			currentNode->Type = ConversationNodeType::NormalTalk;
 		//Get the text
 		currentNode->Text = talkIt->second.as<string>();
 
@@ -131,7 +141,7 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	else if (strKey == "Option")
 	{
 		//Set the type
-		currentNode->Type = Optional;
+		currentNode->Type = ConversationNodeType::Optional;
 
 		//Get all options
 		if (talkIt->second.IsSequence())
@@ -153,10 +163,10 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 				if (nextKey != "Condition")
 					break;
 
-				node.Type = Conditional;
+				node.Type = ConversationNodeType::Conditional;
 				ParseCondition(nextValue, &node);
 				subTalkIt++;
-				//DEBUG_COUT("nextKey: " << nextKey << " value:  " << nextValue << "\n ");
+				//DEBUG_COUT("nextKey: " << nextKey <s< " value:  " << nextValue << "\n ");
 			}
 
 			currentNode->Children.push_back(node);
@@ -176,7 +186,7 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	else if (strKey == "ChooseTalk")
 	{
 		//Set the type
-		currentNode->Type = ChooseTalk;
+		currentNode->Type = ConversationNodeType::ChooseTalk;
 
 		//Get all options
 		for (auto optionIt : talkIt->second) // inside ChooseTalk: list of Options
@@ -203,7 +213,7 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 					if (nextKey != "Condition")
 						break;
 
-					node.Type = Conditional;
+					node.Type = ConversationNodeType::Conditional;
 					ParseCondition(nextValue, &node);
 					subTalkIt++;
 				}
@@ -222,7 +232,7 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	else if (strKey == "JumpBack")
 	{
 		//Set the type
-		currentNode->Type = JumpBack;
+		currentNode->Type = ConversationNodeType::JumpBack;
 
 		// Keep as Param for JumpLevels
 		currentNode->Text = !talkIt->second.IsNull() ? talkIt->second.as<string>() : "1";
@@ -230,8 +240,8 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	else if (strKey == "SetTrue" || strKey == "SetFalse")
 	{
 		//Set the type
-		if (currentNode->Type != Conditional) // If true this means We are carring some conditionals already
-			currentNode->Type = SetBool;
+		if (currentNode->Type != ConversationNodeType::Conditional) // If true this means We are carring some conditionals already
+			currentNode->Type = ConversationNodeType::SetBool;
 
 		currentNode->Action.first = talkIt->second.as<string>();
 		currentNode->Action.second = (strKey == "SetTrue" ? true : false);
@@ -239,8 +249,8 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	else if (strKey == "SetImage")
 	{
 		//Set the type (If true this means We are carring some conditionals already)
-		if (currentNode->Type != Conditional) 
-			currentNode->Type = SetImage;
+		if (currentNode->Type != ConversationNodeType::Conditional)
+			currentNode->Type = ConversationNodeType::SetImage;
 
 		// Get the Image ID
 		currentNode->Action.first = talkIt->second.as<string>();	 
@@ -262,8 +272,8 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	else if (strKey == "ShowImage" || strKey == "HideImage")
 	{
 		//Set the type  (If true this means We are carring some conditionals already)
-		if (currentNode->Type != Conditional) 
-			currentNode->Type = SetImageVisibility;
+		if (currentNode->Type != ConversationNodeType::Conditional)
+			currentNode->Type = ConversationNodeType::SetImageVisibility;
 
 		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to show/hide
 		currentNode->Action.second = strKey == "ShowImage" ? true : false;
@@ -271,8 +281,8 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	else if (strKey == "SetFullHeight" || strKey == "SetSizeExtend" /*|| strKey == "SetImageSizeNormal"*/)
 	{
 		//Set the type  (If true this means We are carring some conditionals already)
-		if (currentNode->Type != Conditional)
-			currentNode->Type = SetImageSize;
+		if (currentNode->Type != ConversationNodeType::Conditional)
+			currentNode->Type = ConversationNodeType::SetImageSize;
 
 		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to show/hide
 		currentNode->Action.second = strKey == "SetSizeExtend" ? true : false;
@@ -280,8 +290,8 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	else if (strKey == "FadeImageIn" || strKey == "FadeImageOut")
 	{
 		//Set the type  (If true this means We are carring some conditionals already)
-		if (currentNode->Type != Conditional)
-			currentNode->Type = SetImageFade;
+		if (currentNode->Type != ConversationNodeType::Conditional)
+			currentNode->Type = ConversationNodeType::SetImageFade;
 
 		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to fade in/out
 		currentNode->Action.second = strKey == "FadeImageIn" ? true : false;
@@ -289,14 +299,14 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	else if (strKey.find("SetImageLeft") != string::npos || strKey == "SetImageCenter" || strKey.find("SetImageRight") != string::npos)
 	{
 		//Set the type  (If true this means We are carring some conditionals already)
-		if (currentNode->Type != Conditional)
+		if (currentNode->Type != ConversationNodeType::Conditional)
 		{
-			currentNode->Type = SetImageCenter;
+			currentNode->Type = ConversationNodeType::SetImageCenter;
 
 			if (strKey.find("Left") != string::npos)
-				currentNode->Type = SetImageLeft;
+				currentNode->Type = ConversationNodeType::SetImageLeft;
 			else if (strKey.find("Right") != string::npos)
-				currentNode->Type = SetImageRight;
+				currentNode->Type = ConversationNodeType::SetImageRight;
 		}
 
 		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to be inside screen or else out
@@ -305,14 +315,14 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	else if (strKey.find("MoveImageLeft") != string::npos || strKey == "MoveImageCenter" || strKey.find("MoveImageRight") != string::npos)
 	{
 		//Set the type  (If true this means We are carring some conditionals already)
-		if (currentNode->Type != Conditional)
+		if (currentNode->Type != ConversationNodeType::Conditional)
 		{
-			currentNode->Type = MoveImageCenter;
+			currentNode->Type = ConversationNodeType::MoveImageCenter;
 
 			if (strKey.find("Left") != string::npos)
-				currentNode->Type = MoveImageLeft;
+				currentNode->Type = ConversationNodeType::MoveImageLeft;
 			else if (strKey.find("Right") != string::npos)
-				currentNode->Type = MoveImageRight;
+				currentNode->Type = ConversationNodeType::MoveImageRight;
 		}
 
 		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to be inside screen or else out
@@ -320,14 +330,14 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	}
 	else if (strKey.find("ScrollLeft") != string::npos || strKey == "ScrollLoop" || strKey.find("ScrollRight") != string::npos)
 	{
-		if (currentNode->Type != Conditional)
+		if (currentNode->Type != ConversationNodeType::Conditional)
 		{
-			currentNode->Type = ScrollCycle;
+			currentNode->Type = ConversationNodeType::ScrollCycle;
 
 			if (strKey.find("Left") != string::npos)
-				currentNode->Type = ScrollLeft;
+				currentNode->Type = ConversationNodeType::ScrollLeft;
 			else if (strKey.find("Right") != string::npos)
-				currentNode->Type = ScrollRight;
+				currentNode->Type = ConversationNodeType::ScrollRight;
 		}
 
 		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to be inside screen or else out
@@ -335,17 +345,48 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	}
 	else if (strKey == "ShakeImage" )
 	{
-		if (currentNode->Type != Conditional)
-			currentNode->Type = ShakeImage;
+		if (currentNode->Type != ConversationNodeType::Conditional)
+			currentNode->Type = ConversationNodeType::ShakeImage;
 
 		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to fade in/out
 		currentNode->Action.second = true; // it's Right else is Left
 	}
+	else if (strKey.find("CleanUp") != string::npos)
+	{
+		if (currentNode->Type != ConversationNodeType::Conditional)
+			currentNode->Type = ConversationNodeType::CleanUp;
+
+		const std::string ImageID = talkIt->second.as<string>();
+		currentNode->Action.first = ImageID;
+		currentNode->Action.second = ImageID.find("All") != string::npos ? true : false; // it's All else is just one
+	}
+	else if (strKey == "PlayMusic" || strKey == "PlayOnce" || strKey == "PlayMusicOnce")
+	{
+		if (currentNode->Type != ConversationNodeType::Conditional)
+			currentNode->Type = ConversationNodeType::PlayMusic;
+
+		currentNode->Action.first = talkIt->second.as<string>();
+		currentNode->Action.second = strKey.find("Once") == string::npos ? true : false; // looping else one time
+	}
+	else if (strKey == "PauseMusic" || strKey == "ResumeMusic" || strKey == "SetMusic")
+	{
+		if (currentNode->Type != ConversationNodeType::Conditional)
+			currentNode->Type = ConversationNodeType::SetMusic;
+
+		currentNode->Action.second = talkIt->second.as<string>() == "Off" ? true : false; // Stop it else Toggle Pause/Resume
+	}
+	else if (strKey == "PlaySound" )
+	{
+		if (currentNode->Type != ConversationNodeType::Conditional)
+			currentNode->Type = ConversationNodeType::PlaySound;
+
+		currentNode->Action.first = talkIt->second.as<string>();
+	}
 	else if (strKey == "SlideImageRight" || strKey == "SlideImageLeft")
 	{
 		//Set the type  (If true this means We are carring some conditionals already)
-		if (currentNode->Type != Conditional)
-			currentNode->Type =  SetImageSlide;
+		if (currentNode->Type != ConversationNodeType::Conditional)
+			currentNode->Type = ConversationNodeType::SetImageSlide;
 
 		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to fade in/out
 		currentNode->Action.second = strKey.find("Right") != string::npos ? true : false; // it's Right else is Left
@@ -386,13 +427,13 @@ void ConversationManager::NextMessage(unsigned nextMessageIndex)
 	CHECK(nextMessageIndex < CurrentConversationNode->Children.size());
 
 	//Change to the next node
-	bool IsChooseNode = (CurrentConversationNode->Type == ChooseTalk);
+	bool IsChooseNode = (CurrentConversationNode->Type == ConversationNodeType::ChooseTalk);
 
 	CurrentConversationNode = (IsChooseNode ?
 							   DisplayedChildren[nextMessageIndex] :
 							   &(CurrentConversationNode->Children[nextMessageIndex]));
 
-	if (CurrentConversationNode->Type == JumpBack)
+	if (CurrentConversationNode->Type == ConversationNodeType::JumpBack)
 	{
 		//JumpLevel is the amount of jumps backs We want
 		int levelJumps = stoi(CurrentConversationNode->Text);
@@ -406,7 +447,7 @@ void ConversationManager::NextMessage(unsigned nextMessageIndex)
 	}
 
 	//Finish the conversation if we reach to the leaf node
-	if (CurrentConversationNode->Type == EndConversation)
+	if (CurrentConversationNode->Type == ConversationNodeType::EndConversation)
 	{
 		TalkStack = std::stack<ConversationNode*>();
 		CurrentConversationNode = nullptr;
@@ -435,30 +476,34 @@ void ConversationManager::Update()
 	switch (CurrentConversationNode->Type)
 	{
 	//case Action:
-	case SetBool:
-	case SetImage:
-	case SetImageVisibility:
-	case SetImageSize:
-	case SetImageFade:
-	case SetImageLeft:
-	case SetImageRight:
-	case SetImageCenter:
-	case MoveImageLeft:
-	case MoveImageRight:
-	case MoveImageCenter:
-	case ScrollLeft:
-	case ScrollRight:
-	case ScrollCycle:
-	case ShakeImage:
-	case SetImageSlide:
+	case ConversationNodeType::SetBool:
+	case ConversationNodeType::SetImage:
+	case ConversationNodeType::SetImageVisibility:
+	case ConversationNodeType::SetImageSize:
+	case ConversationNodeType::SetImageFade:
+	case ConversationNodeType::SetImageLeft:
+	case ConversationNodeType::SetImageRight:
+	case ConversationNodeType::SetImageCenter:
+	case ConversationNodeType::MoveImageLeft:
+	case ConversationNodeType::MoveImageRight:
+	case ConversationNodeType::MoveImageCenter:
+	case ConversationNodeType::ScrollLeft:
+	case ConversationNodeType::ScrollRight:
+	case ConversationNodeType::ScrollCycle:
+	case ConversationNodeType::ShakeImage:
+	case ConversationNodeType::CleanUp:
+	case ConversationNodeType::PlayMusic:
+	case ConversationNodeType::SetMusic:
+	case ConversationNodeType::PlaySound:
+	case ConversationNodeType::SetImageSlide:
 		if (!CurrentConversationNode->Action.first.empty())
 		{
 			CurrentConversationNode->ExecuteAction();
 			NextMessage(0);
 		}
 		break;
-	case Conditional:
-	case NormalTalk:
+	case ConversationNodeType::Conditional:
+	case ConversationNodeType::NormalTalk:
 		//Reduce show time
 		MessageTime -= GetFrameTime();
 
@@ -467,10 +512,10 @@ void ConversationManager::Update()
 			NextMessage(0);
 		break;
 
-	case Optional:
+	case ConversationNodeType::Optional:
 	{
 		ConversationNode& childNode = CurrentConversationNode->Children[0];
-		if (childNode.Type == Conditional && childNode.EvalConditions())
+		if (childNode.Type == ConversationNodeType::Conditional && childNode.EvalConditions())
 		{
 			if (childNode.Action.second || !childNode.Action.first.empty())
 				childNode.ExecuteAction();
@@ -484,7 +529,7 @@ void ConversationManager::Update()
 	}
 	break;
 
-	case ChooseTalk:
+	case ConversationNodeType::ChooseTalk:
 		//Only if the user has accepted an option, change to that branch
 		if (TalkStack.empty() || CurrentConversationNode != TalkStack.top())
 			TalkStack.push(CurrentConversationNode);
@@ -515,13 +560,21 @@ void ConversationManager::Render()
 	//Counter for children
 	unsigned counter = 0;
 
+	//DrawRectangleGradientEx(Rectangle(150.0f, 200.f, 500.f, 200.f), RED, ORANGE, BLUE, GREEN);
+	//DrawRectangleGradientV(150.0f, 200.f, 500.f, 200.f, {0, 0, 0, 128}, { 0, 0, 0, 128 });
+
+	DrawRectangle(0, (int)TextBoxArea.y, (int)Graphics::Get().GetWindowArea().width, (int)TextBoxArea.height, {0, 0, 0, 160});
+	
+	//DrawRectangleRounded(TextBoxArea, .125f, 8, { 0, 0, 0, 128 });
+	//DrawRectangleRoundedLines(TextBoxArea, .125f, 8, 1.0f, { 128, 128, 128, 128 });
+
 	switch (CurrentConversationNode->Type)
 	{
-	case NormalTalk:
-	case Conditional:
+	case ConversationNodeType::NormalTalk:
+	case ConversationNodeType::Conditional:
 		//Write the name
 		characterName = Characters[(CurrentConversationNode->CharacterId)].CharacterName + ": ";
-		DrawText(characterName.c_str(), 50, 100, 20, SKYBLUE);
+		DrawText(characterName.c_str(), (int)TextArea.x, (int)TextArea.y, 20, SKYBLUE);
 
 		//Draw the text
 		message = CurrentConversationNode->Text;
@@ -529,25 +582,26 @@ void ConversationManager::Render()
 		//if (CurrentConversationNode->ConditionsEntries.size() > 0)	// Show me which entries has conditionals beforehand
 		//	DrawText(message.c_str(), 100, 120, 20, RED);
 		//else
-			DrawText(message.c_str(), 100, 120, 20, SKYBLUE);
+			DrawText(message.c_str(), (int)TextArea.x, (int)TextArea.y + 20, 20, SKYBLUE);
 		break;
 
-	case ChooseTalk:
+	case ConversationNodeType::ChooseTalk:
 		//Draw the options
 		for (ConversationNode* child : DisplayedChildren)
 		{
 			characterName = Characters[child->CharacterId].CharacterName + ": ";
-			DrawText(characterName.c_str(), 50, 100, 20, SKYBLUE);
+			DrawText(characterName.c_str(), (int)TextArea.x, (int)TextArea.y, 20, SKYBLUE);
+
 
 			//Set the propper color to the selected option
-			Color color = (counter == ChooseOption) ? VIOLET : SKYBLUE;
+			Color color = (counter == ChooseOption) ? WHITE : SKYBLUE;
 
 			//if (child->Type == Conditional)
 			//	color = RED;
 
 			//Draw the child
 			message = child->Text;
-			DrawText(message.c_str(), 100, 120 + (counter * 20), 20, color);
+			DrawText(message.c_str(), (int)TextArea.x, (int)(TextArea.y + 20) + (counter * 20), 20, color);
 
 			counter++;
 		}

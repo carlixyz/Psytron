@@ -3,11 +3,9 @@
 #include <raylib-cpp.hpp>
 #include <map>
 #include "./reasings.h"
-//#include "../../Utility/Utils.h"
 #include "../../Graphics/Graphics.h"
 
-/// TODO: 
-/// * Would be nice to have Screen Proportion Size Mode for Images
+/// TODO: General Code CleanUp here and Cpp
 
 class DialogState : public GameState
 {
@@ -148,6 +146,10 @@ public:
 	void OnRender();
 		
 	void LoadImage(std::string imageId, std::string file);			//	Create Image ID from a file
+
+	void Unload(std::string imageId);								// Clean Up one Image
+
+	void UnLoadAll();													// Clean Up ALL
 
 	void SetImageVisible(std::string imageId, bool enabled = true);	// ShowImage ID, HideImage ID
 

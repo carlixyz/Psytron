@@ -33,6 +33,13 @@ Dialogs:
   # - ScrollRightEnd:   ID
   # - ScrollLoop:       ID      # Scroll image inbetween both sides
 
+  # - ShakeImage:       ID      # short shake image FX
+  # - CleanUp:          ID/All  # Remove a specific image or anything if ALL
+
+  # - PlayMusic/Once:   ID      # Play Music in loop or once if enabled
+  # - SetMusic:         Off     # Stop Music or Toggle state with PauseMusic/ResumeMusic
+  # - PlaySound:        ID      
+
   # - SlideImageLeft:   ID      # Slide Image from outside into the scene
   # - SlideImageRight:  ID
 

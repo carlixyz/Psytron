@@ -164,6 +164,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Audio\Audio.cpp" />
     <ClCompile Include="Game\States\DialogState.cpp" />
     <ClCompile Include="Game\ConversationManager.cpp" />
     <ClCompile Include="Game\Game.cpp" />
@@ -176,6 +177,7 @@
     <ClCompile Include="Game\Register.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Audio\Audio.h" />
     <ClInclude Include="Game\States\DialogState.h" />
     <ClInclude Include="Game\ConversationManager.h" />
     <ClInclude Include="Game\Game.h" />
