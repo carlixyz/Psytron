@@ -41,10 +41,7 @@ void ConversationManager::Init(const std::string& conversationFile)
 		  Graphics::Get().GetWindowArea().width * 0.95f, Graphics::Get().GetWindowArea().height * 0.2f
 	};
 
-	TextArea = {
-	TextBoxArea.x, TextBoxArea.y + 20,
-	  TextBoxArea.width, TextBoxArea.height
-	};
+	TextArea = { TextBoxArea.x + 20, TextBoxArea.y + 20, TextBoxArea.width -20, TextBoxArea.height -20 };
 }
 
 void ConversationManager::Deinit(void)
@@ -550,23 +547,20 @@ void ConversationManager::Update()
 
 void ConversationManager::Render()
 {
-	//If not in conversation skip the render method
-	if (!IsInConversation()) return;
+	if (!IsInConversation()) return;	//If not in conversation skip the render method
 
-	//Variable that will hold the message
-	std::string message;
-	//Variable taht will hold the name of the character talking
-	std::string characterName;
-	//Counter for children
-	unsigned counter = 0;
+	std::string message;		//Variable that will hold the message
+	std::string characterName;	//Variable that will hold the name of the character talking
+
+	unsigned counter = 0;		//Counter for children
 
 	//DrawRectangleGradientEx(Rectangle(150.0f, 200.f, 500.f, 200.f), RED, ORANGE, BLUE, GREEN);
 	//DrawRectangleGradientV(150.0f, 200.f, 500.f, 200.f, {0, 0, 0, 128}, { 0, 0, 0, 128 });
 
 	DrawRectangle(0, (int)TextBoxArea.y, (int)Graphics::Get().GetWindowArea().width, (int)TextBoxArea.height, {0, 0, 0, 160});
 	
-	//DrawRectangleRounded(TextBoxArea, .125f, 8, { 0, 0, 0, 128 });
-	//DrawRectangleRoundedLines(TextBoxArea, .125f, 8, 1.0f, { 128, 128, 128, 128 });
+	//DrawRectangleRounded(TextBoxArea, .125f, 1, { 0, 0, 0, 128 });
+	//DrawRectangleRoundedLines(TextBoxArea, .125f, 1, 1.0f, { 128, 128, 128, 128 });
 
 	switch (CurrentConversationNode->Type)
 	{

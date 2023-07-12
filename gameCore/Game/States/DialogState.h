@@ -17,7 +17,6 @@ class DialogState : public GameState
 		float Alpha			= 1.0f;							// Current Alpha Color Value
 		Rectangle Size		= { 0.0f, 0.0f, 1.0f, 1.0f };
 		Rectangle FileSize	= { 0.0f, 0.0f, 1.0f, 1.0f };	// Original Image Size before resizing
-		//::Vector2 Size {};		
 
 		float StartValue	= 0.f;
 		float EndValue		= 1.0f;

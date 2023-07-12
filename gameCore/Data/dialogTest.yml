@@ -19,7 +19,7 @@ Dialogs:
   # - SetImageLeft:     ID
   # - SetImageCenter:   ID
   # - SetImageRight:    ID
-  # - SetImageRightOut: ID
+  # - SetImageRightOut: IDin
 
   # - MoveImageLeftOut: ID      # Change Image Position regardless visibility
   # - MoveImageLeft:    ID

@@ -29,9 +29,9 @@
 #define PLACE   __FILE__ << "(" << __LINE__ << ") "  
 #define FIELD( x ) #x << " = [" << x << "]\n"
 
-#define SET_COMP_NUM( NAME ) { int add;  std::ifstream inFile( NAME); inFile >> add; std::ofstream outFile( NAME, std::ios::trunc); outFile << ++add; }
+#define SET_BUILD_NUM( NAME ) { int add;  std::ifstream inFile( NAME); inFile >> add; std::ofstream outFile( NAME, std::ios::trunc); outFile << ++add; }
 inline int GetCompNum(std::string name) { int x; std::ifstream inFile(name); inFile >> x; return x; }
-#define GET_COMP_NUM(NAME) GetCompNum(NAME)
+#define GET_BUILD_NUM(NAME) GetCompNum(NAME)
 
 #define MSG_BOX( x ) {MessageBox(NULL, x, "ERROR", MB_OK | MB_ICONSTOP);}
 
@@ -49,8 +49,8 @@ inline int GetCompNum(std::string name) { int x; std::ifstream inFile(name); inF
 #define PLACE 
 #define FIELD 
 
-#define SET_COMP_NUM( NAME )
-#define GET_COMP_NUM( NAME )
+#define SET_BUILD_NUM( NAME )
+#define GET_BUILD_NUM( NAME )
 
 #define MSG_BOX( x )
 //... etc

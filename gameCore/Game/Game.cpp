@@ -8,8 +8,8 @@
 
 bool Game::Init()
 {
-	DEBUG_FILE("fileDebug.txt", DAY << PLACE << "Compilation number: " << GET_COMP_NUM("Compilations.txt") << "\n");
-	DEBUG_COUT("\n Last Compilation was " << GET_COMP_NUM("Compilations.txt") << "\n\n");
+	DEBUG_FILE("fileDebug.txt", DAY << PLACE << "Compilation number: " << GET_BUILD_NUM("Compilations.txt") << "\n");
+	DEBUG_COUT("\n Last Compilation was " << GET_BUILD_NUM("Compilations.txt") << "\n\n");
 
 	appProperties.LoadConfiguration("config.yml");
 	bool result = Graphics::Get().Init(&appProperties);
@@ -26,7 +26,7 @@ bool Game::Init()
 
 bool Game::Deinit()
 {
-	SET_COMP_NUM("Compilations.txt");
+	SET_BUILD_NUM("Compilations.txt");
 
 	bool result = States.Deinit();								// cleanup the all states
 
