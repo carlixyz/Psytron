@@ -10,9 +10,9 @@
 
 class Audio : public Singleton<Audio>
 {
-
 	bool Pause = false;
-	raylib::Music* SoundTrack = nullptr;
+
+	Music SoundTrack;
 
 	std::map<std::string, raylib::Sound*> SoundsMap;
 
@@ -31,7 +31,7 @@ public:
 	void Update();
 
 protected:
-	Audio() { ; }					// Protected Constructor
+	Audio() : SoundTrack() { ; }					// Protected Constructor
 
 };
 

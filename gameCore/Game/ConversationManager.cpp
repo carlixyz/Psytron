@@ -13,15 +13,13 @@ void ConversationManager::Init(const std::string& conversationFile)
 
 	YAML::Node dialogFile = YAML::LoadFile(conversationFile); // load file
 
-	CHECK(!dialogFile.IsNull());  // the file is wrongly loaded!
-
-	//Get the root node
-	YAML::Node Root = dialogFile["Dialogs"];	// as a Map;
+	CHECK(!dialogFile.IsNull());				// the file is wrongly loaded!
+	
+	YAML::Node Root = dialogFile["Dialogs"];	//Get the root node as a Map;
 	YAML::Node ElementNode;
 	YAML::const_iterator ElementIt;
 
-	//Read characters -  iterate over bar node to get Property nodes (Example)
-	ElementNode = Root["Characters"];
+	ElementNode = Root["Characters"];			//Read characters -  iterate over bar node to get Property nodes (Example)	
 	for (ElementIt = ElementNode.begin(); ElementIt != ElementNode.end(); ElementIt++)
 	{
 		ParseCharacter(ElementIt);
@@ -46,9 +44,9 @@ void ConversationManager::Init(const std::string& conversationFile)
 
 void ConversationManager::Deinit(void)
 {
-	Characters.clear();			//Free characters
+	Characters.clear();							//Free characters
 
-	Conversations.clear();		//Free conversations
+	Conversations.clear();						//Free conversations
 }
 
 void ConversationManager::ProcessDisplayedOptions()
@@ -60,22 +58,17 @@ void ConversationManager::ProcessDisplayedOptions()
 			DisplayedChildren.push_back(&child);
 }
 
-// Parse yml to process a character
 void ConversationManager::ParseCharacter(const YAML::const_iterator& element)
 {
 	CharacterSpeaker character;
 
-	//DEBUG_COUT(element->first.as<int>() << ": " << element->second << "\n");
+	character.CharacterId = element->first.as<int>();					//Get character Id
 
-	//Get character Id
-	character.CharacterId = element->first.as<int>();
 	CHECK(character.CharacterId >= 0);
 
-	//Get character name
-	character.CharacterName = element->second.as<std::string>();
+	character.CharacterName = element->second.as<std::string>();		//Get character name
 
-	//Push back into character list
-	Characters.push_back(character);
+	Characters.push_back(character);									//Push back into character list
 }
 
 // Parse yml to process a conversation
@@ -83,20 +76,16 @@ void ConversationManager::ParseConversation(const YAML::const_iterator& element)
 {
 	Conversation conversation;
 
-	//Get the conversation ID
-	conversation.Name = element->first.as<std::string>();
-	//DEBUG_COUT("\n conversation ID-> " << conversation.Name << " : " << "\n\n");
-
-	//Get the conversation tree
-	if (element->second.IsSequence())			// element.second has inside a sequence of maps!
+	conversation.Name = element->first.as<std::string>();				//Get the conversation ID
+	
+	if (element->second.IsSequence())				// Get conversation tree: element.second has inside a sequence of maps!
 	{
 		YAML::const_iterator elem = element->second.begin();
 		YAML::const_iterator end = element->second.end();
-		ParseNode(elem, end, &conversation.Root); //ParseNode(element->second.begin(), &conversation.Root);
+		ParseNode(elem, end, &conversation.Root);	//ParseNode(element->second.begin(), &conversation.Root);
 	}
 
-	//Push back into conversations list
-	Conversations.push_back(conversation);
+	Conversations.push_back(conversation);			//Push back into conversations list
 }
 
 // Parse yml to process a node of the conversation tree
@@ -155,15 +144,12 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 				string nextKey = subTalkIt->begin()->first.as<string>();
 				string nextValue = subTalkIt->begin()->second.as<string>();
 
-				//DEBUG_COUT("nextKey: " << nextKey << " value:  " << nextValue << "\n ");
-
 				if (nextKey != "Condition")
 					break;
 
 				node.Type = ConversationNodeType::Conditional;
 				ParseCondition(nextValue, &node);
 				subTalkIt++;
-				//DEBUG_COUT("nextKey: " << nextKey <s< " value:  " << nextValue << "\n ");
 			}
 
 			currentNode->Children.push_back(node);
@@ -205,8 +191,6 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 					string nextKey = subTalkIt->begin()->first.as<string>();
 					string nextValue = subTalkIt->begin()->second.as<string>();
 
-					//DEBUG_COUT("nextKey: " << nextKey << " value:  " << nextValue << "\n ");
-
 					if (nextKey != "Condition")
 						break;
 
@@ -214,8 +198,6 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 					ParseCondition(nextValue, &node);
 					subTalkIt++;
 				}
-
-				// --------------------------------------------------------------------------- //
 
 				currentNode->Children.push_back(node);
 
@@ -281,19 +263,19 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 		if (currentNode->Type != ConversationNodeType::Conditional)
 			currentNode->Type = ConversationNodeType::SetImageSize;
 
-		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to show/hide
-		currentNode->Action.second = strKey == "SetSizeExtend" ? true : false;
+		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to be resized
+		currentNode->Action.second = strKey == "SetFullHeight" ? true : false;
 	}
-	else if (strKey == "FadeImageIn" || strKey == "FadeImageOut")
+	else if (strKey == "FadeIn" || strKey == "FadeOut")
 	{
 		//Set the type  (If true this means We are carring some conditionals already)
 		if (currentNode->Type != ConversationNodeType::Conditional)
 			currentNode->Type = ConversationNodeType::SetImageFade;
 
 		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to fade in/out
-		currentNode->Action.second = strKey == "FadeImageIn" ? true : false;
+		currentNode->Action.second = strKey == "FadeIn" ? true : false;
 	}
-	else if (strKey.find("SetImageLeft") != string::npos || strKey == "SetImageCenter" || strKey.find("SetImageRight") != string::npos)
+	else if (strKey.find("SetLeft") != string::npos || strKey == "SetCenter" || strKey.find("SetRight") != string::npos)
 	{
 		//Set the type  (If true this means We are carring some conditionals already)
 		if (currentNode->Type != ConversationNodeType::Conditional)
@@ -307,9 +289,9 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 		}
 
 		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to be inside screen or else out
-		currentNode->Action.second = strKey.find("Out") == string::npos ? true : false;
+		currentNode->Action.second = strKey.find("Out") != string::npos ? true : false;
 	}
-	else if (strKey.find("MoveImageLeft") != string::npos || strKey == "MoveImageCenter" || strKey.find("MoveImageRight") != string::npos)
+	else if (strKey.find("MoveLeft") != string::npos || strKey == "MoveCenter" || strKey.find("MoveRight") != string::npos)
 	{
 		//Set the type  (If true this means We are carring some conditionals already)
 		if (currentNode->Type != ConversationNodeType::Conditional)
@@ -323,7 +305,7 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 		}
 
 		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to be inside screen or else out
-		currentNode->Action.second = strKey.find("Out") == string::npos ? true : false;
+		currentNode->Action.second = strKey.find("Out") != string::npos ? true : false;
 	}
 	else if (strKey.find("ScrollLeft") != string::npos || strKey == "ScrollLoop" || strKey.find("ScrollRight") != string::npos)
 	{
@@ -338,7 +320,7 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 		}
 
 		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to be inside screen or else out
-		currentNode->Action.second = strKey.find("End") == string::npos ? true : false;
+		currentNode->Action.second = strKey.find("End") != string::npos ? true : false;
 	}
 	else if (strKey == "ShakeImage" )
 	{
@@ -355,7 +337,7 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 
 		const std::string ImageID = talkIt->second.as<string>();
 		currentNode->Action.first = ImageID;
-		currentNode->Action.second = ImageID.find("All") != string::npos ? true : false; // it's All else is just one
+		currentNode->Action.second = ImageID == "All" ? true : false; // it's All else is just one
 	}
 	else if (strKey == "PlayMusic" || strKey == "PlayOnce" || strKey == "PlayMusicOnce")
 	{
@@ -379,7 +361,7 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 
 		currentNode->Action.first = talkIt->second.as<string>();
 	}
-	else if (strKey == "SlideImageRight" || strKey == "SlideImageLeft")
+	else if (strKey == "SlideRight" || strKey == "SlideLeft")
 	{
 		//Set the type  (If true this means We are carring some conditionals already)
 		if (currentNode->Type != ConversationNodeType::Conditional)
@@ -390,14 +372,12 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	}
 	else
 	{
-		//Invalid tag found
-		CHECK(0 && "Wrong character tag ID\n");
+		CHECK(0 && "Wrong character tag ID\n");						//Invalid tag found
 	}
 
 	currentNode->Children.push_back(node);
 
-	//Recursive call
-	ParseNode(++iterator, end, &(currentNode->Children[0]));
+	ParseNode(++iterator, end, &(currentNode->Children[0]));		//Recursive call
 }
 
 // Parse yml to  group conditions
@@ -551,16 +531,9 @@ void ConversationManager::Render()
 
 	std::string message;		//Variable that will hold the message
 	std::string characterName;	//Variable that will hold the name of the character talking
-
 	unsigned counter = 0;		//Counter for children
 
-	//DrawRectangleGradientEx(Rectangle(150.0f, 200.f, 500.f, 200.f), RED, ORANGE, BLUE, GREEN);
-	//DrawRectangleGradientV(150.0f, 200.f, 500.f, 200.f, {0, 0, 0, 128}, { 0, 0, 0, 128 });
-
 	DrawRectangle(0, (int)TextBoxArea.y, (int)Graphics::Get().GetWindowArea().width, (int)TextBoxArea.height, {0, 0, 0, 160});
-	
-	//DrawRectangleRounded(TextBoxArea, .125f, 1, { 0, 0, 0, 128 });
-	//DrawRectangleRoundedLines(TextBoxArea, .125f, 1, 1.0f, { 128, 128, 128, 128 });
 
 	switch (CurrentConversationNode->Type)
 	{
@@ -570,13 +543,10 @@ void ConversationManager::Render()
 		characterName = Characters[(CurrentConversationNode->CharacterId)].CharacterName + ": ";
 		DrawText(characterName.c_str(), (int)TextArea.x, (int)TextArea.y, 20, SKYBLUE);
 
-		//Draw the text
-		message = CurrentConversationNode->Text;
+		message = CurrentConversationNode->Text;						//Draw the text
 
-		//if (CurrentConversationNode->ConditionsEntries.size() > 0)	// Show me which entries has conditionals beforehand
-		//	DrawText(message.c_str(), 100, 120, 20, RED);
-		//else
-			DrawText(message.c_str(), (int)TextArea.x, (int)TextArea.y + 20, 20, SKYBLUE);
+		DrawText(message.c_str(), (int)TextArea.x, (int)TextArea.y + 20, 20, SKYBLUE);
+			
 		break;
 
 	case ConversationNodeType::ChooseTalk:
@@ -586,15 +556,10 @@ void ConversationManager::Render()
 			characterName = Characters[child->CharacterId].CharacterName + ": ";
 			DrawText(characterName.c_str(), (int)TextArea.x, (int)TextArea.y, 20, SKYBLUE);
 
-
 			//Set the propper color to the selected option
 			Color color = (counter == ChooseOption) ? WHITE : SKYBLUE;
 
-			//if (child->Type == Conditional)
-			//	color = RED;
-
-			//Draw the child
-			message = child->Text;
+			message = child->Text;										//Draw the child
 			DrawText(message.c_str(), (int)TextArea.x, (int)(TextArea.y + 20) + (counter * 20), 20, color);
 
 			counter++;

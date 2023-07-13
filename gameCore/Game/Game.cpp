@@ -14,12 +14,13 @@ bool Game::Init()
 	appProperties.LoadConfiguration("config.yml");
 	bool result = Graphics::Get().Init(&appProperties);
 
-	if (!result) Graphics::Get().Deinit();	// CloseWindow();	// If something fails Kill Window
-
 	SetExitKey(KEY_Q);
 
+	if (!result) Graphics::Get().Deinit();	// CloseWindow();	// If something fails Kill Window
 
 	result = result && States.Init();							//	States.Init(States.introState);
+
+	result = result && Audio::Get().Init();
 
 	return result;
 }
@@ -31,6 +32,8 @@ bool Game::Deinit()
 	bool result = States.Deinit();								// cleanup the all states
 
 	ConversationManager::Get().Deinit();
+
+	result = result && Audio::Get().Deinit();
 
 	result = result && Graphics::Get().Deinit();
 
@@ -52,19 +55,21 @@ void Game::Update()
 	States.CurrentState().OnUpdate();						/// statesStack.top()->OnUpdate(timeStep);
 
 	ConversationManager::Get().Update();
+
+	Audio::Get().Update();
 }
 
 void Game::Render()
 {
 	BeginDrawing();
-	ClearBackground(RAYWHITE);
+	ClearBackground(BLACK);
 
 	//if (States.IsLoaded())
-		States.CurrentState().OnRender();						/// statesStack.top()->OnRender();
+	States.CurrentState().OnRender();						/// statesStack.top()->OnRender();
 
 	//DrawText("Congrats! Your Game is up & running!", 190, 200, 20, LIGHTGRAY);
 	
-		ConversationManager::Get().Render();
+	ConversationManager::Get().Render();
 
 
 	EndDrawing();

@@ -120,16 +120,16 @@ struct ConversationNode     // Conversation SubNodes
 
         case ConversationNodeType::SetImageLeft:
             if (Action.second == true) // Set inside Screen else set it Out
-                Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionLeft);
-            else
                 Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionLeftOut);
+            else
+                Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionLeft);
             break;
 
         case ConversationNodeType::SetImageRight:
             if (Action.second == true) // Set inside Screen else set it Out
-                Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionRight);
-            else
                 Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionRightOut);
+            else
+                Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionRight);
             break;
 
         case ConversationNodeType::SetImageCenter:
@@ -139,16 +139,16 @@ struct ConversationNode     // Conversation SubNodes
 
         case ConversationNodeType::MoveImageLeft:
             if (Action.second == true) // Move inside Screen else set it Out
-                Game::Get().States.dialogState.MovePosition(Action.first, DialogState::EScreenPosition::EPositionLeft);
-            else
                 Game::Get().States.dialogState.MovePosition(Action.first, DialogState::EScreenPosition::EPositionLeftOut);
+            else
+                Game::Get().States.dialogState.MovePosition(Action.first, DialogState::EScreenPosition::EPositionLeft);
             break;
 
         case ConversationNodeType::MoveImageRight:
             if (Action.second == true) // Set inside Screen else set it Out
-                Game::Get().States.dialogState.MovePosition(Action.first, DialogState::EScreenPosition::EPositionRight);
-            else
                 Game::Get().States.dialogState.MovePosition(Action.first, DialogState::EScreenPosition::EPositionRightOut);
+            else
+                Game::Get().States.dialogState.MovePosition(Action.first, DialogState::EScreenPosition::EPositionRight);
             break;
 
         case ConversationNodeType::MoveImageCenter:
@@ -188,9 +188,9 @@ struct ConversationNode     // Conversation SubNodes
 
         case ConversationNodeType::CleanUp:
             if (Action.second == true)  // Move inside Screen cap else leave it free Out undefinedly
-                Game::Get().States.dialogState.Unload(Action.first);
-            else
                 Game::Get().States.dialogState.UnLoadAll();
+            else
+                Game::Get().States.dialogState.Unload(Action.first);
             break;
         case ConversationNodeType::PlayMusic:   // PlayMusic with looping On/Off
                 Audio::Get().PlayMusic(Action.first, Action.second);

@@ -5,16 +5,14 @@ bool Audio::Init()
 {
     InitAudioDevice();
 
-    SoundTrack = new raylib::Music();
-    SoundTrack->looping = true;
+    SoundTrack = LoadMusicStream("LP.mp3");
 
     return true;
 }
 
 bool Audio::Deinit()
 {
-    SoundTrack->Unload();
-    delete SoundTrack;
+    UnloadMusicStream(SoundTrack);
 
     for (auto& sound : SoundsMap)
     {
@@ -33,9 +31,10 @@ bool Audio::Deinit()
 void Audio::PlaySound(const std::string& soundFile)
 {
     if (!SoundsMap.contains(soundFile))
+    {
         SoundsMap[soundFile] = new raylib::Sound();
-
-    SoundsMap[soundFile]->Load(soundFile);
+        SoundsMap[soundFile]->Load(soundFile);
+    }
 
     if (SoundsMap[soundFile]->IsReady())
         SoundsMap[soundFile]->Play();
@@ -43,31 +42,30 @@ void Audio::PlaySound(const std::string& soundFile)
 
 void Audio::PlayMusic(const std::string& musicFile, bool isLooping)
 {
-    SoundTrack->Load(musicFile.c_str());
+    SoundTrack = LoadMusicStream(musicFile.c_str());
     
-    SoundTrack->looping = isLooping;
+    SoundTrack.looping = isLooping;
 
-    if (SoundTrack->IsReady())
-        SoundTrack->Play();
+    if (IsMusicReady(SoundTrack))
+        PlayMusicStream(SoundTrack);
 }
 
 void Audio::StopMusic()
 {
-    SoundTrack->Stop();
+    StopMusicStream(SoundTrack);
 }
 
 void Audio::PauseMusic()
 {
-    //Pause = !Pause;
-
-    //if (Pause) 
-    if (SoundTrack->IsPlaying())
-        SoundTrack->Pause();
-    else 
-        SoundTrack->Resume();
+    Pause = !Pause;
+    if (Pause) 
+        if (IsMusicStreamPlaying(SoundTrack))
+            PauseMusicStream(SoundTrack);
+        else
+            ResumeMusicStream(SoundTrack);
 }
 
 void Audio::Update()
 {
-    SoundTrack->Update();
+    UpdateMusicStream(SoundTrack);
 }

@@ -1,9 +1,11 @@
 #pragma once
 #include "GameState.h"
 #include <raylib-cpp.hpp>
+#include <unordered_map>
 #include <map>
 #include "./reasings.h"
 #include "../../Graphics/Graphics.h"
+//#include <functional>
 
 /// TODO: General Code CleanUp here and Cpp
 
@@ -11,6 +13,8 @@ class DialogState : public GameState
 {
 	struct ImageEase : public raylib::TextureUnmanaged
 	{
+		ImageEase(std::string id) : Id(id) {}
+
 		bool Visible		= true;							// Determines whether our Texture should be visible or hidden.
 		float PositionX		= 0;							// Current Horizontal position in Screen
 		float PositionY		= 0;							// Current Vertical position in Screen
@@ -23,6 +27,7 @@ class DialogState : public GameState
 		float CurrentTime	= 0.0f;
 		float TotalTime		= 3.0f;
 		bool Completed		= false;
+		std::string Id		= "";
 				
 		GETTERSETTER(bool, IsVisible, Visible)
 		GETTERSETTER(float, Alpha, Alpha)
@@ -39,7 +44,6 @@ class DialogState : public GameState
 
 		void ActionFade()
 		{
-			//Alpha = EaseLinearOut((TotalTime, StartPosition, EndPosition - StartPosition, Duration);
 			Alpha = EaseCubicOut(CurrentTime, StartValue, EndValue - StartValue, TotalTime);
 			Completed = CurrentTime < TotalTime ? false : true;
 		}
@@ -104,12 +108,16 @@ class DialogState : public GameState
 		void ExecuteEasing()						
 		{
 			if (Completed)
+			{
+				if (Easing) Easing = nullptr;					
 				return;
+			}
 
 			CurrentTime += GetFrameTime();
 
 			if (Easing)
 				(this->*Easing)();					/// We're using it here just to simplify things
+
 		}
 
 		inline void Draw()
@@ -136,7 +144,9 @@ class DialogState : public GameState
 
 public:
 
-	std::map<std::string, ImageEase*> ImagesMap; // = { {"ActorLeft", new ImageMove()}, {"ActorRight", new ImageMove()} };
+	std::unordered_map<std::string, ImageEase*> ImagesMap; // = { {"ActorLeft", new ImageMove()}, {"ActorRight", new ImageMove()} };
+	std::vector<ImageEase*> ImagesVector;
+	//std::map<std::string, ImageEase*> ImagesMap; // = { {"ActorLeft", new ImageMove()}, {"ActorRight", new ImageMove()} };
 
 	void OnInit();
 	void OnDeinit();

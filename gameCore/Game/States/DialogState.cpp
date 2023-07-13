@@ -1,6 +1,7 @@
 #include "DialogState.h"
 #include "../ConversationManager.h"
 #include "../../Graphics/Graphics.h"
+#include <functional>
 
 #define PADDING 100
 #define POS_CENTER ((Graphics::Get().GetWindowArea().width * 0.5f) - (ImagesMap[imageId]->Size.width * 0.5f))
@@ -15,22 +16,6 @@ void DialogState::OnInit()
 	ConversationManager::Get().Init("Data/dialogTest.yml");
 	//ConversationManager::Get().StartConversation("Comienzo"); // Activar este para realizar una comica charla al iniciar el juego
 	ConversationManager::Get().StartConversation("Setup");		// Activar este para realizar una interesante charla con acciones y logica
-
-	//LoadImage( "logo", "Back1.png");
-	LoadImage( "logo", "Back2.png");
-	//SetPosition("logo", EPositionCenter);
-	SetFullSize("logo");
-	//SetFullSize("logo", ENormal);
-	//SetFullSize("logo",false);
-	//MovePosition("logo", EPositionRight);
-	 
-	//SetEasing("logo", EActionEasing::EScrollRightCap);
-	//SetEasing("logo", EActionEasing::EScrollLeftCap);
-	SetEasing("logo", EActionEasing::EScrollCycle);
-	//SetEasing("logo", EActionEasing::EScrollRight);
-	//SetEasing("logo", EActionEasing::EShakeQuake);
-	//RemoveImage("logo");
-
 }
 
 void DialogState::OnDeinit()
@@ -48,6 +33,7 @@ void DialogState::UnLoadAll()
 	}
 
 	ImagesMap.clear();
+	ImagesVector.clear();
 }
 
 void DialogState::Unload(std::string imageId)
@@ -55,38 +41,44 @@ void DialogState::Unload(std::string imageId)
 	if (!ImagesMap.contains(imageId))
 		return;
 
-	ImagesMap[imageId]->Visible = false;
-	ImagesMap[imageId]->Unload();
-	delete ImagesMap[imageId];
-	ImagesMap.erase(imageId);
+	for (std::vector<ImageEase*>::iterator it = ImagesVector.begin(); it != ImagesVector.end(); it++)
+	{
+		if ((*it)->Id == imageId)
+		{
+			ImagesMap[imageId]->SetIsVisible(false);
+			ImagesMap[imageId]->Unload();
+			ImagesMap.erase(imageId);		// Remove Dict remaining item
+
+			delete (*it);					// Delete Obj
+
+			it = ImagesVector.erase(it);	// Remove vector remaining item
+
+			return;
+		}
+	}
 }
 
 void DialogState::OnUpdate()
 {
-	for (auto const& img : ImagesMap)
-	{
-		img.second->ExecuteEasing();
-	}
+	for (auto const& img : ImagesVector)
+		img->ExecuteEasing();
 }
 
 void DialogState::OnRender()
 {
-	//for (auto const& img : ImagesMap)
-	//	img.second->Draw();
-
-	// Iterate in reverse to draw stuff in order of last created
-	for (auto it = ImagesMap.rbegin(); it != ImagesMap.rend(); it++) 
-	{
-		it->second->Draw();
-	}
+	for (auto const& img : ImagesVector)
+		img->Draw();
 }
 
 void DialogState::LoadImage(std::string imageId, std::string file)
 {
 	//if(ImagesMap.find(imageId) != ImagesMap.end())
 	//if (ImagesMap[imageId] == nullptr)
-	if(!ImagesMap.contains(imageId))
-		ImagesMap[imageId] = new ImageEase();
+	if (!ImagesMap.contains(imageId))
+	{
+		ImagesMap[imageId] = new ImageEase(imageId);
+		ImagesVector.push_back(ImagesMap[imageId]);
+	}
 
 	ImagesMap[imageId]->Load(file);
 
@@ -103,7 +95,9 @@ void DialogState::LoadImage(std::string imageId, std::string file)
 void DialogState::SetImageVisible(std::string imageId, bool enabled)
 {
 	if (ImagesMap.contains(imageId))
+	{
 		ImagesMap[imageId]->SetIsVisible(enabled);
+	}
 }
 
 void DialogState::SetPosition(std::string imageId, EScreenPosition position)
@@ -184,6 +178,7 @@ void DialogState::SetEasing(std::string imageId, EActionEasing easing)
 		case EActionEasing::EFadeIn:
 			ImagesMap[imageId]->Alpha = 0.0f;
 			ImagesMap[imageId]->Easing = &ImageEase::ActionFade;
+			//ImagesMap[imageId]->Easing = &ImagesMap[imageId]->ActionFade;
 			ImagesMap[imageId]->StartValues(0.0f, 1.0f, 2);
 			break;
 

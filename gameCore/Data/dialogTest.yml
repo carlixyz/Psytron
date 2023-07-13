@@ -12,20 +12,20 @@ Dialogs:
   # - SetFullHeight:    ID      # Useful for Backgrounds
   # - SetSizeExtend:    ID
 
-  # - FadeImageIn:      ID      # Fade In/Out Image
-  # - FadeImageOut:     ID
+  # - FadeIn:           ID      # Fade In/Out Image
+  # - FadeOut:          ID
 
-  # - SetImageLeftOut:  ID      # Change Image Position regardless visibility
-  # - SetImageLeft:     ID
-  # - SetImageCenter:   ID
-  # - SetImageRight:    ID
-  # - SetImageRightOut: IDin
+  # - SetLeftOut:       ID      # Change Image Position regardless visibility
+  # - SetLeft:          ID
+  # - SetCenter:        ID
+  # - SetRight:         ID
+  # - SetRightOut:      ID
 
-  # - MoveImageLeftOut: ID      # Change Image Position regardless visibility
-  # - MoveImageLeft:    ID
-  # - MoveImageCenter:  ID
-  # - MoveImageRight:   ID
-  # - MoveImageRightOut:ID
+  # - MoveLeftOut:      ID      # Change Image Position regardless visibility
+  # - MoveLeft:         ID
+  # - MoveCenter:       ID
+  # - MoveRight:        ID
+  # - MoveRightOut:     ID
 
   # - ScrollLeft:       ID      # Scroll Image until the end of times
   # - ScrollLeftEnd:    ID      # Scroll Image until the end of it.
@@ -45,30 +45,35 @@ Dialogs:
 
   ###############################################################################################
   Conversations:
-    Setup: 
-      - SetImage: "Background"       # ActorLeft, ActorRight, BGLayer1 ~ BGLayer5  
-        visible: false
-        file: "kyo.png"
-      - SetFullHeight: Background
-      #- SetSizeExtend: Background
-      - SetImageLeftOut: Background
-      #- SlideImageRight: Background
-      #- SwipeImageRight: Background
-      - MoveImageCenter: Background
+    Setup:
+      - SetImage: Back       # ActorLeft, ActorRight, BGLayer1 ~ BGLayer5  
+        visible: true
+        file: "back2.png"
+      - SetFullHeight: Back
+      #- FadeIn: Back
+      - ScrollLoop: Back
+      - PlaySound: "zapslat.wav"
+      - PlayMusic: "LP.mp3"
 
-      - 1: Esto es solo un test... es solo un test
+      - 1: Esto es solo un test... es solo un A verest
       - 0: Esto es otro test...
       - 1: "Ok, Esto es solo un test... es solo un test"
-      - SetImage: "ActorLeft"       # ActorLeft, ActorRight, BGLayer1 ~ BGLayer5  
+
+      - SetImage: ActorLeft       # ActorLeft, ActorRight, BGLayer1 ~ BGLayer5  
         visible: true
         file: "george.png"
 
-      - SetImageCenter: ActorLeft
+      - SetImage: A1       # ActorLeft, ActorRight, BGLayer1 ~ BGLayer5  
+        visible: false
+        file: "kyo.png"
+      - FadeIn: A1
+
+      - 0: Remove something...
+      - PlaySound: "laser-shot.wav"
+      #- PlayMusic: "LP.mp3"
+      - SetCenter: ActorLeft
       - SetTrue: one_shot
       - SetFalse: two_shot
-      - MoveImageRightOut: Background
-      #- SlideImageLeft: Background
-      #- SwipeImageRight: Background
 
       - 0: Hagamos un Branch...
       - Option:
@@ -76,30 +81,31 @@ Dialogs:
         - Condition: "!two_shot"    # default value is false when there isn't a previous entry
         - Condition: "!extra_shot"    
         - 1: We're inside an option!
-        - MoveImageLeft: ActorLeft
+        - MoveLeft: ActorLeft
+        - MoveRight: A1
         - 0: Ok, let's jump back to main branch..
         - SetFalse: one_shot
         - SetTrue: two_shot
-        - HideImage: ActorLeft      ###
-        #- FadeImageOut: Background
+        #- HideImage: ActorLeft      ###
+        #- FadeOut: Background
         - JumpBack:
       - 1: Test completado
       - 0: Parece que resulto exitoso
       - ChooseTalk :
         - Option:
           - 1: Esta es una sola opcion
-          - FadeImageIn: ActorLeft
-          #- ShowImage: ActorLeft    ###
+          - PlaySound: "laser-shot.wav"
+          - FadeIn: ActorLeft
           - 0: una es mejor que ninguna!.
           - SetTrue: hidden_option
-          - MoveImageRightOut: ActorLeft
+          - MoveRight: ActorLeft
           - JumpBack:         # jumpback returns 1 level back by default
         - Option:
           - Condition: "hidden_option"
           - Condition: "!random_value"
           - 1: Esta es otra opcion
           - 0: definitivamente la ultima!.
-          - FadeImageOut: ActorLeft
+          - FadeOut: ActorLeft
 
 
   ###############################################################################################
