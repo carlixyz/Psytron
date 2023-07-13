@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../Utility/Singleton.h"
-//#include "../Graphics/Graphics.h"
 #include "../Graphics/ApplicationProperties.h"
 #include "States/FSM.h"
 

@@ -40,37 +40,37 @@ Dialogs:
   # - SetMusic:         Off     # Stop Music or Toggle state with PauseMusic/ResumeMusic
   # - PlaySound:        ID      
 
-  # - SlideImageLeft:   ID      # Slide Image from outside into the scene
-  # - SlideImageRight:  ID
+  # - SlideLeft:   ID      # Slide Image from outside into the scene
+  # - SlideRight:  ID
 
   ###############################################################################################
   Conversations:
     Setup:
       - SetImage: Back       # ActorLeft, ActorRight, BGLayer1 ~ BGLayer5  
-        visible: true
-        file: "back2.png"
+        visible: false
+        file: "Data/back2.png"
       - SetFullHeight: Back
-      #- FadeIn: Back
+      - FadeIn: Back
       - ScrollLoop: Back
-      - PlaySound: "zapslat.wav"
-      - PlayMusic: "LP.mp3"
+      - PlaySound: "Data/zapslat.wav"
+      - PlayMusic: Data/Watermelon.mp3
 
       - 1: Esto es solo un test... es solo un A verest
       - 0: Esto es otro test...
       - 1: "Ok, Esto es solo un test... es solo un test"
 
       - SetImage: ActorLeft       # ActorLeft, ActorRight, BGLayer1 ~ BGLayer5  
-        visible: true
-        file: "george.png"
+        visible: false
+        file: "Data/george.png"
+      - SlideLeft: ActorLeft
 
       - SetImage: A1       # ActorLeft, ActorRight, BGLayer1 ~ BGLayer5  
         visible: false
-        file: "kyo.png"
+        file: "Data/kyo.png"
       - FadeIn: A1
 
       - 0: Remove something...
-      - PlaySound: "laser-shot.wav"
-      #- PlayMusic: "LP.mp3"
+      - PlaySound: "Data/laser-shot.wav"
       - SetCenter: ActorLeft
       - SetTrue: one_shot
       - SetFalse: two_shot
@@ -94,7 +94,7 @@ Dialogs:
       - ChooseTalk :
         - Option:
           - 1: Esta es una sola opcion
-          - PlaySound: "laser-shot.wav"
+          - PlaySound: "Data/laser-shot.wav"
           - FadeIn: ActorLeft
           - 0: una es mejor que ninguna!.
           - SetTrue: hidden_option

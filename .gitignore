@@ -10,3 +10,13 @@ Intermediate
 # need these libs
 !*.lib
 x64/
+gameCore/Data/Back1.png
+gameCore/Data/Back2.png
+gameCore/Data/george.png
+gameCore/Data/kyo.png
+gameCore/Data/laser-shot.wav
+gameCore/Data/LP.mp3
+gameCore/Data/raylib_logo.png
+gameCore/Data/UV.png
+gameCore/Data/Watermelon.mp3
+gameCore/Data/zapslat.wav

@@ -14,7 +14,7 @@ void ConversationManager::Init(const std::string& conversationFile)
 	YAML::Node dialogFile = YAML::LoadFile(conversationFile); // load file
 
 	CHECK(!dialogFile.IsNull());				// the file is wrongly loaded!
-	
+
 	YAML::Node Root = dialogFile["Dialogs"];	//Get the root node as a Map;
 	YAML::Node ElementNode;
 	YAML::const_iterator ElementIt;

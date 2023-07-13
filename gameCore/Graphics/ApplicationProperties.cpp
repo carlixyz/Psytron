@@ -2,11 +2,22 @@
 
 #include <yaml-cpp/yaml.h>
 #include "../Utility/Utils.h"
+#include <Windows.h>		
 
 void ApplicationProperties::LoadConfiguration(const std::string filename)
 {
 	///...
-	YAML::Node configFile = YAML::LoadFile(filename); // load file
+	//YAML::Node configFile = YAML::LoadFile(filename); // load file
+
+	YAML::Node configFile; // load file
+	try
+	{
+		configFile = YAML::LoadFile(filename);
+	}
+	catch (std::exception const& e) // @throws {@link BadFile} if the file cannot be loaded.
+	{
+		MSG_BOX(e.what());
+	}
 
 	CHECK(!configFile.IsNull());  //assert(configFile.Type() == YAML::NodeType::Map);
 		

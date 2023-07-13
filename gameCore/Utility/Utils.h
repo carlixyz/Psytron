@@ -19,7 +19,6 @@
 #include <iostream>
 #include <assert.h>
 
-
 #define DEBUG_COUT( x ) {  std::ostringstream os; os << x; std::cout << os.str(); }
 #define DEBUG_OUT( x ) {  std::ostringstream os; os << x; ::OutputDebugStringA(os.str().c_str()); }
 #define DEBUG_FILE( NAME, x ) { std::ofstream os( NAME, std::ios::out | std::ios::app  ); os << x;  }
@@ -33,11 +32,12 @@
 inline int GetCompNum(std::string name) { int x; std::ifstream inFile(name); inFile >> x; return x; }
 #define GET_BUILD_NUM(NAME) GetCompNum(NAME)
 
-#define MSG_BOX( x ) {MessageBox(NULL, x, "ERROR", MB_OK | MB_ICONSTOP);}
+#define MSG_BOX( x ) {MessageBoxA(NULL, x, "ERROR", MB_OK | MB_ICONSTOP);}
 
 //... etc
 #else 
 #include <sstream>
+
 
 #define DEBUG_COUT( x )
 //#define DEBUG_OUT( x ){  std::ostringstream os; os << x; ::OutputDebugStringA(os.str().c_str()); }
@@ -52,7 +52,7 @@ inline int GetCompNum(std::string name) { int x; std::ifstream inFile(name); inF
 #define SET_BUILD_NUM( NAME )
 #define GET_BUILD_NUM( NAME )
 
-#define MSG_BOX( x )
+#define MSG_BOX( x ) {MessageBoxA(NULL, x, "ERROR", MB_OK | MB_ICONSTOP);}
 //... etc
 #endif
 
