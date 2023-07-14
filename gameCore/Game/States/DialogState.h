@@ -2,10 +2,8 @@
 #include "GameState.h"
 #include <raylib-cpp.hpp>
 #include <unordered_map>
-#include <map>
 #include "./reasings.h"
 #include "../../Graphics/Graphics.h"
-//#include <functional>
 
 /// TODO: General Code CleanUp here and Cpp
 
@@ -146,7 +144,6 @@ public:
 
 	std::unordered_map<std::string, ImageEase*> ImagesMap; // = { {"ActorLeft", new ImageMove()}, {"ActorRight", new ImageMove()} };
 	std::vector<ImageEase*> ImagesVector;
-	//std::map<std::string, ImageEase*> ImagesMap; // = { {"ActorLeft", new ImageMove()}, {"ActorRight", new ImageMove()} };
 
 	void OnInit();
 	void OnDeinit();

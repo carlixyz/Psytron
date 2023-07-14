@@ -363,7 +363,6 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	}
 	else if (strKey == "SlideRight" || strKey == "SlideLeft")
 	{
-		//Set the type  (If true this means We are carring some conditionals already)
 		if (currentNode->Type != ConversationNodeType::Conditional)
 			currentNode->Type = ConversationNodeType::SetImageSlide;
 
@@ -529,9 +528,9 @@ void ConversationManager::Render()
 {
 	if (!IsInConversation()) return;	//If not in conversation skip the render method
 
-	std::string message;		//Variable that will hold the message
-	std::string characterName;	//Variable that will hold the name of the character talking
-	unsigned counter = 0;		//Counter for children
+	std::string message;				//Variable that will hold the message
+	std::string characterName;			//Variable that will hold the name of the character talking
+	unsigned counter = 0;				//Counter for children
 
 	DrawRectangle(0, (int)TextBoxArea.y, (int)Graphics::Get().GetWindowArea().width, (int)TextBoxArea.height, {0, 0, 0, 160});
 

@@ -5,7 +5,7 @@ bool Audio::Init()
 {
     InitAudioDevice();
 
-    SoundTrack = LoadMusicStream("LP.mp3");
+    //SoundTrack = LoadMusicStream("LP.mp3");
 
     return true;
 }

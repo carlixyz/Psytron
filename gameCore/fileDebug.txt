@@ -2,3 +2,4 @@ Jul 13 2023, 11:08:16 - E:\Mis Documentos\GitHub\Psytron\gameCore\Game\Game.cpp(
 Jul 13 2023, 11:08:16 - E:\Mis Documentos\GitHub\Psytron\gameCore\Game\Game.cpp(11) Compilation number: 753
 Jul 13 2023, 11:13:51 - E:\Mis Documentos\GitHub\Psytron\gameCore\Game\Game.cpp(11) Compilation number: 753
 Jul 13 2023, 11:40:12 - E:\Mis Documentos\GitHub\Psytron\gameCore\Game\Game.cpp(11) Compilation number: 753
+Jul 14 2023, 12:19:46 - E:\Mis Documentos\GitHub\Psytron\gameCore\Game\Game.cpp(11) Compilation number: 754
