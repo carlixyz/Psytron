@@ -443,8 +443,7 @@ void ConversationManager::NextMessage(unsigned nextMessageIndex)
 
 void ConversationManager::Update()
 {
-	//If not in conversation goes out
-	if (!IsInConversation())
+	if (!IsInConversation())			// If not in conversation get out
 		return;
 
 	ProcessDisplayedOptions();
@@ -480,12 +479,22 @@ void ConversationManager::Update()
 		break;
 	case ConversationNodeType::Conditional:
 	case ConversationNodeType::NormalTalk:
-		//Reduce show time
-		MessageTime -= GetFrameTime();
+		
+		MessageTime -= GetFrameTime();						//Reduce show time
+		CharIndex += CharShowDelay;
 
 		//If time has finished or Accept action has been selected change to the next message
-		if (MessageTime <= 0.0f || IsKeyPressed(KEY_ENTER))
+		if (MessageTime <= 0.0f || IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE))	
+		{
+			if (CharIndex < CurrentConversationNode->Text.size())
+			{
+				CharIndex = (unsigned)CurrentConversationNode->Text.size();
+				break;
+			}
+
+			CharIndex = 0;
 			NextMessage(0);
+		}
 		break;
 
 	case ConversationNodeType::Optional:
@@ -510,18 +519,35 @@ void ConversationManager::Update()
 		if (TalkStack.empty() || CurrentConversationNode != TalkStack.top())
 			TalkStack.push(CurrentConversationNode);
 
-		if (IsKeyPressed(KEY_ENTER))
-			NextMessage(ChooseOption);
+		CharIndex += CharShowDelay;
+			
 		if (IsKeyPressed(KEY_UP) && ChooseOption > 0)
 			ChooseOption--;
 		if (IsKeyPressed(KEY_DOWN) && ChooseOption < (DisplayedChildren.size() - 1))
 			ChooseOption++;
+		if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE))
+		{
+			if (ChooseIndex < CurrentConversationNode->Children.size())
+			{
+				CharIndex = (unsigned)CurrentConversationNode->Text.size();
+				ChooseIndex = (unsigned)CurrentConversationNode->Children.size();
+				break;
+			}
+
+			CharIndex = 0;
+			ChooseIndex = 0;
+			NextMessage(ChooseOption);
+		}
 		return;
 
-
+	case ConversationNodeType::EndConversation:
 	default:
+		//CurrentConversationNode = nullptr;
 		break;
 	}
+
+	if (CurrentConversationNode == nullptr)
+		ConversationEnded = true;
 }
 
 void ConversationManager::Render()
@@ -531,21 +557,22 @@ void ConversationManager::Render()
 	std::string message;				//Variable that will hold the message
 	std::string characterName;			//Variable that will hold the name of the character talking
 	unsigned counter = 0;				//Counter for children
+	unsigned charSize = (unsigned)CurrentConversationNode->Text.size();
 
 	DrawRectangle(0, (int)TextBoxArea.y, (int)Graphics::Get().GetWindowArea().width, (int)TextBoxArea.height, {0, 0, 0, 160});
 
 	switch (CurrentConversationNode->Type)
 	{
-	case ConversationNodeType::NormalTalk:
 	case ConversationNodeType::Conditional:
-		//Write the name
+	case ConversationNodeType::NormalTalk:
+	{															//Write the name
 		characterName = Characters[(CurrentConversationNode->CharacterId)].CharacterName + ": ";
 		DrawText(characterName.c_str(), (int)TextArea.x, (int)TextArea.y, 20, SKYBLUE);
 
-		message = CurrentConversationNode->Text;						//Draw the text
-
+		//message = CurrentConversationNode->Text;						//Draw the text
+		message = CurrentConversationNode->Text.substr(0, CharIndex < charSize ? CharIndex : charSize);						//Draw the text
 		DrawText(message.c_str(), (int)TextArea.x, (int)TextArea.y + 20, 20, SKYBLUE);
-			
+	}
 		break;
 
 	case ConversationNodeType::ChooseTalk:
@@ -558,7 +585,24 @@ void ConversationManager::Render()
 			//Set the propper color to the selected option
 			Color color = (counter == ChooseOption) ? WHITE : SKYBLUE;
 
-			message = child->Text;										//Draw the child
+			if (ChooseIndex == DisplayedChildren.size() || ChooseIndex > counter)
+			{
+				message = child->Text;										//Draw the child
+			}
+			else if (ChooseIndex == counter)
+			{
+				message = child->Text;										//Draw the child
+				charSize = (unsigned)child->Text.size();
+				CharIndex++;
+				message = child->Text.substr(0, CharIndex < charSize ? CharIndex : charSize);						//Draw the text
+
+				if (CharIndex >= child->Text.size() - 1)
+				{
+					CharIndex = 0;
+					ChooseIndex++;
+				}
+			}
+			
 			DrawText(message.c_str(), (int)TextArea.x, (int)(TextArea.y + 20) + (counter * 20), 20, color);
 
 			counter++;

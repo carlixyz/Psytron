@@ -178,7 +178,6 @@ void DialogState::SetEasing(std::string imageId, EActionEasing easing)
 		case EActionEasing::EFadeIn:
 			ImagesMap[imageId]->Alpha = 0.0f;
 			ImagesMap[imageId]->Easing = &ImageEase::ActionFade;
-			//ImagesMap[imageId]->Easing = &ImagesMap[imageId]->ActionFade;
 			ImagesMap[imageId]->StartValues(0.0f, 1.0f, 2);
 			break;
 

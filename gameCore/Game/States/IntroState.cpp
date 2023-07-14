@@ -11,9 +11,9 @@ void IntroState::OnDeinit()
 
 void IntroState::OnUpdate()
 {
-
 	//float deltaTime = GetFrameTime();
-	if (IsKeyPressed(KEY_SPACE))
+	 
+	//if (IsKeyPressed(KEY_SPACE))
 	{
 		Game::Get().States.ChangeState(Game::Get().States.dialogState);
 		//Game::Get().States.ChangeState(Game::Get().States.titleState);

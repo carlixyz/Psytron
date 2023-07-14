@@ -1,14 +1,14 @@
 #pragma once
 
 #include "../Utility/Singleton.h"
+#include "Game.h"
+#include "Register.h"
+#include "../Audio/Audio.h"
 #include <vector>
 #include <stack>
 #include <list>
 #include <string>
 #include "yaml-cpp/yaml.h"
-#include "Register.h"
-#include "../Audio/Audio.h"
-#include "Game.h"
 
 enum class ConversationNodeType	
 {
@@ -216,7 +216,6 @@ struct Conversation         // SubConversation Root tree, In our example We have
 	ConversationNode Root;
 };
 
-
 class ConversationManager : public Singleton<ConversationManager>
 {
 	friend class Singleton<ConversationManager>;
@@ -224,24 +223,23 @@ class ConversationManager : public Singleton<ConversationManager>
     Rectangle TextBoxArea;
     Rectangle TextArea;
 
-    //Type definition to simplify the syntax
-    typedef std::vector<CharacterSpeaker> CharactersVector;
+    typedef std::vector<CharacterSpeaker> CharactersVector; //Type definitions to simplify the syntax
     typedef CharactersVector::iterator CharactersIt;
     typedef std::list<Conversation> ConversationsList;
     typedef ConversationsList::iterator ConversationsIt;
     typedef std::vector<ConversationNode> ConversationChildren;
     typedef ConversationChildren::iterator ConversationChildrenIt;
 
-    //List of characters
-    CharactersVector Characters;
-    //List of conversations 
-    ConversationsList Conversations;
-    //Current conversation node
-    ConversationNode* CurrentConversationNode = nullptr;
-    //Time to show the conversation
-    float MessageTime = 5.f;
-    //Selected option in a choose conversation
-    unsigned ChooseOption = 0;
+    CharactersVector Characters;                            //List of characters
+    ConversationsList Conversations;                        //List of conversations 
+    ConversationNode* CurrentConversationNode = nullptr;    //Current conversation node
+
+    bool ConversationEnded          = false;
+    float MessageTime               = 5.f;                  //Time to show the conversation
+    unsigned ChooseOption           = 0;                    //Selected option in a choose conversation
+    unsigned ChooseIndex            = 0;                    //Selected option in a choose conversation
+    unsigned CharIndex              = 0;                    //Current frame char index for our wording printer FX
+    unsigned CharShowDelay          = 1;                    //Current frame char index for our wording printer FX
 
     std::stack<ConversationNode*> TalkStack;
     std::vector<ConversationNode*> DisplayedChildren;
