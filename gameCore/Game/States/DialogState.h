@@ -115,7 +115,6 @@ class DialogState : public GameState
 
 			if (Easing)
 				(this->*Easing)();					/// We're using it here just to simplify things
-
 		}
 
 		inline void Draw()

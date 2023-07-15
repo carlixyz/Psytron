@@ -210,7 +210,7 @@ struct ConversationNode     // Conversation SubNodes
     }
 };
 
-struct Conversation         // SubConversation Root tree, In our example We have a pair
+struct Conversation                                         // SubConversation Root tree
 {
     std::string  Name           = "";
 	ConversationNode Root;
@@ -244,6 +244,7 @@ class ConversationManager : public Singleton<ConversationManager>
     std::stack<ConversationNode*> TalkStack;
     std::vector<ConversationNode*> DisplayedChildren;
 
+    void PreLoadImage(const YAML::const_iterator& images);
     void ParseCharacter(const YAML::const_iterator& element);
     void ParseConversation(const YAML::const_iterator& element);
     void ParseNode(YAML::const_iterator& iterator, YAML::const_iterator& end, ConversationNode* currentNode);

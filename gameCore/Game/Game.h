@@ -7,10 +7,10 @@
 class Game : public Singleton<Game>
 {
 	bool finish = false;
-	ApplicationProperties appProperties;
 
 public:
 	friend class Singleton<Game>;
+	ApplicationProperties appProperties;
 	FSM States;
 
 	bool Init();

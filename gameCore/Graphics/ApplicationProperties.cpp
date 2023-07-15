@@ -21,15 +21,11 @@ void ApplicationProperties::LoadConfiguration(const std::string filename)
 
 	CHECK(!configFile.IsNull());  //assert(configFile.Type() == YAML::NodeType::Map);
 		
-	YAML::Node AppNode = configFile["Application"];	// as a Map;
-
-	if (AppNode)
+	if (YAML::Node AppNode = configFile["Application"])		// as a Map;
 	{
-		YAML::Node WinNode = AppNode["Window"];// .as<YAML::Node>();
-
-		if (WinNode)
+		if (YAML::Node WinNode = AppNode["Window"])			// .as<YAML::Node>();
 		{
-			YAML::Node properties = WinNode["Properties"];// .as<YAML::Node>();
+			YAML::Node properties = WinNode["Properties"];	// .as<YAML::Node>();
 
 			ApplicationName = properties["_Name"].IsDefined() ? 
 								properties["_Name"].as<std::string>() :
@@ -66,6 +62,15 @@ void ApplicationProperties::LoadConfiguration(const std::string filename)
 					std::cout << "		" << j.first << ": " << j.second << "\n";
 			}
 			*/
+		}
+
+		if (YAML::Node Resources = AppNode["Resources"])
+		{
+			DialogFilePath = Resources["DialogFile"].IsDefined() ?
+								Resources["DialogFile"].as<std::string>() :
+								"";
+
+			DEBUG_COUT("DialogFile \t-> " << DialogFilePath << "\n");
 		}
 	}
 }

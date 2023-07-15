@@ -11,6 +11,15 @@ void ConversationManager::Init(const std::string& conversationFile)
 	Characters.reserve(5);
 	DisplayedChildren.reserve(5);
 
+	CurrentConversationNode = nullptr;
+	ChooseOption = 0;
+
+	TextBoxArea = {
+		Graphics::Get().GetWindowArea().width * 0.025f,	Graphics::Get().GetWindowArea().height * 0.8f,
+		  Graphics::Get().GetWindowArea().width * 0.95f, Graphics::Get().GetWindowArea().height * 0.2f
+	};
+	TextArea = { TextBoxArea.x + 20, TextBoxArea.y + 20, TextBoxArea.width - 20, TextBoxArea.height - 20 };
+
 	YAML::Node dialogFile = YAML::LoadFile(conversationFile); // load file
 
 	CHECK(!dialogFile.IsNull());				// the file is wrongly loaded!
@@ -31,15 +40,19 @@ void ConversationManager::Init(const std::string& conversationFile)
 		ParseConversation(ElementIt);
 	}
 
-	CurrentConversationNode = nullptr;
-	ChooseOption = 0;
+	if (ElementNode = Root["Setup"])
+	{
+		const YAML::Node& PreLoad = ElementNode["PreLoad"];
+		for (ElementIt = PreLoad.begin(); ElementIt != PreLoad.end(); ElementIt++)
+		{
+			PreLoadImage(ElementIt);
+		}
 
-	TextBoxArea = {
-		Graphics::Get().GetWindowArea().width * 0.025f,	Graphics::Get().GetWindowArea().height * 0.8f,
-		  Graphics::Get().GetWindowArea().width * 0.95f, Graphics::Get().GetWindowArea().height * 0.2f
-	};
-
-	TextArea = { TextBoxArea.x + 20, TextBoxArea.y + 20, TextBoxArea.width -20, TextBoxArea.height -20 };
+		if (ElementNode["StartEntry"].IsDefined())
+		{
+			StartConversation(ElementNode["StartEntry"].as<std::string>());
+		}
+	}
 }
 
 void ConversationManager::Deinit(void)
@@ -71,6 +84,20 @@ void ConversationManager::ParseCharacter(const YAML::const_iterator& element)
 	Characters.push_back(character);									//Push back into character list
 }
 
+void ConversationManager::PreLoadImage(const YAML::const_iterator& element)
+{
+	const YAML::Node& image = *element;
+
+	if (image["SetImage"].IsDefined() && image["file"].IsDefined())
+	{
+		const std::string& imageID = image["SetImage"].as<std::string>();
+		const std::string& imagePath = image["file"].as<std::string>();
+		bool imageVisible = image["visible"] ? image["visible"].as<bool>() : false;
+
+		Game::Get().States.dialogState.LoadImage( imageID, imagePath);
+		Game::Get().States.dialogState.SetImageVisible( imageID, imageVisible);
+	}
+}
 // Parse yml to process a conversation
 void ConversationManager::ParseConversation(const YAML::const_iterator& element)
 {
@@ -481,7 +508,7 @@ void ConversationManager::Update()
 	case ConversationNodeType::NormalTalk:
 		
 		MessageTime -= GetFrameTime();						//Reduce show time
-		CharIndex += CharShowDelay;
+		CharIndex++;
 
 		//If time has finished or Accept action has been selected change to the next message
 		if (MessageTime <= 0.0f || IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE))	
@@ -519,7 +546,7 @@ void ConversationManager::Update()
 		if (TalkStack.empty() || CurrentConversationNode != TalkStack.top())
 			TalkStack.push(CurrentConversationNode);
 
-		CharIndex += CharShowDelay;
+		CharIndex++;
 			
 		if (IsKeyPressed(KEY_UP) && ChooseOption > 0)
 			ChooseOption--;
@@ -568,9 +595,8 @@ void ConversationManager::Render()
 	{															//Write the name
 		characterName = Characters[(CurrentConversationNode->CharacterId)].CharacterName + ": ";
 		DrawText(characterName.c_str(), (int)TextArea.x, (int)TextArea.y, 20, SKYBLUE);
-
-		//message = CurrentConversationNode->Text;						//Draw the text
-		message = CurrentConversationNode->Text.substr(0, CharIndex < charSize ? CharIndex : charSize);						//Draw the text
+																//Draw the text
+		message = CurrentConversationNode->Text.substr(0, CharIndex < charSize ? CharIndex : charSize);						
 		DrawText(message.c_str(), (int)TextArea.x, (int)TextArea.y + 20, 20, SKYBLUE);
 	}
 		break;
