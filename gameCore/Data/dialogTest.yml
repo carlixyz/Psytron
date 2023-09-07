@@ -85,9 +85,10 @@ Dialogs:
 
       - 0: Hagamos un Branch...
       - Option:
-        - Condition: "one_shot"     # saddly Yaml uses '!' to represent some Tag thing... whatever!
-        - Condition: "!two_shot"    # default value is false when there isn't a previous entry
-        - Condition: "!extra_shot"    
+        - if: [ one_shot, ¬two_shot, "!extra_shot"]
+        #- Condition: "one_shot"     # saddly Yaml uses '!' to represent some Tag thing... whatever, We also can use '¬' to negate
+        #- Condition: "!two_shot"    # default value is false when there isn't a previous entry
+        #- Condition: "!extra_shot"    
         - 1: We're inside an option!
         - MoveLeft: ActorLeft
         - MoveRight: A1
@@ -109,8 +110,7 @@ Dialogs:
           - MoveRight: ActorLeft
           - JumpBack:               # jumpback returns 1 level back by default
         - Option:
-          - Condition: "hidden_option"
-          - Condition: "!random_value"
+          - if: [hidden_option, "!random_value"]
           - 1: Esta es otra opcion muchisimo mas larga y que se puede truncar
           - 0: definitivamente la ultima!.
           - FadeOut: ActorLeft
@@ -158,6 +158,6 @@ Dialogs:
                 time: 28.0
               - JumpBack:
         - Option:
-          - Condition: finish_talk     # saddly Yaml uses '!' to represent some Tag thing... whatever!
+          - if: finish_talk     # saddly Yaml uses '!' to represent some Tag thing... whatever!
           - 1: Si bueno, nos vemos!
           - 0: Nos vemos querido!

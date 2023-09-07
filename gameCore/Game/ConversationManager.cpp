@@ -169,13 +169,29 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 			while (subTalkIt != subTalkEnd)
 			{
 				string nextKey = subTalkIt->begin()->first.as<string>();
-				string nextValue = subTalkIt->begin()->second.as<string>();
+				YAML::Node conditional = subTalkIt->begin()->second;
 
-				if (nextKey != "Condition")
+				if (nextKey == "if")
+				{
+					if (conditional.IsSequence())
+					{
+						YAML::const_iterator condEnd = conditional.end();
+						for (YAML::const_iterator condIt = conditional.begin(); condIt != condEnd; condIt++)
+						{
+							string nextValue = condIt->as<string>();
+							node.Type = ConversationNodeType::Conditional;
+							ParseCondition(nextValue, &node);
+						}
+					}
+					else if (conditional.IsScalar())
+					{
+						node.Type = ConversationNodeType::Conditional;
+						ParseCondition(conditional.as<string>(), &node);
+					}
+				}
+				else
 					break;
 
-				node.Type = ConversationNodeType::Conditional;
-				ParseCondition(nextValue, &node);
 				subTalkIt++;
 			}
 
@@ -216,13 +232,29 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 				while (subTalkIt != subTalkEnd)
 				{
 					string nextKey = subTalkIt->begin()->first.as<string>();
-					string nextValue = subTalkIt->begin()->second.as<string>();
+					YAML::Node conditional = subTalkIt->begin()->second;
 
-					if (nextKey != "Condition")
+					if (nextKey == "if")
+					{
+						if (conditional.IsSequence())
+						{
+							YAML::const_iterator condEnd = conditional.end();
+							for (YAML::const_iterator condIt = conditional.begin(); condIt != condEnd; condIt++)
+							{
+								string nextValue = condIt->as<string>();
+								node.Type = ConversationNodeType::Conditional;
+								ParseCondition(nextValue, &node);
+							}
+						}
+						else if (conditional.IsScalar())
+						{
+							node.Type = ConversationNodeType::Conditional;
+							ParseCondition(conditional.as<string>(), &node);
+						}
+					}
+					else
 						break;
 
-					node.Type = ConversationNodeType::Conditional;
-					ParseCondition(nextValue, &node);
 					subTalkIt++;
 				}
 
@@ -410,7 +442,7 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 void ConversationManager::ParseCondition(const std::string& cond, ConversationNode* currentNode)
 {
 	std::string keyStr = cond;
-	size_t negationPos = keyStr.find('!');
+	size_t negationPos = keyStr.find('!') == 0 ? 0 : keyStr.find('¬');
 	bool isNegated = false;
 
 	if (negationPos != std::string::npos && negationPos == 0)
@@ -553,11 +585,14 @@ void ConversationManager::Update()
 		if (IsKeyPressed(KEY_DOWN) && ChooseOption < (DisplayedChildren.size() - 1))
 			ChooseOption++;
 		if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE))
-		{
-			if (ChooseIndex < CurrentConversationNode->Children.size())
+		{			
+
+			if (ChooseIndex < CurrentConversationNode->Children.size() &&
+				CharIndex < CurrentConversationNode->Children[ChooseIndex].Text.size())
 			{
-				CharIndex = (unsigned)CurrentConversationNode->Text.size();
+				CharIndex = (unsigned)CurrentConversationNode->Children[ChooseIndex].Text.size();
 				ChooseIndex = (unsigned)CurrentConversationNode->Children.size();
+
 				break;
 			}
 
