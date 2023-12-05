@@ -8,7 +8,8 @@
       _FPS: 60
       _Fullscreen: false
   Resources:
-    DialogFile: Data/dialogTest.yml
+    # DialogFile: Data/dialogTest_2.yml
+    DialogFile: Data/intro.yml
     Material:
      _name: Test
      _effect: Simple

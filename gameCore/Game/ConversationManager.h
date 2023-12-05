@@ -16,6 +16,7 @@ enum class ConversationNodeType
 	ChooseTalk,
     Optional,
     Conditional,
+    GoToNode,
     
     //Actions
     SetBool,

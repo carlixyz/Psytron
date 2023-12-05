@@ -1,0 +1,54 @@
+Characters:
+  0: Narrator
+  1: Ale    # Main char
+  2: Pilsen # Guide Tutor
+  3: Hoppy  # Best Friend
+  4: Ginger # Love interest
+  5: Porter # Muscle Guy
+  6: Amber  # Afro Lady
+  7: Lager  # Cool Guy
+  8: Honey  # Funny Girl
+  9: AnchorGirl
+
+Setup:
+  StartEntry: InfoNews       # Define First Entry point
+  #PreLoad:
+  #  - SetImage: logo
+  #    file: raylib_logo.png
+  #  - SetImage: UV            # Useful When you need to preload something to avoid spamming script space
+  #    file: "Data/UV.png"
+
+InfoNews:
+  - 9: In another order of news, Last night new disturbances occurred in Boedo 808
+  - 9: Seems they may be related to another Class E synthetic unit, used for sweeping and public cleaning tasks.
+  - 9: BioTech Systems expressed itself in this regard, confirming that these are just some isolated incidents...   
+  - 9: due to lack of general checks and improper maintenance by the prefecture.
+  - 9: and these are in no way related to deviations in the automaton learning # Neural link automaton
+  - 9: just as the unfounded rumors of some dissident sectors suggest. 
+  - 9: More details about coming soon as the day goes by.
+  - GoTo: IntroSchool
+    
+IntroSchool:
+  - 1: Hermosa tarde verdad?
+  - 1: por fin Viernes y otra larga semana que termina...
+  - 1: Soy Alex, tengo 21 años y este es mi ultimo mes en el instituto Tecnologico.
+  - 1: Espere años para certificarme pero ahora que estoy aca tengo algunos pensamientos mezclados.
+  - 1: Por fin voy a ser libre y nunca mas tendre que estudiar durante horas para cursar este infierno!
+  - 1: Pero por otro lado siento que voy a extrañar algunas cosas de este lugar...
+  - 1: Tiene una energia especial, los chistes de Hoppy, las fiestas y las chicas Uff... Sin palabras!
+  - 1: Mhhh ahi se acerca Hoppy, que estara tramando ahora?
+  - 3: Hey Al, Donde estabas? seguro otra vez en tu onanismo mental! jajajaaj 
+  - 3: No te olvides que me debes una apuesta...
+  - 1: Rayos y ahora que diablos quieres?
+  - 3: Ahi esta saliendo Ginger... te digo que tiene algo contigo!
+  - 1: Que quee? No tengo idea de que hablas y ya tengo que irme...
+  - 3: Hey! deja de esconderte, tengo el presentimiento de que sino lo intentas...
+  - 3: te arrepentiras para siempre!
+  - 1: Estas loco? No tengo nada que hacer ahi! 
+  - 1: Es obvio que ella se lleva mejor con tontos como Porter o Lager...
+  - 3: Escucha, Tengo los apuntes de clase del Profe...
+  - 3: Solo dale el enlace de acceso a ella y nada mas
+    
+GameOfLove:
+  - 1: Heyyy
+  

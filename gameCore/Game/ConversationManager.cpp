@@ -24,6 +24,42 @@ void ConversationManager::Init(const std::string& conversationFile)
 
 	CHECK(!dialogFile.IsNull());				// the file is wrongly loaded!
 
+	YAML::const_iterator ElementIt;
+
+	for (ElementIt = dialogFile.begin(); ElementIt != dialogFile.end(); ElementIt++)
+	{
+		if (ElementIt->first.as<string>() == "Characters")
+		{
+			//Read characters -  iterate over bar node to get Property nodes (Example)
+			for (YAML::const_iterator SubIt = ElementIt->second.begin(); SubIt != ElementIt->second.end(); SubIt++)
+			{
+				ParseCharacter(SubIt);
+			}
+		}
+		else  //Read Conversation
+		{
+			ParseConversation(ElementIt);
+		}
+	}
+
+	CurrentConversationNode = nullptr;
+	ChooseOption = 0;
+
+	if (YAML::Node ElementNode = dialogFile["Setup"])
+	{
+		const YAML::Node& PreLoad = ElementNode["PreLoad"];
+		for (ElementIt = PreLoad.begin(); ElementIt != PreLoad.end(); ElementIt++)
+		{
+			PreLoadImage(ElementIt);
+		}
+
+		if (ElementNode["StartEntry"].IsDefined())
+		{
+			StartConversation(ElementNode["StartEntry"].as<std::string>());
+		}
+	}
+
+	/*
 	YAML::Node Root = dialogFile["Dialogs"];	//Get the root node as a Map;
 	YAML::Node ElementNode;
 	YAML::const_iterator ElementIt;
@@ -53,6 +89,7 @@ void ConversationManager::Init(const std::string& conversationFile)
 			StartConversation(ElementNode["StartEntry"].as<std::string>());
 		}
 	}
+	*/
 }
 
 void ConversationManager::Deinit(void)
@@ -274,6 +311,14 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 
 		// Keep as Param for JumpLevels
 		currentNode->Text = !talkIt->second.IsNull() ? talkIt->second.as<string>() : "1";
+	}
+	else if (strKey == "GoTo")
+	{
+		//Set the type
+		currentNode->Type = ConversationNodeType::GoToNode;
+
+		// Keep as Param for JumpLevels
+		currentNode->Text = !talkIt->second.IsNull() ? talkIt->second.as<string>() : "Setup";
 	}
 	else if (strKey == "SetTrue" || strKey == "SetFalse")
 	{
@@ -600,6 +645,11 @@ void ConversationManager::Update()
 			ChooseIndex = 0;
 			NextMessage(ChooseOption);
 		}
+		return;
+
+	case ConversationNodeType::GoToNode:
+		TalkStack = std::stack<ConversationNode*>();
+		StartConversation(CurrentConversationNode->Text);
 		return;
 
 	case ConversationNodeType::EndConversation:

@@ -1,0 +1,167 @@
+Setup:
+  StartEntry: CodeTests       # Define First Entry point
+  PreLoad:
+    - SetImage: logo
+      file: raylib_logo.png
+    - SetImage: UV            # Useful When you need to preload something to avoid spamming script space
+      file: "Data/UV.png"
+
+Characters:
+  0 : Gandalf
+  1 : Frodo
+  ###############################################################################################
+  # - SetImage: "ID"            # ActorLeft, ActorRight, BGLayer1 ~ BGLayer5  (They're drawn 'in last order of Creation)
+  #   visible: false       
+  #   file: "kyo.png"
+
+  # - ShowImage:        ID      # Show/Hide Visibility on Image
+  # - HideImage:        ID
+  # - SetFullHeight:    ID      # Useful for Backgrounds
+  # - SetSizeExtend:    ID
+
+  # - FadeIn:           ID      # Fade In/Out Image
+  # - FadeOut:          ID
+
+  # - SetLeftOut:       ID      # Change Image Position regardless visibility
+  # - SetLeft:          ID
+  # - SetCenter:        ID
+  # - SetRight:         ID
+  # - SetRightOut:      ID
+
+  # - MoveLeftOut:      ID      # Change Image Position regardless visibility
+  # - MoveLeft:         ID
+  # - MoveCenter:       ID
+  # - MoveRight:        ID
+  # - MoveRightOut:     ID
+
+  # - ScrollLeft:       ID      # Scroll Image until the end of times
+  # - ScrollLeftEnd:    ID      # Scroll Image until the end of it.
+  # - ScrollRight:      ID
+  # - ScrollRightEnd:   ID
+  # - ScrollLoop:       ID      # Scroll image inbetween both sides
+
+  # - ShakeImage:       ID      # short shake image FX
+  # - CleanUp:          ID/All  # Remove a specific image or anything if ALL
+
+  # - PlayMusic/Once:   ID      # Play Music in loop or once if enabled
+  # - SetMusic:         Off     # Stop Music or Toggle state with PauseMusic/ResumeMusic
+  # - PlaySound:        ID      
+
+  # - SlideLeft:   ID      # Slide Image from outside into the scene
+  # - SlideRight:  ID
+
+  ###############################################################################################
+CodeTests:
+  - SetImage: Back       # ActorLeft, ActorRight, BGLayer1 ~ BGLayer5  
+    visible: false
+    file: "Data/back2.png"
+  - SetFullHeight: Back
+  - FadeIn: Back
+  - ScrollLoop: Back
+  - PlaySound: "Data/zapslat.wav"
+  - PlayMusic: Data/Watermelon.mp3
+
+  - 1: Esto es solo un test... es solo un A everest
+  - 0: Esto es otro test...
+  - 1: "Ok, Esto es solo un test... es solo un test"
+
+  - SetImage: ActorLeft       # ActorLeft, ActorRight, BGLayer1 ~ BGLayer5  
+    #visible: false
+    file: "Data/george.png"
+  - SlideLeft: ActorLeft
+
+  - SetImage: A1       # ActorLeft, ActorRight, BGLayer1 ~ BGLayer5  
+    visible: false
+    file: "Data/kyo.png"
+  - FadeIn: A1
+  - FadeIn: logo
+
+  - 0: Remove something...
+  - PlaySound: "Data/laser-shot.wav"
+  - SetCenter: ActorLeft
+  - SetTrue: one_shot
+  - SetFalse: two_shot
+
+  - 0: Hagamos un Branch...
+  - Option:
+    - if: [ one_shot, ¬two_shot, "!extra_shot"]
+    #- Condition: "one_shot"     # saddly Yaml uses '!' to represent some Tag thing... whatever, We also can use '¬' to negate
+    #- Condition: "!two_shot"    # default value is false when there isn't a previous entry
+    #- Condition: "!extra_shot"    
+    - 1: We're inside an option!
+    - MoveLeft: ActorLeft
+    - MoveRight: A1
+    - 0: Ok, let's jump back to main branch..
+    - SetFalse: one_shot
+    - SetTrue: two_shot
+    #- HideImage: ActorLeft      ###
+    #- FadeOut: Background
+    - JumpBack:
+  - 1: Test completado
+  - 0: Parece que resulto exitoso
+
+  - ChooseTalk :
+    - Option:
+      - 1: Esta es una sola opcion muy corta
+      - PlaySound: "Data/laser-shot.wav"
+      - FadeIn: ActorLeft
+      - 0: una es mejor que ninguna!.
+      - SetTrue: hidden_option
+      - MoveRight: ActorLeft
+      - JumpBack:               # jumpback returns 1 level back by default
+
+    - Option:
+      - if: [hidden_option, "!random_value"]
+      - 1: Esta es otra opcion muchisimo mas larga y que se puede truncar
+      - 0: definitivamente la ultima!.
+      - FadeOut: ActorLeft
+      - GoTo: Comienzo
+
+
+  ###############################################################################################
+
+Comienzo:
+  - 0: El camino sigue sin cesar... 
+  - 1: pero sin demora haz de continuar...
+  - 0: El camino sigue sin cesar... pero sin demora he de continuar...
+  - ChooseTalk:
+
+    - Option:
+      - 1: Llegas tarde!
+      - 0: Un mago nunca llega tarde, Frodo Bolson.
+      - 1: Ni pronto, llega exactamente cuando se lo propone.
+      - ChooseTalk:
+        - Option:
+          - 1: Sera prepotente! Vete por donde has venido!
+          - 0: Te arrepentiras de esta!
+          - JumpBack: 1 # Optional parameter returns 1 level
+        - Option:
+          - 1: Cuanto me alegro de verte Gandalf!
+          - 0: No me iba a perder el cumpleaños de tu tio Bilbo.
+          - 0: Como esta mi viejo amigo?
+          - 0: He oido que va a dar una fiesta de especial importancia.
+          - SetTrue: finish_talk
+          - JumpBack: 2 # Optional parameter returns 2 level
+
+    - Option:
+      - 1: Eh! Tu! Viejo! Donde crees que vas?
+      - 0: Que falta de respeto, ya no te acuerdas de mi?
+      - ChooseTalk:
+        - Option:
+          - 1: Papa Noel?
+          - 0: Acaso voy vestido de rojo y llevo renos?
+          - JumpBack: 3 # Optional parameter bail off
+        - Option:
+          - 1: Ah! Cuanto me alegro de verte Gandalf!
+          - 0: Eso esta mejor.
+          - 1: Te Felicito que bien actuas!
+        - Option:
+            - 1: Eehhh, cual era la pregunta?
+            - 0: ..., Da igual.
+              time: 28.0
+            - JumpBack:
+
+    - Option:
+      - if: finish_talk     # saddly Yaml uses '!' to represent some Tag thing... whatever!
+      - 1: Si bueno, nos vemos!
+      - 0: Nos vemos querido!
