@@ -138,6 +138,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>Libraries/raylib/bin/$(Platform)/$(Configuration)/;Libraries/yaml-cpp/lib/$(Platform)/</AdditionalLibraryDirectories>
       <AdditionalDependencies>raylib.lib;winmm.lib;$(CoreLibraryDependencies);yaml-cppd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <StackReserveSize>20000000</StackReserveSize>
+      <StackCommitSize>20000000</StackCommitSize>
     </Link>
     <PostBuildEvent>
       <Command>copy /y ".\Data\*.*" "$(OutDir)"</Command>
@@ -162,6 +164,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>Libraries/raylib/bin/$(Platform)/$(Configuration)/;Libraries/yaml-cpp/lib/$(Platform)/</AdditionalLibraryDirectories>
       <AdditionalDependencies>raylib.lib;winmm.lib;$(CoreLibraryDependencies);yaml-cpp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <StackReserveSize>20000000</StackReserveSize>
+      <StackCommitSize>20000000</StackCommitSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -283,7 +287,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="config.yml" />
-    <None Include="Data\dialogTest.yml" />
     <None Include="Data\intro.yml" />
     <None Include="Libraries\yaml-cpp\lib\Win32\yaml-cppd.pdb" />
     <None Include="Libraries\yaml-cpp\lib\x64\yaml-cppd.pdb" />

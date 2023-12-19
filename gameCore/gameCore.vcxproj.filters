@@ -345,7 +345,6 @@
     <None Include="Libraries\yaml-cpp\lib\Win32\yaml-cppd.pdb" />
     <None Include="Libraries\yaml-cpp\lib\x64\yaml-cppd.pdb" />
     <None Include="config.yml" />
-    <None Include="Data\dialogTest.yml" />
     <None Include="Data\intro.yml" />
   </ItemGroup>
 </Project>

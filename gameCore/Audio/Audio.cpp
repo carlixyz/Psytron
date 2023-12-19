@@ -1,5 +1,6 @@
 #include "Audio.h"
-
+#include <raylib-cpp.hpp>
+#include "./reasings.h"
 
 bool Audio::Init()
 {
@@ -43,11 +44,14 @@ void Audio::PlaySound(const std::string& soundFile)
 void Audio::PlayMusic(const std::string& musicFile, bool isLooping)
 {
     SoundTrack = LoadMusicStream(musicFile.c_str());
-    
     SoundTrack.looping = isLooping;
 
     if (IsMusicReady(SoundTrack))
+    {
         PlayMusicStream(SoundTrack);
+        if (IsMusicFading || MusicVolumeNow <= 0.0f )
+            FadeMusicIn();
+    }
 }
 
 void Audio::StopMusic()
@@ -55,17 +59,51 @@ void Audio::StopMusic()
     StopMusicStream(SoundTrack);
 }
 
-void Audio::PauseMusic()
+void Audio::FadeMusicIn()
+{
+    MusicVolumeStart = MusicVolumeNow;
+    MusicVolumeEnd = 1.0f;
+    CurrentTime = 0.0f;
+    IsMusicFading = true;
+}
+
+void Audio::FadeMusicOut()
+{
+    MusicVolumeStart = MusicVolumeNow;
+    MusicVolumeEnd = 0.0f;
+    CurrentTime = 0.0f;
+    IsMusicFading = true;
+}
+
+void Audio::ToggleMusic()
 {
     Pause = !Pause;
-    if (Pause) 
-        if (IsMusicStreamPlaying(SoundTrack))
-            PauseMusicStream(SoundTrack);
-        else
-            ResumeMusicStream(SoundTrack);
+    if (IsPlayingMusic())
+        PauseMusicStream(SoundTrack);
+    else
+        ResumeMusicStream(SoundTrack);
+}
+
+bool Audio::IsPlayingMusic()
+{
+    return IsMusicStreamPlaying(SoundTrack);
 }
 
 void Audio::Update()
 {
+    if (IsMusicFading)
+    {
+        CurrentTime += GetFrameTime();
+        MusicVolumeNow = EaseCubicOut(CurrentTime, MusicVolumeStart, MusicVolumeEnd - MusicVolumeStart, TotalTime);
+        //MusicVolumeNow = EaseLinearNone(CurrentTime, MusicVolumeNow, MusicVolumeEnd - MusicVolumeNow, TotalTime);
+        IsMusicFading = CurrentTime > TotalTime ? false : true;
+
+        SetMusicVolume(SoundTrack, MusicVolumeNow);
+
+        if (!IsMusicFading && MusicVolumeNow < 0.0f)
+            StopMusicStream(SoundTrack);
+    }
+
+
     UpdateMusicStream(SoundTrack);
 }

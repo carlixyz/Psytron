@@ -196,11 +196,25 @@ struct ConversationNode     // Conversation SubNodes
         case ConversationNodeType::PlayMusic:   // PlayMusic with looping On/Off
                 Audio::Get().PlayMusic(Action.first, Action.second);
             break;
-        case ConversationNodeType::SetMusic:  // Stop music or just toggle pause/resume it
-            if (Action.second == true)  
-                Audio::Get().StopMusic();
+        case ConversationNodeType::SetMusic:    // Stop music or just toggle pause/resume it
+            if (Action.first == "StopMusic")
+            {
+                if(Action.second == true)       // Do Fade?
+                    Audio::Get().FadeMusicOut();
+                else
+                    Audio::Get().StopMusic();
+            }
             else
-                Audio::Get().PauseMusic();
+            {
+                bool SetPausedMusic = (Audio::Get().IsPlayingMusic() && Action.first == "PauseMusic" ||
+                                        (Action.first == "ToggleMusic" && Action.second == false));
+                bool SetResumedMusic = (!Audio::Get().IsPlayingMusic() && Action.first == "ResumeMusic" ||
+                                       (Action.first == "ToggleMusic" && Action.second == true));
+
+                if (SetResumedMusic || SetPausedMusic)
+                    Audio::Get().ToggleMusic();
+            }
+
             break;
         case ConversationNodeType::PlaySound:   
                 Audio::Get().PlaySound(Action.first);
@@ -223,6 +237,10 @@ class ConversationManager : public Singleton<ConversationManager>
 
     Rectangle TextBoxArea;
     Rectangle TextArea;
+    Font FontResource;
+    Color FontColor                 = SKYBLUE;
+    const float FontSize            = 24;
+    const float FontOffset          = 20;
 
     typedef std::vector<CharacterSpeaker> CharactersVector; //Type definitions to simplify the syntax
     typedef CharactersVector::iterator CharactersIt;

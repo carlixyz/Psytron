@@ -10,30 +10,134 @@ Characters:
   8: Honey  # Funny Girl
   9: AnchorGirl
 
+
 Setup:
   StartEntry: InfoNews       # Define First Entry point
-  #PreLoad:
-  #  - SetImage: logo
-  #    file: raylib_logo.png
-  #  - SetImage: UV            # Useful When you need to preload something to avoid spamming script space
-  #    file: "Data/UV.png"
+  PreLoad:
+    - SetImage: News1
+      # visible: true       # not visible by default thus not needed
+      file: Data/InfoNews_1.png
+    - SetFullHeight: News1
+    - SetImage: News2
+      file: "Data/InfoNews_2.png"
+    - SetFullHeight: News2
+    - SetImage: News3            
+      file: "Data/InfoNews_3.png"
+    - SetFullHeight: News3
+    - SetImage: News4
+      file: "Data/InfoNews_4.png"
+    - SetFullHeight: News4
+    - SetImage: News5
+      file: "Data/InfoNews_5.png"
+    - SetFullHeight: News5
+    - SetImage: News6
+      file: "Data/InfoNews_6.png"
+    - SetFullHeight: News6
+    - SetImage: News7
+      file: "Data/InfoNews_7.png"
+    - SetFullHeight: News7
+    - SetImage: News8
+      file: "Data/InfoNews_8.png"
+    - SetFullHeight: News8
+    - SetImage: News9
+      file: "Data/InfoNews_9.png"
+    - SetFullHeight: News9
+    - SetImage: Ale
+      file: "Data/Ale.png"
+    - SetImage: logo
+      file: raylib_logo.png
+    - SetImage: UV
+      file: "Data/UV.png"
+
 
 InfoNews:
-  - 9: In another order of news, Last night new disturbances occurred in Boedo 808
-  - 9: Seems they may be related to another Class E synthetic unit, used for sweeping and public cleaning tasks.
-  - 9: BioTech Systems expressed itself in this regard, confirming that these are just some isolated incidents...   
-  - 9: due to lack of general checks and improper maintenance by the prefecture.
-  - 9: and these are in no way related to deviations in the automaton learning # Neural link automaton
-  - 9: just as the unfounded rumors of some dissident sectors suggest. 
-  - 9: More details about coming soon as the day goes by.
+  - PlaySound: "Data/zapslat.wav"
+  - 0: NeoChaco 20XX
+  - 0: Good afternoon citizens...
+  - 9: "「Mike」これは今日の主要なストーリーです。\n別のニュースで、今日の主なニュースです。"
+  - 9: "こんばんわ！"
+  - 9: Today's weather is a clear night with stars and 32% clouds
+    time: 10.0
+
+# Traduce esta frase "En otro orden de noticias, esta es la historia principal de hoy" al japones 
+# usando hiragana, katakana y solamente estos kanjis
+
+# エナマ人休体働元光写刃前友口名命問国土学山布師年心怒悪手日曜書月木校楽死気水法泣火獣理画病目知石砂笑算糸紙習耳船花草葉虫言話語読足車金鉄雨雲革音頭風魚鳥鼻一七万三上下中九乾事二五京低作健億兆全八六具内円冬冷分則力動医十千半厚原古右同四地坂塩壁夏外多夜大天奏女官家寝小少屋島川左市帰平広床座康後忘思恵想慮戸操教数文料
+
+  - PlayMusic: "Data/High-Tech-City_Looping.mp3"
+  - FadeIn: News1
+  - ScrollLoop: News1
+  - 9: «Welcome to the Info News Network Edition 20XX!»
+    time: 16.0
+    # unskip:
+  - 9: Currency exchange is 40% blue and 60% 1000:1 for leliqs
+  - 9: "他のニュースに移りますが、これは今日の主要なストーリーです。\n別のニュースで、今日の主なニュースです。"
+  - 9: "他のニュースに移りますが、\n これは今日の主要なストーリーです。\n別のニュースで、今日の主なニュースです。"
+  - 9: The Curve's projection aims to reach level 9000 at end of year
+  - 9: Finally SARS dispersion is the lowest since Pandemic beginings
+    time: 16.0
+
+  - ShowImage: News2
+  - FadeOut: News1
+  - 9: In another order of news, This is today main story
+  - 9: Last night new disturbances occurred in Boedo 808
+    time: 16.0
+  # - PauseMusic:
+
+  - ShowImage: News3
+  - FadeOut: News2
+  - 9: Seems they may be related to another synthetic unit
+  - 9: Class E used for sweeping and public cleaning tasks.
+  - FadeOut: News3
+  # - ResumeMusic:
+
+  - ShowImage: News4
+  - ShakeImage: News4
+  - 9: This generated a tense situation with extreme overflows
+  - 9: Another unit sacrified itself burning in a big fire.
+
+  - ShowImage: News5
+  - FadeOut: News4
+  - 9: This generated a tense situation with extreme overflows
+  - 9: Resulting in a balance of 5 deaths and 12 injuries.
+
+  - ShowImage: News6
+  - FadeOut: News5
+  # - FadeIn: News4
+  - 9: consulting BioTech part of InfoCom group about this
+  - 9: They expresed that all was just an isolated case
+
+  - ShowImage: News7
+  - FadeOut: News6
+  - 9: due to an usual lack of prefecture's general checks 
+  - 9: by improper maintenance of the respective subsystems
+
+  - ShowImage: News8
+  - FadeOut: News7
+  - 9: and no way related to deviations in automaton learning # Neural link automaton
+  - 9: as the unfounded rumors of dissident minority suggest.  
+
+  - ShowImage: News9
+  - FadeOut: News8
+  - 9: But that's all the information We have for now.
+  - FadeOut: News9
+  - 9: More details about will come soon as time goes by.
+  - StopMusic:
   - GoTo: IntroSchool
+
     
 IntroSchool:
+  - 0: " "
+  - 0: " "
+    time: 12.0
   - 1: Hermosa tarde verdad?
   - 1: por fin Viernes y otra larga semana que termina...
-  - 1: Soy Alex, tengo 21 años y este es mi ultimo mes en el instituto Tecnologico.
-  - 1: Espere años para certificarme pero ahora que estoy aca tengo algunos pensamientos mezclados.
-  - 1: Por fin voy a ser libre y nunca mas tendre que estudiar durante horas para cursar este infierno!
+  - PlayMusic: "Data/Video-Game-Brain-Drain_Looping.mp3"
+  - SetLeft: Ale
+  - FadeIn: Ale
+  - 1: "Soy Alex, tengo 21 años y este es mi ultimo mes \nen el instituto tecnologico."
+  - 1: "Espere años para certificarme pero ahora... \nestoy aqui y tengo algunos pensamientos mezclados."
+  - 1: "Por fin voy a ser libre y nunca mas tendre que estudiar \ndurante horas para cursar este infierno!"
   - 1: Pero por otro lado siento que voy a extrañar algunas cosas de este lugar...
   - 1: Tiene una energia especial, los chistes de Hoppy, las fiestas y las chicas Uff... Sin palabras!
   - 1: Mhhh ahi se acerca Hoppy, que estara tramando ahora?
@@ -42,13 +146,54 @@ IntroSchool:
   - 1: Rayos y ahora que diablos quieres?
   - 3: Ahi esta saliendo Ginger... te digo que tiene algo contigo!
   - 1: Que quee? No tengo idea de que hablas y ya tengo que irme...
-  - 3: Hey! deja de esconderte, tengo el presentimiento de que sino lo intentas...
-  - 3: te arrepentiras para siempre!
+  - 3: Hey, deja de esconderte, tengo el presentimiento que sino lo intentas...
+  - 3: te arrepentiras para siempre
   - 1: Estas loco? No tengo nada que hacer ahi! 
   - 1: Es obvio que ella se lleva mejor con tontos como Porter o Lager...
   - 3: Escucha, Tengo los apuntes de clase del Profe...
   - 3: Solo dale el enlace de acceso a ella y nada mas
     
 GameOfLove:
-  - 1: Heyyy
+  - 4: Hola Al perdona
+  - 4: Hoppy dijo que tienes el resumen de la clase de hoy, es cierto?
+  - 1: Ehmmm si, asi es...
+  - 1: Toma, Estos son los que necesitamos para el practico final.
+  - 4: Genial, que buena suerte que los conseguiste!
+  - 1: Eh y Si claro...
+  - 4: Digo, ultima clase y luego se termina todo, es la ultima oportunidad
+  - 1: «Un momento, Dijo ultima oportunidad?»
+  - 1: «tengo que pensar algo rapido!»
+  - 1: ...
+  - 1: «Diablos, no se me ocurre nada!»
+  - 4: Y tu que estabas haciendo? 
+  - 1: mhhh la verdad, nada en especial, solo despidiendome del instituto y eso.
+  - 4: Nosotros estamos organizando con la banda para hacer algo...
+  - 4: Ah ahi viene Porter...
+  - 5: Hey que pasa aca? de que estan hablando?
+  - 1: ...
+  - 5: Desde cuando son amigos? Tienes que pedirme permiso antes eh
+  - 1: permiso? 
+  - 5: Jajajja es broma, tranquilo, relajate chiquito.
+  - 8: Que te pasa a ti Porter?
+  - 5: Ahh ehhhh... 
+  - 6: Creo que intenta hacerse el Bully de nuevo
+  - 5: no, bueno, no es tan asi...
+  - 8: Porter, ni se te ocurra, ahorranos la verguenza por favor!
+  - 1: "'Mhhh debo ser cuidadoso con mis palabras'"
+  - 5: Tranquilos, tranquilos, Solo estoy bromeando un poco, perdon...
+  - 6: Ok pero No lo hagas mas...
+  - 8: Bueno Chicos, dejemos de perder tiempo y vamos al Viel Glick!
+  - 4: Al, Nos vamos al bar, quieres venir con nosotros?
+  - 1: "'Es una invitacion? Debo estar alucinando...'"
+  - 1: Si claro, me gustaria ir y...
+  - 4: y que?
+  - 1: Demonios, me olvide completamente de algo..
+  - 4: Que cosa? que sucede?
+  - 1: Tengo que trabajar y debo ir hacia otro lado.
+  - 4: Ohhh Que pena
+  - 4: Bueno, otro dia quiza podamos volver a reunirnos.
+  - 1: Por supuesto, Diviertanse, si me libero mas tarde, capaz vaya. 
+  - 1: «Ahora si, perdi mi ultima chance"
+  - 1: Eso fue todo, oficialmente soy un fracaso
+  - 1: Pero bueno, no tengo opcion, tengo que currar...
   

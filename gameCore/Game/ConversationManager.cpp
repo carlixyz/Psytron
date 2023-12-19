@@ -1,24 +1,18 @@
-#include "ConversationManager.h"
+﻿#include "ConversationManager.h"
 #include "../Utility/Utils.h"
 #include "raylib-cpp.hpp"
+
 
 using namespace std;
 
 /// TODO: General Code CleanUp here
-
 void ConversationManager::Init(const std::string& conversationFile)
 {
-	Characters.reserve(5);
+	Characters.reserve(10);
 	DisplayedChildren.reserve(5);
 
 	CurrentConversationNode = nullptr;
 	ChooseOption = 0;
-
-	TextBoxArea = {
-		Graphics::Get().GetWindowArea().width * 0.025f,	Graphics::Get().GetWindowArea().height * 0.8f,
-		  Graphics::Get().GetWindowArea().width * 0.95f, Graphics::Get().GetWindowArea().height * 0.2f
-	};
-	TextArea = { TextBoxArea.x + 20, TextBoxArea.y + 20, TextBoxArea.width - 20, TextBoxArea.height - 20 };
 
 	YAML::Node dialogFile = YAML::LoadFile(conversationFile); // load file
 
@@ -28,9 +22,8 @@ void ConversationManager::Init(const std::string& conversationFile)
 
 	for (ElementIt = dialogFile.begin(); ElementIt != dialogFile.end(); ElementIt++)
 	{
-		if (ElementIt->first.as<string>() == "Characters")
+		if (ElementIt->first.as<string>() == "Characters")  //Read characters -  iterate over bar node to get Property nodes (Example)
 		{
-			//Read characters -  iterate over bar node to get Property nodes (Example)
 			for (YAML::const_iterator SubIt = ElementIt->second.begin(); SubIt != ElementIt->second.end(); SubIt++)
 			{
 				ParseCharacter(SubIt);
@@ -59,37 +52,17 @@ void ConversationManager::Init(const std::string& conversationFile)
 		}
 	}
 
-	/*
-	YAML::Node Root = dialogFile["Dialogs"];	//Get the root node as a Map;
-	YAML::Node ElementNode;
-	YAML::const_iterator ElementIt;
+	FontResource = LoadFont("Data/NotoJp.fnt");
+	//fontAsian = LoadFont("Data/DigiKyokasho.fnt");
 
-	ElementNode = Root["Characters"];			//Read characters -  iterate over bar node to get Property nodes (Example)	
-	for (ElementIt = ElementNode.begin(); ElementIt != ElementNode.end(); ElementIt++)
-	{
-		ParseCharacter(ElementIt);
-	}
+	// Set bilinear scale filter for better font scaling
+	SetTextureFilter(FontResource.texture, TEXTURE_FILTER_BILINEAR);
 
-	ElementNode = Root["Conversations"];
-	for (ElementIt = ElementNode.begin(); ElementIt != ElementNode.end(); ElementIt++)
-	{
-		ParseConversation(ElementIt);
-	}
+	TextBoxArea = {	Graphics::Get().GetWindowArea().width * 0.025f,	Graphics::Get().GetWindowArea().height * 0.8f,
+					Graphics::Get().GetWindowArea().width * 0.95f, Graphics::Get().GetWindowArea().height * 0.2f - FontResource.baseSize * 0.5f };
 
-	if (ElementNode = Root["Setup"])
-	{
-		const YAML::Node& PreLoad = ElementNode["PreLoad"];
-		for (ElementIt = PreLoad.begin(); ElementIt != PreLoad.end(); ElementIt++)
-		{
-			PreLoadImage(ElementIt);
-		}
-
-		if (ElementNode["StartEntry"].IsDefined())
-		{
-			StartConversation(ElementNode["StartEntry"].as<std::string>());
-		}
-	}
-	*/
+	TextArea = { TextBoxArea.x + FontResource.baseSize *0.5f, TextBoxArea.y + (FontResource.baseSize *0.2f),
+		TextBoxArea.x + FontResource.baseSize *0.5f, TextBoxArea.y + (FontResource.baseSize *0.2f) + FontResource.baseSize*0.5f };
 }
 
 void ConversationManager::Deinit(void)
@@ -173,7 +146,7 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	if (!strKey.empty() && strKey.find_first_not_of("-.0123456789") == std::string::npos) 	//if (strKey[0] == '0' || (atoi(strKey.c_str())))
 	{
 		//Set the type
-		if (currentNode->Type != ConversationNodeType::Conditional) // If true this means We are carring some conditionals already
+		if (currentNode->Type != ConversationNodeType::Conditional)				// If true this means We are carring some conditionals already
 			currentNode->Type = ConversationNodeType::NormalTalk;
 		//Get the text
 		currentNode->Text = talkIt->second.as<string>();
@@ -185,8 +158,11 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 
 		//DEBUG_COUT("CharacterId: " << currentNode->CharacterId << " value:  " << currentNode->Text << "\n ");
 
-		if (talkNode["time"]) 		//Get the duration (optional parametter)
+		if (talkNode["time"]) 													//Get the duration (optional parametter)
 			currentNode->Duration = talkNode["time"].as<float>();
+
+		if (talkNode["unskip"]) 												//Set unnskippable dialog  (optional parametter)
+			currentNode->Action.second = true;
 	}
 	else if (strKey == "Option")
 	{
@@ -322,7 +298,6 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	}
 	else if (strKey == "SetTrue" || strKey == "SetFalse")
 	{
-		//Set the type
 		if (currentNode->Type != ConversationNodeType::Conditional) // If true this means We are carring some conditionals already
 			currentNode->Type = ConversationNodeType::SetBool;
 
@@ -432,7 +407,7 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 			currentNode->Type = ConversationNodeType::ShakeImage;
 
 		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to fade in/out
-		currentNode->Action.second = true; // it's Right else is Left
+		currentNode->Action.second = true; // 
 	}
 	else if (strKey.find("CleanUp") != string::npos)
 	{
@@ -451,12 +426,13 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 		currentNode->Action.first = talkIt->second.as<string>();
 		currentNode->Action.second = strKey.find("Once") == string::npos ? true : false; // looping else one time
 	}
-	else if (strKey == "PauseMusic" || strKey == "ResumeMusic" || strKey == "SetMusic")
+	else if (strKey == "PauseMusic" || strKey == "ResumeMusic" || strKey == "StopMusic" || strKey == "ToggleMusic")
 	{
 		if (currentNode->Type != ConversationNodeType::Conditional)
 			currentNode->Type = ConversationNodeType::SetMusic;
 
-		currentNode->Action.second = talkIt->second.as<string>() == "Off" ? true : false; // Stop it else Toggle Pause/Resume
+		currentNode->Action.first = strKey;
+		currentNode->Action.second = talkIt->second.as<string>() != "Off";				// Stop it else Toggle Pause/Resume
 	}
 	else if (strKey == "PlaySound" )
 	{
@@ -475,19 +451,19 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 	}
 	else
 	{
-		CHECK(0 && "Wrong character tag ID\n");						//Invalid tag found
+		CHECK(0 && "Wrong character tag ID\n");											//Invalid tag found
 	}
 
 	currentNode->Children.push_back(node);
 
-	ParseNode(++iterator, end, &(currentNode->Children[0]));		//Recursive call
+	ParseNode(++iterator, end, &(currentNode->Children[0]));							//Recursive call
 }
 
 // Parse yml to  group conditions
 void ConversationManager::ParseCondition(const std::string& cond, ConversationNode* currentNode)
 {
 	std::string keyStr = cond;
-	size_t negationPos = keyStr.find('!') == 0 ? 0 : keyStr.find('�');
+	size_t negationPos = keyStr.find('!') == 0 ? 0 : keyStr.find('¬');
 	bool isNegated = false;
 
 	if (negationPos != std::string::npos && negationPos == 0)
@@ -588,7 +564,8 @@ void ConversationManager::Update()
 		CharIndex++;
 
 		//If time has finished or Accept action has been selected change to the next message
-		if (MessageTime <= 0.0f || IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE))	
+		if (MessageTime <= 0.0f || 
+			( (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE)) && !CurrentConversationNode->Action.second))
 		{
 			if (CharIndex < CurrentConversationNode->Text.size())
 			{
@@ -671,34 +648,40 @@ void ConversationManager::Render()
 	unsigned counter = 0;				//Counter for children
 	unsigned charSize = (unsigned)CurrentConversationNode->Text.size();
 
-	DrawRectangle(0, (int)TextBoxArea.y, (int)Graphics::Get().GetWindowArea().width, (int)TextBoxArea.height, {0, 0, 0, 160});
+	//DrawRectangle(0, (int)TextBoxArea.y, (int)Graphics::Get().GetWindowArea().width, (int)TextBoxArea.height, {0, 0, 0, 200});
+	DrawRectangle((int)TextBoxArea.x, (int)TextBoxArea.y, (int)TextBoxArea.width, (int)TextBoxArea.height, { 0, 0, 0, 200 });
 
 	switch (CurrentConversationNode->Type)
 	{
 	case ConversationNodeType::Conditional:
 	case ConversationNodeType::NormalTalk:
-	{															//Write the name
-		characterName = Characters[(CurrentConversationNode->CharacterId)].CharacterName + ": ";
-		DrawText(characterName.c_str(), (int)TextArea.x, (int)TextArea.y, 20, SKYBLUE);
-																//Draw the text
-		message = CurrentConversationNode->Text.substr(0, CharIndex < charSize ? CharIndex : charSize);						
-		DrawText(message.c_str(), (int)TextArea.x, (int)TextArea.y + 20, 20, SKYBLUE);
-	}
+		{
+			if (CurrentConversationNode->CharacterId)							//if CharacterId > 0 Write the name
+			{
+				characterName = "[" + Characters[CurrentConversationNode->CharacterId].CharacterName + "] ";
+				DrawTextEx(FontResource, characterName.c_str(), Vector2{ TextArea.x, TextArea.y }, FontSize, 1, FontColor);
+			}
+																				//Draw the text
+			message = CurrentConversationNode->Text.substr(0, CharIndex < charSize ? CharIndex : charSize);						
+			DrawTextEx(FontResource, message.c_str(), Vector2{TextArea.width, TextArea.height}, FontSize, 1, FontColor);
+		}
 		break;
 
 	case ConversationNodeType::ChooseTalk:
-		//Draw the options
-		for (ConversationNode* child : DisplayedChildren)
+		for (ConversationNode* child : DisplayedChildren) 						//Draw the options
 		{
-			characterName = Characters[child->CharacterId].CharacterName + ": ";
-			DrawText(characterName.c_str(), (int)TextArea.x, (int)TextArea.y, 20, SKYBLUE);
+			if (CurrentConversationNode->CharacterId)							//if CharacterId > 0 Write the name
+			{
+				characterName = "[" + Characters[child->CharacterId].CharacterName + "] ";
+				DrawTextEx(FontResource, characterName.c_str(), Vector2{ TextArea.x, TextArea.y }, FontSize, 1, FontColor);
+			}
 
 			//Set the propper color to the selected option
-			Color color = (counter == ChooseOption) ? WHITE : SKYBLUE;
+			Color color = (counter == ChooseOption) ? WHITE : FontColor;
 
 			if (ChooseIndex == DisplayedChildren.size() || ChooseIndex > counter)
 			{
-				message = child->Text;										//Draw the child
+				message = child->Text;											//Draw the child
 			}
 			else if (ChooseIndex == counter)
 			{
@@ -714,7 +697,8 @@ void ConversationManager::Render()
 				}
 			}
 			
-			DrawText(message.c_str(), (int)TextArea.x, (int)(TextArea.y + 20) + (counter * 20), 20, color);
+			DrawTextEx(FontResource, message.c_str(), Vector2{ TextArea.width, 
+					   TextArea.height + counter * FontResource.baseSize * 0.5f }, FontSize, 1, color);
 
 			counter++;
 		}
