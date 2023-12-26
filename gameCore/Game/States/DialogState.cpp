@@ -3,7 +3,7 @@
 #include "../../Graphics/Graphics.h"
 #include <functional>
 
-#define PADDING 100
+#define PADDING 50
 #define POS_CENTER ((Graphics::Get().GetWindowArea().width * 0.5f) - (ImagesMap[imageId]->Size.width * 0.5f))
 #define POS_LEFT (PADDING)
 #define POS_RIGHT (Graphics::Get().GetWindowArea().width - ImagesMap[imageId]->Size.width - PADDING)
@@ -136,7 +136,7 @@ void DialogState::MovePosition(std::string imageId, EScreenPosition position)
 
 	bool isOutScreen = ImagesMap[imageId]->PositionX < -PADDING ||
 		ImagesMap[imageId]->PositionX > Graphics::Get().GetWindowArea().width + PADDING;
-
+	
 	switch (position)	// This Slide something from current position to a new one.
 	{
 		case EScreenPosition::EPositionLeft:

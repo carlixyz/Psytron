@@ -13,37 +13,52 @@ Characters:
 
 Setup:
   StartEntry: InfoNews       # Define First Entry point
+  # StartEntry: IntroSchool       # Define First Entry point
   PreLoad:
     - SetImage: News1
       # visible: true       # not visible by default thus not needed
-      file: Data/InfoNews_1.png
+      file: Data/Scenes/Intro/InfoNews_1.png
     - SetFullHeight: News1
     - SetImage: News2
-      file: "Data/InfoNews_2.png"
+      file: "Data/Scenes/Intro/InfoNews_2.png"
     - SetFullHeight: News2
     - SetImage: News3            
-      file: "Data/InfoNews_3.png"
+      file: "Data/Scenes/Intro/InfoNews_3.png"
     - SetFullHeight: News3
     - SetImage: News4
-      file: "Data/InfoNews_4.png"
+      file: "Data/Scenes/Intro/InfoNews_4.png"
     - SetFullHeight: News4
     - SetImage: News5
-      file: "Data/InfoNews_5.png"
+      file: "Data/Scenes/Intro/InfoNews_5.png"
     - SetFullHeight: News5
     - SetImage: News6
-      file: "Data/InfoNews_6.png"
+      file: "Data/Scenes/Intro/InfoNews_6.png"
     - SetFullHeight: News6
     - SetImage: News7
-      file: "Data/InfoNews_7.png"
+      file: "Data/Scenes/Intro/InfoNews_7.png"
     - SetFullHeight: News7
     - SetImage: News8
-      file: "Data/InfoNews_8.png"
+      file: "Data/Scenes/Intro/InfoNews_8.png"
     - SetFullHeight: News8
     - SetImage: News9
-      file: "Data/InfoNews_9.png"
+      file: "Data/Scenes/Intro/InfoNews_9.png"
     - SetFullHeight: News9
+    - SetImage: School
+      file: "Data/Scenes/School.png"
     - SetImage: Ale
-      file: "Data/Ale.png"
+      file: "Data/Actors/Ale.png"
+    - SetImage: Ginger2
+      file: "Data/Actors/Ginger2.png"
+    - SetImage: Amber
+      file: "Data/Actors/Amber.png"
+    - SetImage: Ginger
+      file: "Data/Actors/Ginger.png"
+    - SetImage: Porter
+      file: "Data/Actors/Porter.png"
+    - SetImage: Honey
+      file: "Data/Actors/Honey.png"
+    - SetImage: Hoppy
+      file: "Data/Actors/Hoppy.png"
     - SetImage: logo
       file: raylib_logo.png
     - SetImage: UV
@@ -54,8 +69,6 @@ InfoNews:
   - PlaySound: "Data/zapslat.wav"
   - 0: NeoChaco 20XX
   - 0: Good afternoon citizens...
-  - 9: "「Mike」これは今日の主要なストーリーです。\n別のニュースで、今日の主なニュースです。"
-  - 9: "こんばんわ！"
   - 9: Today's weather is a clear night with stars and 32% clouds
     time: 10.0
 
@@ -128,72 +141,140 @@ InfoNews:
     
 IntroSchool:
   - 0: " "
+    time: 4.0
+    unskip:
   - 0: " "
-    time: 12.0
+    time: 2.0
+  - PlaySound: "Data/zapslat.wav"
   - 1: Hermosa tarde verdad?
   - 1: por fin Viernes y otra larga semana que termina...
   - PlayMusic: "Data/Video-Game-Brain-Drain_Looping.mp3"
   - SetLeft: Ale
   - FadeIn: Ale
   - 1: "Soy Alex, tengo 21 años y este es mi ultimo mes \nen el instituto tecnologico."
-  - 1: "Espere años para certificarme pero ahora... \nestoy aqui y tengo algunos pensamientos mezclados."
+  - FadeIn: School
+  - 1: "Espere años para certificarme pero ahora... \ntengo pensamientos mezclados."
   - 1: "Por fin voy a ser libre y nunca mas tendre que estudiar \ndurante horas para cursar este infierno!"
-  - 1: Pero por otro lado siento que voy a extrañar algunas cosas de este lugar...
-  - 1: Tiene una energia especial, los chistes de Hoppy, las fiestas y las chicas Uff... Sin palabras!
+  - 1: Pero por otro lado siento que voy a extrañar algunas cosas...
+  - FadeOut: Ale
+  - 1: "Este lugar tenia una energia especial"
+  - SetLeftOut: Hoppy
+  - 1: "Los chistes de Hoppy, mis tontos amigos, locas fiestas Uff... \n Sin palabras!"
+  - 1: Siento que estoy dejando aqui un pedazo de mi para siempre...
+  - MoveCenter: Hoppy
+
+  - SetLeftOut: Ginger2
   - 1: Mhhh ahi se acerca Hoppy, que estara tramando ahora?
-  - 3: Hey Al, Donde estabas? seguro otra vez en tu onanismo mental! jajajaaj 
+  - 3: "Hey Al, Donde estabas? \n seguro que otra vez en tu onanismo mental! jajajaaj" 
   - 3: No te olvides que me debes una apuesta...
   - 1: Rayos y ahora que diablos quieres?
-  - 3: Ahi esta saliendo Ginger... te digo que tiene algo contigo!
-  - 1: Que quee? No tengo idea de que hablas y ya tengo que irme...
-  - 3: Hey, deja de esconderte, tengo el presentimiento que sino lo intentas...
-  - 3: te arrepentiras para siempre
+    time: 6.0
+  - MoveRight: Ginger2
+  - 3: "Ahi esta saliendo Ginger... \ncreo que ahora tienes una chance con ella..."
+    time: 6.0
+  - 1: Que quee? No tengo idea de que hablas 
+  - 1: y ya tengo que irme, se me empieza a hacer tarde...
+  - 3: Hey, deja de esconderte, te digo que tiene algo contigo... 
+  - 3: tengo el presentimiento que sino lo intentas...
+  - 3: te arrepentiras para siempre.
+    time: 6.0
   - 1: Estas loco? No tengo nada que hacer ahi! 
   - 1: Es obvio que ella se lleva mejor con tontos como Porter o Lager...
   - 3: Escucha, Tengo los apuntes de clase del Profe...
-  - 3: Solo dale el enlace de acceso a ella y nada mas
+  - 3: Toma, Solo dale el enlace de acceso a ella y nada mas
+  - MoveRightOut: Hoppy
+  - SetRightOut: Ginger
+  - GoTo: GameOfLove
+  
     
 GameOfLove:
+  - SetLeftOut: Porter
+  - SetRightOut: Honey
+  - SetLeftOut: Amber
+  - MoveRight: Ginger
+  - FadeOut: Ginger2
   - 4: Hola Al perdona
   - 4: Hoppy dijo que tienes el resumen de la clase de hoy, es cierto?
   - 1: Ehmmm si, asi es...
-  - 1: Toma, Estos son los que necesitamos para el practico final.
-  - 4: Genial, que buena suerte que los conseguiste!
-  - 1: Eh y Si claro...
-  - 4: Digo, ultima clase y luego se termina todo, es la ultima oportunidad
+  - 1: Toma, Estos son los que necesitamos para la entrega final.
+  - 4: Genial, que  suerte que los conseguiste!
+  - 1: Eh si claro...
+  - 4: Digo, clase final y luego se termina todo, es la ultima oportunidad
   - 1: «Un momento, Dijo ultima oportunidad?»
-  - 1: «tengo que pensar algo rapido!»
-  - 1: ...
+  - 1: «tengo que pensar algo rapido para darle charla!»
+  - 1: "«...»"
+    time: 3.0
+    unskip:
   - 1: «Diablos, no se me ocurre nada!»
-  - 4: Y tu que estabas haciendo? 
-  - 1: mhhh la verdad, nada en especial, solo despidiendome del instituto y eso.
+  - 4: Y tu que estas haciendo? 
+  - ChooseTalk :
+    - Option:
+      - 1: Es un secreto muy especial
+      - 4: En serio? puedes contarmelo a mi?
+      - 1: Jejje por esta vez creo que puedo hacer una excepcion
+      - 4: Genial y de que se trata entonces?
+      - 1: "mhhh..."
+      - GoTo: GameOfWar
+  
+    - Option:
+      - 1: Planificando a que fiestas voy a ir esta noche
+      - 4: Ohh vaya, vaya, pero que loco!
+      - 1: Jejje
+      - 4: Y adonde vas a ir?
+      - 1: "mhhh..."
+      - 1: A ningun lugar realmente, tengo que trabajar
+      - 4: infelizmente
+      - GoTo: GameOfWar
+  
+    - Option:
+      - 1: Disfrutando con nostalgia este momento por ultima vez.
+      - 4: Wow, en serio eso es lo que piensas?
+      - 1: Bueno, no siempre, pero me siento un poco asi estos dias
+      - 4: "Vaya, no sabia que eras tan profundo\n No a todos les gusta mostrar sus emociones"
+      - GoTo: GameOfWar
+
+
+GameOfWar:
+  - 1: "la verdad, no hacia nada en especial \nsolo me estoy despidiendo del instituto y todo esto."
   - 4: Nosotros estamos organizando con la banda para hacer algo...
   - 4: Ah ahi viene Porter...
+  - ShakeImage: School
+  - MoveLeft: Porter
   - 5: Hey que pasa aca? de que estan hablando?
-  - 1: ...
-  - 5: Desde cuando son amigos? Tienes que pedirme permiso antes eh
+  - 1: "..."
+  - 5: Desde cuando son amigos? Tienes que pedir permiso antes eh
   - 1: permiso? 
   - 5: Jajajja es broma, tranquilo, relajate chiquito.
-  - 8: Que te pasa a ti Porter?
+  - MoveCenter: Amber
+  - 6: Que te pasa a ti Porter?
   - 5: Ahh ehhhh... 
-  - 6: Creo que intenta hacerse el Bully de nuevo
+  - MoveLeft: Honey
+  - 8: Creo que intenta hacerse el Bully de nuevo
   - 5: no, bueno, no es tan asi...
   - 8: Porter, ni se te ocurra, ahorranos la verguenza por favor!
-  - 1: "'Mhhh debo ser cuidadoso con mis palabras'"
+  - 1: «Mhhh debo ser cuidadoso con mis palabras»
   - 5: Tranquilos, tranquilos, Solo estoy bromeando un poco, perdon...
   - 6: Ok pero No lo hagas mas...
-  - 8: Bueno Chicos, dejemos de perder tiempo y vamos al Viel Glick!
-  - 4: Al, Nos vamos al bar, quieres venir con nosotros?
-  - 1: "'Es una invitacion? Debo estar alucinando...'"
-  - 1: Si claro, me gustaria ir y...
+  - FadeOut: Porter
+  - 6: Bueno Chicos, dejemos de perder tiempo y vamos al Viel Glück!
+  - FadeOut: Amber
+  - 8: Vamos! Hay que disfrutar el antro ese, antes que lo cierren jaja
+  - FadeOut: Honey
+  - MoveCenter: Ginger
+  - 4: Al, Nos vamos al Pool, quieres venir con nosotros?
+  - 1: «Es una invitacion? Debo estar alucinando...»
+  - 1: Si claro, me encantaria ir con ustedes y...
   - 4: y que?
   - 1: Demonios, me olvide completamente de algo..
   - 4: Que cosa? que sucede?
-  - 1: Tengo que trabajar y debo ir hacia otro lado.
+  - 1: Hoy trabajo y tengo que ir para el otro lado.
   - 4: Ohhh Que pena
-  - 4: Bueno, otro dia quiza podamos volver a reunirnos.
-  - 1: Por supuesto, Diviertanse, si me libero mas tarde, capaz vaya. 
-  - 1: «Ahora si, perdi mi ultima chance"
-  - 1: Eso fue todo, oficialmente soy un fracaso
-  - 1: Pero bueno, no tengo opcion, tengo que currar...
+  - 4: Bueno, Sera otro dia quiza.
+  - 1: Por supuesto, Diviertanse, si me libero mas tarde, capaz vaya.
+  - 4: Chiao.
+  - FadeOut: Ginger
+  - 1: «Ahora si, perdi mi ultima chance»
+  - 1: «Eso es todo, oficialmente soy un fracaso»
+  - FadeOut: School
+  - 1: Pero bueno, no tengo opcion, tengo que trabajar...
   

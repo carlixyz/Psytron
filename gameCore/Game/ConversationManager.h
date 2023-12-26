@@ -86,7 +86,7 @@ struct ConversationNode     // Conversation SubNodes
         return result;
     }
 
-    void ExecuteAction()
+    void ExecuteAction() const
     {
         switch (Type)
         {

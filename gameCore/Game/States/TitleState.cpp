@@ -1,48 +1,86 @@
 #include "TitleState.h"
 #include "../Game.h"
+#include "../../Graphics/Graphics.h"
+#include "./reasings.h"
+
+#define PADDING 100
+#define SCREEN_CENTER_H (int)(Graphics::Get().GetWindowArea().width * 0.5f)
+#define SCREEN_CENTER_V (int)(Graphics::Get().GetWindowArea().height * 0.5f)
 
 void TitleState::OnInit()
 {
-	if(!logo.IsReady())
-		logo.Load("raylib_logo.png");
- 
+	TitleLogo.Load("Data/PsyTronTitle.png");
+
+	MenuOptions.push_back("Introduction");
+	MenuOptions.push_back(" Start Game ");
+	MenuOptions.push_back("   Credits  ");
+
 }
 
 void TitleState::OnDeinit()
 {
-	//logo.Unload();
+	if (TitleLogo.IsReady())
+		TitleLogo.Unload();
 }
 
 void TitleState::OnUpdate()
 {
-	if (IsKeyPressed(KEY_SPACE))
+	if (CurrentTime < TotalTime)
 	{
-		//Game::Get().PopState();
-		//Game::Get().PushState(new IntroState());
-
-		Game::Get().States.PopState();
-		Game::Get().States.PushState(Game::Get().States.introState);
+		CurrentTime += GetFrameTime();
+		Alpha = EaseCircInOut(CurrentTime, 0.0f, 1.0f, TotalTime);
+		return;
 	}
 
-	if (IsKeyPressed(KEY_C))
+	if (!ShowCredits)
 	{
-		if(logo.IsReady())
-			logo.Unload();
-		//else
-		//	logo.Load("george.png");
+		if (IsKeyPressed(KEY_UP))
+			CurrentIndex--;
+		if (IsKeyPressed(KEY_DOWN))
+			CurrentIndex++;
+		CurrentIndex = (int)Clamp((float)CurrentIndex, 0.f, MenuOptions.size() - 1.f);
 	}
+		
+	if (IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_ENTER))
+	{
+		switch (CurrentIndex)
+		{
+			case 0:
+				Game::Get().States.PushState(Game::Get().States.dialogState);
+				break;
+			case 1:
+				Game::Get().States.PushState(Game::Get().States.dialogState);
+				break;
+			case 2:
+				ShowCredits = !ShowCredits;	// Toogle show Credits mode
+				break;
+		}
+	}
+
 }
 
 void TitleState::OnRender()
 {
-	if (logo.IsReady())
-		logo.Draw();
+	if (ShowCredits)
+	{
+		DrawText("Made by Carlixyz \n Thanks to Fulanos",
+				 SCREEN_CENTER_H - 100,
+				 PADDING + SCREEN_CENTER_V,
+				 FontSize,
+				 SKYBLUE);
+		return;
+	}
 
-	//for (auto& image : Layers)
-	//{
-	//	if (image.IsReady())
-	//		image.Draw();
-	//}
+	if (TitleLogo.IsReady())
+		TitleLogo.Draw({ 0, 0 }, Fade(WHITE, Alpha));
 
-	//DrawText("TITLE STATE", 190, 160, 40, RED);
+	int i = 0;
+	for (auto& option : MenuOptions)
+	{
+		DrawText(option.c_str(),
+					SCREEN_CENTER_H - ((int)(option.size() / 2 * FontSize / 2)),
+					PADDING + SCREEN_CENTER_V + FontSize * i,
+					FontSize,
+					CurrentIndex == i++ ? Fade(WHITE, Alpha) : Fade(SKYBLUE, Alpha));
+	}
 }

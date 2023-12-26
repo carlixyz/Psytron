@@ -21,3 +21,6 @@ gameCore/Data/UV.png
 gameCore/Data/Watermelon.mp3
 gameCore/Data/zapslat.wav
 README.txt
+gameCore/Data/FontConfig.bmfc
+gameCore/Data/FontSetup.bmfc
+gameCore/Data/Scenes/test/
