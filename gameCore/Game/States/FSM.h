@@ -4,6 +4,7 @@
 #include "GameState.h"
 #include "DialogState.h"
 #include "IntroState.h"
+#include "BootState.h"
 #include "TitleState.h"
 //#include "../../Utility/Utils.h"
 #include <assert.h>
@@ -30,8 +31,9 @@ public:
 
 	/// All states instances included below here
 
-	DialogState dialogState;
+	BootState bootState;
 	IntroState introState;
 	TitleState titleState;
+	DialogState dialogState;
 };
 

@@ -9,7 +9,6 @@
       _Fullscreen: false
   Resources:
     Language: Spanish
-    # DialogFile: Data/dialogTest.yml
     DialogFile: Data/intro.yml
     Material:
      _name: Test

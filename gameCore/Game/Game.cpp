@@ -5,6 +5,7 @@
 #include "../Audio/Audio.h"
 #include "../Utility/Utils.h"
 #include "ConversationManager.h"
+#include "VisualDialogManager.h"
 
 bool Game::Init()
 {
@@ -54,6 +55,8 @@ void Game::Update()
 	//if(States.IsLoaded()) 
 	States.CurrentState().OnUpdate();						/// statesStack.top()->OnUpdate(timeStep);
 
+	VisualDialogManager::Get().Update();
+
 	ConversationManager::Get().Update();
 
 	Audio::Get().Update();
@@ -69,8 +72,9 @@ void Game::Render()
 
 	//DrawText("Congrats! Your Game is up & running!", 190, 200, 20, LIGHTGRAY);
 	
-	ConversationManager::Get().Render();
+	VisualDialogManager::Get().Render();
 
+	ConversationManager::Get().Render();
 
 	EndDrawing();
 }

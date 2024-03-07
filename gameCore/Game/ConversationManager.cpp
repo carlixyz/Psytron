@@ -12,11 +12,22 @@ void ConversationManager::Init(const std::string& conversationFile)
 	DisplayedChildren.reserve(5);
 
 	CurrentConversationNode = nullptr;
+	ConversationEnded = false;
 	ChooseOption = 0;
 
-	YAML::Node dialogFile = YAML::LoadFile(conversationFile); // load file
+	FontResource = LoadFont("Data/NotoJp.fnt");
 
-	CHECK(!dialogFile.IsNull());				// the file is wrongly loaded!
+	SetTextureFilter(FontResource.texture, TEXTURE_FILTER_BILINEAR);
+
+	TextBoxArea = { Graphics::Get().GetWindowArea().width * 0.025f,	Graphics::Get().GetWindowArea().height * 0.8f,
+					Graphics::Get().GetWindowArea().width * 0.95f, Graphics::Get().GetWindowArea().height * 0.2f - FontResource.baseSize * 0.5f };
+
+	TextArea = { TextBoxArea.x + FontResource.baseSize * 0.5f, TextBoxArea.y + (FontResource.baseSize * 0.2f),
+		TextBoxArea.x + FontResource.baseSize * 0.5f, TextBoxArea.y + (FontResource.baseSize * 0.2f) + FontResource.baseSize * 0.5f };
+
+	YAML::Node dialogFile = YAML::LoadFile(conversationFile);	// load file
+
+	CHECK(!dialogFile.IsNull());								// the file is wrongly loaded!
 
 	YAML::const_iterator ElementIt;
 
@@ -35,9 +46,6 @@ void ConversationManager::Init(const std::string& conversationFile)
 		}
 	}
 
-	CurrentConversationNode = nullptr;
-	ChooseOption = 0;
-
 	if (YAML::Node ElementNode = dialogFile["Setup"])
 	{
 		const YAML::Node& PreLoad = ElementNode["PreLoad"];
@@ -51,18 +59,6 @@ void ConversationManager::Init(const std::string& conversationFile)
 			StartConversation(ElementNode["StartEntry"].as<std::string>());
 		}
 	}
-
-	FontResource = LoadFont("Data/NotoJp.fnt");
-	//fontAsian = LoadFont("Data/DigiKyokasho.fnt");
-
-	// Set bilinear scale filter for better font scaling
-	SetTextureFilter(FontResource.texture, TEXTURE_FILTER_BILINEAR);
-
-	TextBoxArea = {	Graphics::Get().GetWindowArea().width * 0.025f,	Graphics::Get().GetWindowArea().height * 0.8f,
-					Graphics::Get().GetWindowArea().width * 0.95f, Graphics::Get().GetWindowArea().height * 0.2f - FontResource.baseSize * 0.5f };
-
-	TextArea = { TextBoxArea.x + FontResource.baseSize *0.5f, TextBoxArea.y + (FontResource.baseSize *0.2f),
-		TextBoxArea.x + FontResource.baseSize *0.5f, TextBoxArea.y + (FontResource.baseSize *0.2f) + FontResource.baseSize*0.5f };
 }
 
 void ConversationManager::Deinit(void)
@@ -104,8 +100,8 @@ void ConversationManager::PreLoadImage(const YAML::const_iterator& element)
 		const std::string& imagePath = image["file"].as<std::string>();
 		bool imageVisible = image["visible"] ? image["visible"].as<bool>() : false;
 
-		Game::Get().States.dialogState.LoadImage( imageID, imagePath);
-		Game::Get().States.dialogState.SetImageVisible( imageID, imageVisible);
+		VisualDialogManager::Get().LoadImage( imageID, imagePath);
+		VisualDialogManager::Get().SetImageVisible( imageID, imageVisible);
 	}
 }
 // Parse yml to process a conversation
@@ -321,10 +317,10 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 		{
 			currentNode->Action.second = talkNode["visible"].as<string>() == "true";
 		}
-		else if (Game::Get().States.dialogState.ImagesMap.contains(currentNode->Action.first))	
+		else if (VisualDialogManager::Get().ImagesMap.contains(currentNode->Action.first))	
 		{
 			// else use the previous value if We had one
-			currentNode->Action.second = Game::Get().States.dialogState.ImagesMap[currentNode->Action.first]->GetIsVisible();
+			currentNode->Action.second = VisualDialogManager::Get().ImagesMap[currentNode->Action.first]->GetIsVisible();
 		}
 	}
 	else if (strKey == "ShowImage" || strKey == "HideImage")
@@ -398,7 +394,41 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 				currentNode->Type = ConversationNodeType::ScrollRight;
 		}
 
-		currentNode->Action.first = talkIt->second.as<string>();	/// Set the Image ID to be inside screen or else out
+		currentNode->Action.first = talkIt->second.as<string>();
+		currentNode->Action.second = strKey.find("End") != string::npos ? true : false;
+	}
+	else if (strKey == "ScrollVertical")
+	{
+		if (currentNode->Type != ConversationNodeType::Conditional)
+		{
+			currentNode->Type = ConversationNodeType::ScrollCycleVertical;
+			//if (strKey.find("Top") != string::npos)
+			//	currentNode->Type = ConversationNodeType::ScrollTop;
+			//else if (strKey.find("Bottom") != string::npos)
+			//	currentNode->Type = ConversationNodeType::ScrollBottom;
+		}
+
+		currentNode->Action.first = talkIt->second.as<string>();
+		currentNode->Action.second = strKey.find("End") != string::npos ? true : false;
+	}
+	else if (strKey == "ScrollTop")
+	{
+		if (currentNode->Type != ConversationNodeType::Conditional)
+		{
+			currentNode->Type = ConversationNodeType::ScrollTop;
+		}
+
+		currentNode->Action.first = talkIt->second.as<string>();
+		currentNode->Action.second = strKey.find("End") != string::npos ? true : false;
+	}	
+	else if (strKey == "ScrollBottom")
+	{
+		if (currentNode->Type != ConversationNodeType::Conditional)
+		{
+			currentNode->Type = ConversationNodeType::ScrollBottom;
+		}
+
+		currentNode->Action.first = talkIt->second.as<string>();
 		currentNode->Action.second = strKey.find("End") != string::npos ? true : false;
 	}
 	else if (strKey == "ShakeImage" )
@@ -545,6 +575,9 @@ void ConversationManager::Update()
 	case ConversationNodeType::ScrollLeft:
 	case ConversationNodeType::ScrollRight:
 	case ConversationNodeType::ScrollCycle:
+	case ConversationNodeType::ScrollCycleVertical:
+	case ConversationNodeType::ScrollTop:
+	case ConversationNodeType::ScrollBottom:
 	case ConversationNodeType::ShakeImage:
 	case ConversationNodeType::CleanUp:
 	case ConversationNodeType::PlayMusic:
@@ -728,5 +761,10 @@ void ConversationManager::StartConversation(const std::string& lacConversationId
 
 bool ConversationManager::IsInConversation()
 {
-	return (CurrentConversationNode ? true : false);
+	return (CurrentConversationNode != nullptr ? true : false);
+}
+
+bool ConversationManager::HasEndedConversation()
+{
+	return ConversationEnded;
 }

@@ -12,8 +12,7 @@ Characters:
 
 
 Setup:
-  StartEntry: InfoNews       # Define First Entry point
-  # StartEntry: IntroSchool       # Define First Entry point
+  # StartEntry: InfoNews       # Define First Entry point
   PreLoad:
     - SetImage: News1
       # visible: true       # not visible by default thus not needed
@@ -45,8 +44,27 @@ Setup:
     - SetFullHeight: News9
     - SetImage: School
       file: "Data/Scenes/School.png"
+
+    - SetImage: TrackSide
+      file: "Data/Scenes/Track/Track_Side.png"
+    - SetImage: TrackClose
+      file: "Data/Scenes/Track/Track_Close.png"
+    - SetImage: TrackOpen
+      file: "Data/Scenes/Track/Track_Open.png"
+    - SetImage: NightCity
+      file: "Data/Scenes/NightCity.png"
+
+    - SetImage: LabIntro
+      file: "Data/Scenes/Track/LabInside.png"
+    - SetImage: RechargeStation
+      file: "Data/Scenes/Track/RechargeStation.png"
+    - SetImage: LabSpecs
+      file: "Data/Scenes/Track/LabSpecs.png"
+
     - SetImage: Ale
       file: "Data/Actors/Ale.png"
+    - SetImage: Ale2
+      file: "Data/Actors/Ale2.png"
     - SetImage: Ginger2
       file: "Data/Actors/Ginger2.png"
     - SetImage: Amber
@@ -59,59 +77,75 @@ Setup:
       file: "Data/Actors/Honey.png"
     - SetImage: Hoppy
       file: "Data/Actors/Hoppy.png"
-    - SetImage: logo
-      file: raylib_logo.png
-    - SetImage: UV
-      file: "Data/UV.png"
+    - SetImage: Pilsen
+      file: "Data/Actors/Pilsen.png"
 
 
 InfoNews:
-  - PlaySound: "Data/zapslat.wav"
+  - PlaySound: "Data/Sound/zapslat.wav"
   - 0: NeoChaco 20XX
+    time: 3.0
+    unskip:
   - 0: Good afternoon citizens...
-  - 9: Today's weather is a clear night with stars and 32% clouds
-    time: 10.0
+    time: 2.0
+  - 9: Today's weather is a clear night with stars and 32% hecto-pascals
+    time: 4.0
 
 # Traduce esta frase "En otro orden de noticias, esta es la historia principal de hoy" al japones 
 # usando hiragana, katakana y solamente estos kanjis
 
 # エナマ人休体働元光写刃前友口名命問国土学山布師年心怒悪手日曜書月木校楽死気水法泣火獣理画病目知石砂笑算糸紙習耳船花草葉虫言話語読足車金鉄雨雲革音頭風魚鳥鼻一七万三上下中九乾事二五京低作健億兆全八六具内円冬冷分則力動医十千半厚原古右同四地坂塩壁夏外多夜大天奏女官家寝小少屋島川左市帰平広床座康後忘思恵想慮戸操教数文料
 
-  - PlayMusic: "Data/High-Tech-City_Looping.mp3"
+  - PlayMusic: "Data/Sound/High-Tech-City_Looping.mp3"
   - FadeIn: News1
   - ScrollLoop: News1
-  - 9: «Welcome to the Info News Network Edition 20XX!»
-    time: 16.0
+  - 9: Welcome to the Info News Network Edition 20XX!
+    time: 4.0
+    unskip:
+
     # unskip:
   - 9: Currency exchange is 40% blue and 60% 1000:1 for leliqs
-  - 9: "他のニュースに移りますが、これは今日の主要なストーリーです。\n別のニュースで、今日の主なニュースです。"
-  - 9: "他のニュースに移りますが、\n これは今日の主要なストーリーです。\n別のニュースで、今日の主なニュースです。"
+    time: 3.0
+    unskip:
+
   - 9: The Curve's projection aims to reach level 9000 at end of year
+    time: 3.0
+    unskip:
+
   - 9: Finally SARS dispersion is the lowest since Pandemic beginings
-    time: 16.0
+    time: 4.0
+    unskip:
 
   - ShowImage: News2
   - FadeOut: News1
   - 9: In another order of news, This is today main story
+    time: 4.0
+    unskip:
+
   - 9: Last night new disturbances occurred in Boedo 808
-    time: 16.0
+    time: 4.0
+    unskip:
+
   # - PauseMusic:
 
   - ShowImage: News3
   - FadeOut: News2
   - 9: Seems they may be related to another synthetic unit
+    time: 3.0
+    unskip:
   - 9: Class E used for sweeping and public cleaning tasks.
+    time: 3.0
+    unskip:
   - FadeOut: News3
   # - ResumeMusic:
 
   - ShowImage: News4
   - ShakeImage: News4
   - 9: This generated a tense situation with extreme overflows
-  - 9: Another unit sacrified itself burning in a big fire.
 
   - ShowImage: News5
   - FadeOut: News4
-  - 9: This generated a tense situation with extreme overflows
+  - 9: Another unit sacrified itself spreading a big fire...
   - 9: Resulting in a balance of 5 deaths and 12 injuries.
 
   - ShowImage: News6
@@ -128,7 +162,7 @@ InfoNews:
   - ShowImage: News8
   - FadeOut: News7
   - 9: and no way related to deviations in automaton learning # Neural link automaton
-  - 9: as the unfounded rumors of dissident minority suggest.  
+  - 9: as the unfounded rumors of some dissident minorities suggest.  
 
   - ShowImage: News9
   - FadeOut: News8
@@ -136,8 +170,8 @@ InfoNews:
   - FadeOut: News9
   - 9: More details about will come soon as time goes by.
   - StopMusic:
-  - GoTo: IntroSchool
-
+  # - GoTo: IntroSchool
+  
     
 IntroSchool:
   - 0: " "
@@ -145,16 +179,16 @@ IntroSchool:
     unskip:
   - 0: " "
     time: 2.0
-  - PlaySound: "Data/zapslat.wav"
+  - PlaySound: "Data/Sound/zapslat.wav"
   - 1: Hermosa tarde verdad?
   - 1: por fin Viernes y otra larga semana que termina...
-  - PlayMusic: "Data/Video-Game-Brain-Drain_Looping.mp3"
+  - PlayMusic: "Data/Sound/Video-Game-Brain-Drain_Looping.mp3"
   - SetLeft: Ale
   - FadeIn: Ale
   - 1: "Soy Alex, tengo 21 años y este es mi ultimo mes \nen el instituto tecnologico."
   - FadeIn: School
   - 1: "Espere años para certificarme pero ahora... \ntengo pensamientos mezclados."
-  - 1: "Por fin voy a ser libre y nunca mas tendre que estudiar \ndurante horas para cursar este infierno!"
+  - 1: "Por fin se terminan los examenes y nunca mas tendre que estudiar \ndurante horas para aprobar asignaturas!"
   - 1: Pero por otro lado siento que voy a extrañar algunas cosas...
   - FadeOut: Ale
   - 1: "Este lugar tenia una energia especial"
@@ -170,7 +204,7 @@ IntroSchool:
   - 1: Rayos y ahora que diablos quieres?
     time: 6.0
   - MoveRight: Ginger2
-  - 3: "Ahi esta saliendo Ginger... \ncreo que ahora tienes una chance con ella..."
+  - 3: "Ahi esta saliendo Ginger...\ncreo que ahora tienes una chance con ella..."
     time: 6.0
   - 1: Que quee? No tengo idea de que hablas 
   - 1: y ya tengo que irme, se me empieza a hacer tarde...
@@ -209,11 +243,11 @@ GameOfLove:
   - 4: Y tu que estas haciendo? 
   - ChooseTalk :
     - Option:
-      - 1: Es un secreto muy especial
+      - 1: Trabajando en un proyecto secreto muy especial
       - 4: En serio? puedes contarmelo a mi?
       - 1: Jejje por esta vez creo que puedo hacer una excepcion
       - 4: Genial y de que se trata entonces?
-      - 1: "mhhh..."
+      - 1: "emhhh..."
       - GoTo: GameOfWar
   
     - Option:
@@ -223,7 +257,7 @@ GameOfLove:
       - 4: Y adonde vas a ir?
       - 1: "mhhh..."
       - 1: A ningun lugar realmente, tengo que trabajar
-      - 4: infelizmente
+      - 4: infelizmente jaja
       - GoTo: GameOfWar
   
     - Option:
@@ -236,7 +270,7 @@ GameOfLove:
 
 GameOfWar:
   - 1: "la verdad, no hacia nada en especial \nsolo me estoy despidiendo del instituto y todo esto."
-  - 4: Nosotros estamos organizando con la banda para hacer algo...
+  - 4: Nosotros estamos organizando con el grupo para ir a algun lado...
   - 4: Ah ahi viene Porter...
   - ShakeImage: School
   - MoveLeft: Porter
@@ -256,9 +290,9 @@ GameOfWar:
   - 5: Tranquilos, tranquilos, Solo estoy bromeando un poco, perdon...
   - 6: Ok pero No lo hagas mas...
   - FadeOut: Porter
-  - 6: Bueno Chicos, dejemos de perder tiempo y vamos al Viel Glück!
+  - 6: Bueno Chicos, basta de perder tiempo y vamos al Viel Glück!
   - FadeOut: Amber
-  - 8: Vamos! Hay que disfrutar el antro ese, antes que lo cierren jaja
+  - 8: Yeah! Hay que aprovechar ese antro, antes que lo cierren jaja
   - FadeOut: Honey
   - MoveCenter: Ginger
   - 4: Al, Nos vamos al Pool, quieres venir con nosotros?
@@ -267,14 +301,230 @@ GameOfWar:
   - 4: y que?
   - 1: Demonios, me olvide completamente de algo..
   - 4: Que cosa? que sucede?
-  - 1: Hoy trabajo y tengo que ir para el otro lado.
+  - 1: Hoy trabajo y tengo que ir hacia otro lugar.
   - 4: Ohhh Que pena
   - 4: Bueno, Sera otro dia quiza.
   - 1: Por supuesto, Diviertanse, si me libero mas tarde, capaz vaya.
   - 4: Chiao.
+  - StopMusic:
   - FadeOut: Ginger
   - 1: «Ahora si, perdi mi ultima chance»
   - 1: «Eso es todo, oficialmente soy un fracaso»
   - FadeOut: School
   - 1: Pero bueno, no tengo opcion, tengo que trabajar...
+    time: 2.0
+    unskip:
+  - GoTo: MiPrimeraChamba
   
+MiPrimeraChamba:
+  - SetCenter: Ale
+  - SetLeftOut: Ale2
+  - 1: Que Barbaro
+  - FadeIn: NightCity
+  - ScrollRightEnd: NightCity
+  - 1: Diablos, No Puedo creer lo que me acaba de pasar
+  - MoveCenter: Ale2
+  - PlayMusic: "Data/Sound/Cyber-Streets.mp3"
+  - 1: "No puedo tener tanta mala suerte"
+  - 1: "justo hablamos el ultimo dia \n y es justo cuando empiezo a trabajar"
+    time: 6.0
+  - FadeOut: Ale2
+  - FadeIn: Ale
+  - 1: Ahora que lo pienso, Podria haber intentado hablar un poco mas...
+    time: 4.0
+  - 1: Le podria haber preguntado que va iba a hacer en el verano...
+    time: 5.0
+  - 1: "O quiza que haria el proximo año... \nquiza este buscando trabajo tambien..."
+    time: 6.0
+  - 1: "Ja pero que estoy diciendo"
+  - 1: "Probablemente ya tiene resuelto el futuro."
+  - 1: "Pero bueno, son cosas que pasan"
+    time: 3.0
+  - 1: "y no tiene sentido darle mas vueltas ahora"
+  - MoveRightOut: Ale
+  - SetLeft: TrackClose
+  - 1: "Hice lo que pude, no tenia alternativa, se me hace tarde"
+  - 1: "Es mi primer dia de trabajo y la verdad, necesito el dinero."
+  - FadeOut: NightCity
+  - ScrollRightEnd: TrackClose
+  - 1: Lo unico que puedo hacer es aprender de esta experiencia
+  - 1: "Bueno y si eso fue todo, entonces... \n quiza resulto mejor de lo esperado"
+    time: 6.0
+  - 1: Creo...
+  - 1: Si, si, Mejor no mirar atras y concentrarme en el futuro...
+  - 0: " "
+    time: 3.0
+    unskip:
+  - 1: Por cierto, Creo que ya estoy cerca del lugar...
+  - 1: En esta calle se supone que era el punto de contacto
+  - StopMusic:
+  - 1: El aviso decia algo de un camion... Sera este blanco? 
+    time: 5.0
+    unskip:
+  - SetRight: TrackOpen
+  - 1: Deberia tener un logo para identificar la empresa
+  - 1: o algo aunque sea para saber quienes son los dueños
+    time: 3.0
+  - 1: No se porque en el instructivo insistian con tanta confidencialidad
+  - 1: Que cosa mas misteriosa...
+    time: 3.0
+  - 1: Todo esto es muy raro la verdad
+    time: 5.0
+    unskip:
+  - FadeIn: TrackOpen
+  - PlaySound: "Data/Sound/laser-shot.wav"
+  - 1: Mhhh
+  - 1: Oh, se abrio un acceso posterior.
+  - 1: Parece que hay alguien adentro...
+    time: 4.0
+  - 0: Oye tu eres el nuevo pasante?
+  - 1: ¿!?
+  - 0: Entonces Que estas esperando? Vas a entrar o no?
+    time: 4.0
+  - 1: Y Ahora que se supone que tengo que hacer?
+  - ChooseTalk :
+    - Option:
+      - 1: Rechazar la invitacion educadamente
+      - 1: No lo se, este lugar y todo parece demasiado sospechoso...
+      - 0: No seas tonto ni que vendieramos droga, todo es legal aqui
+      - 1: "..."
+      - 0: Vamos deja de perder el tiempo y apurate!
+      - 0: No tengo todo el dia!
+      - JumpBack:
+    - Option:
+      - 1: Ignorar la voz y huir del sitio a toda velocidad
+      - 0: Espera adonde vas!? no venias a trabajar??
+      - 1: Adios!
+      - 0: Oh Bueno, largate ya entonces
+      - 1: ¡¿???!
+      - 1: Esto es muy sospechoso... parece una trampa!
+      - 0: Haz lo que quieras, No tengo ganas de perder el tiempo 
+      - JumpBack:
+    - Option:
+      - 1: Entrar en el lugar
+      - 1: Oh, bueno
+      - 1: Alla vamos entonces...
+      - FadeOut: TrackClose
+      - GoTo: InsideLab
+
+
+InsideLab:
+    - PlayMusic: "Data/Sound/Too-Cool-for-Words.mp3"
+    - FadeOut: TrackOpen
+    - ScrollBottom: LabIntro
+    - SetRightOut: Pilsen
+    - 0: Vaya hasta que por fin te decidiste a entrar!
+    - MoveRight: Pilsen
+    - 0: Bienvenido a tu primera chamba
+    - 1: ¡???
+    - 2: Yo soy Pilsen, sere tu guia autorizado en el onboarding
+      time: 2.0
+    - 1: Y que se supone que eres tu?
+    - 2: Quee queee!?
+      unskip:
+    - 2: Mas respeto por favor, soy un Carpincho!
+      time: 3.0
+      unskip:
+    - 2: Ademas de tu guia de onboarding... 
+    - 1: "..."
+    - 2: Me estas escuchando!??
+      time: 2.0
+    - 1: Ehhh perdon, perdon
+    - 1: Es que todo esto es muy repentino...
+      time: 3.0
+    - 2: "Ufff hoy va a ser una noche larga..."
+      time: 2.0
+    - 2: "Mira, ya hay problemas en la ciudad, Estamos retrasados \n y todavia no te explique ni la mitad de las cosas..."
+      time: 4.5
+      unskip:
+    - 2: Mejor callate y presta bien atencion a todo lo que digo, Ok?
+      time: 4.0
+    - 1: Si, si perdon!
+      time: 2.0
+    - 2: Bien, vamos de nuevo entonces...
+    - GoTo: QuickSpecs
+  
+
+QuickSpecs:
+    - ScrollBottom: LabSpecs
+    - FadeOut: LabIntro
+    - 2: Este sera tu dispositivo de interfaz con la unidad PsyTron
+      time: 4.0
+    - 2: en apariencia parece un simple casco de hyper-realidad
+      time: 4.0
+    - 2: Pero es capaz de establecer una conexion psiquica de 256 TB/seg
+      time: 3.0
+    - 2: el enlace es muy intenso asi que quiza tengas sensaciones raras
+      time: 3.0
+    - 1: ¿Sensaciones raras?
+      time: 3.0
+    - 2: Ehh Si, si... como recuerdos ajenos o quiza alucinaciones...
+      time: 4.0
+    - 2: Pero recuerda que nada de todo eso es real.
+      time: 2.0
+    - 2: Asi que no le prestes demasiada atencion nada mas...
+    - 1: "..."
+      time: 3.0
+    - 2: Y por cierto, aqui abajo tenemos tu butaca de enlace...
+      time: 3.0
+      unskip:
+    - 2: "Tus signos vitales seran monitoreados constantemente \npara asegurar el mejor vinculo"
+      time: 5.0
+    - 2: "Basicamente tu cuerpo real queda aqui recostado \nmientras tu piloteas tu unidad sin riesgo"
+      time: 5.0
+    - 2: "Por eso digo que mas alla de lo que suceda alla afuera en la calle\nno te lo tomes demasiado en serio..."
+      time: 5.0
+    - 2: "Por ahora solo concentrate en todo esto que te explico"
+      time: 4.0
+    - 1: "Ok"
+      time: 3.0
+    - 2: Entonces, Esta todo claro hasta aqui?
+    - 2: Tienes alguna pregunta o duda?
+    - ChooseTalk :
+        - Option:
+          - 1: Ehh Claro que si
+          - 1: Ahora que dice, Hay algo que no me quedo claro
+          - 2: Oh noo
+            time: 1.5
+            unskip:
+          - 2: Bueno, vamos de vuelta entonces...
+          - GoTo: QuickSpecs
+        - Option:
+          - 1: No señor, todo esta clarisimo
+          - 2: Excelente, ya estas aprendiendo
+          - MoveLeftOut: Pilsen
+          - 2: Pasemos a lo siguiente entonces
+            unskip:
+          - GoTo: EnterPsyTron
+  
+EnterPsyTron:
+    - ScrollVertical: RechargeStation
+    - FadeOut: LabSpecs
+    - 2: Por ultimo te presento al PsyTron
+      time: 3.0
+    - 0: " "
+      time: 5.0
+      unskip:
+    - 2: Unidad remota de enlace psiquico con capacidad de combate urbano
+      time: 5.0
+      unskip:
+    - 2: Tecnicamente puede acelerar a mas de 100 Km en 6 segundos
+      time: 5.0
+    - 2: "Saltar casi 7 metros de altura \ny soportar impactos de hasta 500 toneladas"
+      time: 5.0
+    - 2: "en este momento reposa sobre su plataforma de carga inalambrica\n y con su bateria completa al 100%"
+      time: 5.0
+    - 1: Wow
+    - 2: "Tu mision es pilotear esto y patearle el trasero a esas cosas\n que estan en la calle fuera de control"
+      time: 5.0
+    - 2: Eso es todo y mas que suficiente por ahora
+    - 2: Alguna pregunta?
+      time: 4.0
+    - 1: Bueno, cuando empezamos el trabajo?
+      time: 4.0
+    - StopMusic:
+    - FadeOut: RechargeStation
+    - 2: Ahora mismo!
+      time: 5.0
+      unskip:
+     

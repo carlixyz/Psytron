@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Utility/Singleton.h"
+#include "VisualDialogManager.h"
 #include "Game.h"
 #include "Register.h"
 #include "../Audio/Audio.h"
@@ -36,6 +37,9 @@ enum class ConversationNodeType
     ScrollLeft,
     ScrollRight,
     ScrollCycle,
+    ScrollCycleVertical,
+    ScrollTop,
+    ScrollBottom,
     ShakeImage,
     CleanUp,
 
@@ -96,102 +100,122 @@ struct ConversationNode     // Conversation SubNodes
 
         case ConversationNodeType::SetImage:
             if(!Text.empty())
-                Game::Get().States.dialogState.LoadImage(Action.first, Text);                       // LoadImage
-            Game::Get().States.dialogState.SetImageVisible( Action.first, Action.second);   
+                VisualDialogManager::Get().LoadImage(Action.first, Text);                       // LoadImage
+            VisualDialogManager::Get().SetImageVisible( Action.first, Action.second);   
             break;
 
         case ConversationNodeType::SetImageVisibility:
-            Game::Get().States.dialogState.SetImageVisible(Action.first, Action.second);            // Set it Visible or not
+            VisualDialogManager::Get().SetImageVisible(Action.first, Action.second);            // Set it Visible or not
             break;
 
         case ConversationNodeType::SetImageSize:
             if(Action.second)
-                Game::Get().States.dialogState.SetFullSize(Action.first, DialogState::EStrechProportion);    // Strech it along screen
+                VisualDialogManager::Get().SetFullSize(Action.first, VisualDialogManager::EStrechProportion);    // Strech it along screen
             else
-                Game::Get().States.dialogState.SetFullSize(Action.first, DialogState::EExtend);    // Else Extend tiles too 
+                VisualDialogManager::Get().SetFullSize(Action.first, VisualDialogManager::EExtend);    // Else Extend tiles too 
             break;
 
         case ConversationNodeType::SetImageFade:
             if (Action.second == true) // Fade In else Out
-                Game::Get().States.dialogState.SetEasing( Action.first, DialogState::EActionEasing::EFadeIn);
+                VisualDialogManager::Get().SetEasing( Action.first, VisualDialogManager::EActionEasing::EFadeIn);
             else
-                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::EFadeOut);
+                VisualDialogManager::Get().SetEasing(Action.first, VisualDialogManager::EActionEasing::EFadeOut);
             break;
 
 
         case ConversationNodeType::SetImageLeft:
             if (Action.second == true) // Set inside Screen else set it Out
-                Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionLeftOut);
+                VisualDialogManager::Get().SetPosition(Action.first, VisualDialogManager::EScreenPosition::EPositionLeftOut);
             else
-                Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionLeft);
+                VisualDialogManager::Get().SetPosition(Action.first, VisualDialogManager::EScreenPosition::EPositionLeft);
             break;
 
         case ConversationNodeType::SetImageRight:
             if (Action.second == true) // Set inside Screen else set it Out
-                Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionRightOut);
+                VisualDialogManager::Get().SetPosition(Action.first, VisualDialogManager::EScreenPosition::EPositionRightOut);
             else
-                Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionRight);
+                VisualDialogManager::Get().SetPosition(Action.first, VisualDialogManager::EScreenPosition::EPositionRight);
             break;
 
         case ConversationNodeType::SetImageCenter:
-            Game::Get().States.dialogState.SetPosition(Action.first, DialogState::EScreenPosition::EPositionCenter);
+            VisualDialogManager::Get().SetPosition(Action.first, VisualDialogManager::EScreenPosition::EPositionCenter);
             break;
 
 
         case ConversationNodeType::MoveImageLeft:
             if (Action.second == true) // Move inside Screen else set it Out
-                Game::Get().States.dialogState.MovePosition(Action.first, DialogState::EScreenPosition::EPositionLeftOut);
+                VisualDialogManager::Get().MovePosition(Action.first, VisualDialogManager::EScreenPosition::EPositionLeftOut);
             else
-                Game::Get().States.dialogState.MovePosition(Action.first, DialogState::EScreenPosition::EPositionLeft);
+                VisualDialogManager::Get().MovePosition(Action.first, VisualDialogManager::EScreenPosition::EPositionLeft);
             break;
 
         case ConversationNodeType::MoveImageRight:
             if (Action.second == true) // Set inside Screen else set it Out
-                Game::Get().States.dialogState.MovePosition(Action.first, DialogState::EScreenPosition::EPositionRightOut);
+                VisualDialogManager::Get().MovePosition(Action.first, VisualDialogManager::EScreenPosition::EPositionRightOut);
             else
-                Game::Get().States.dialogState.MovePosition(Action.first, DialogState::EScreenPosition::EPositionRight);
+                VisualDialogManager::Get().MovePosition(Action.first, VisualDialogManager::EScreenPosition::EPositionRight);
             break;
 
         case ConversationNodeType::MoveImageCenter:
-            Game::Get().States.dialogState.MovePosition(Action.first, DialogState::EScreenPosition::EPositionCenter);
+            VisualDialogManager::Get().MovePosition(Action.first, VisualDialogManager::EScreenPosition::EPositionCenter);
             break;
 
 
         case ConversationNodeType::SetImageSlide:
             if (Action.second == true)      // Set Slide From Right else Slide From Left
-                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::ESlideFromRight);
+                VisualDialogManager::Get().SetEasing(Action.first, VisualDialogManager::EActionEasing::ESlideFromRight);
             else
-                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::ESlideFromLeft);
+                VisualDialogManager::Get().SetEasing(Action.first, VisualDialogManager::EActionEasing::ESlideFromLeft);
             break;
 
 
         case ConversationNodeType::ScrollLeft:
             if (Action.second == true)      // Move inside Screen cap else leave it scroll free Out undefinedly
-                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::EScrollLeftCap);
+                VisualDialogManager::Get().SetEasing(Action.first, VisualDialogManager::EActionEasing::EScrollLeftCap);
             else
-                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::EScrollLeft);
+                VisualDialogManager::Get().SetEasing(Action.first, VisualDialogManager::EActionEasing::EScrollLeft);
             break;
 
         case ConversationNodeType::ScrollRight:
             if (Action.second == true)  // Move inside Screen cap else leave it free Out undefinedly
-                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::EScrollRightCap);
+                VisualDialogManager::Get().SetEasing(Action.first, VisualDialogManager::EActionEasing::EScrollRightCap);
             else
-                Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::EScrollRight);
+                VisualDialogManager::Get().SetEasing(Action.first, VisualDialogManager::EActionEasing::EScrollRight);
             break;
 
         case ConversationNodeType::ScrollCycle:                   // Move inside Screen cap undefinedly
-            Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::EScrollCycle);
+            VisualDialogManager::Get().SetEasing(Action.first, VisualDialogManager::EActionEasing::EScrollCycle);
             break;
 
+
+        case ConversationNodeType::ScrollTop:
+            //if (Action.second == true)  // Move inside Screen cap else leave it free Out undefinedly
+                VisualDialogManager::Get().SetEasing(Action.first, VisualDialogManager::EActionEasing::EScrollTopCap);
+            //else
+            //    VisualDialogManager::Get().SetEasing(Action.first, VisualDialogManager::EActionEasing::EScrollTop);
+            break;
+
+        case ConversationNodeType::ScrollBottom:
+            //if (Action.second == true)  // Move inside Screen cap else leave it free Out undefinedly
+                VisualDialogManager::Get().SetEasing(Action.first, VisualDialogManager::EActionEasing::EScrollBottomCap);
+            //else
+            //    VisualDialogManager::Get().SetEasing(Action.first, VisualDialogManager::EActionEasing::EScrollBottom);
+            break;
+
+        case ConversationNodeType::ScrollCycleVertical:                   // Move inside Screen cap undefinedly
+            VisualDialogManager::Get().SetEasing(Action.first, VisualDialogManager::EActionEasing::EScrollCycleVertical);
+            break;
+
+
         case ConversationNodeType::ShakeImage:
-            Game::Get().States.dialogState.SetEasing(Action.first, DialogState::EActionEasing::EShakeQuake);
+            VisualDialogManager::Get().SetEasing(Action.first, VisualDialogManager::EActionEasing::EShakeQuake);
             break;
 
         case ConversationNodeType::CleanUp:
             if (Action.second == true)  // Move inside Screen cap else leave it free Out undefinedly
-                Game::Get().States.dialogState.UnLoadAll();
+                VisualDialogManager::Get().UnLoadAll();
             else
-                Game::Get().States.dialogState.Unload(Action.first);
+                VisualDialogManager::Get().Unload(Action.first);
             break;
         case ConversationNodeType::PlayMusic:   // PlayMusic with looping On/Off
                 Audio::Get().PlayMusic(Action.first, Action.second);
@@ -279,4 +303,6 @@ public:
     void Render();
     void StartConversation(const std::string& lconversationId);
     bool IsInConversation();
+    bool HasEndedConversation();
+
 };

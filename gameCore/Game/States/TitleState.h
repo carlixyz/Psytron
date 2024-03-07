@@ -8,7 +8,6 @@ class TitleState : public GameState//, public Singleton<TitleState>
 {
 	raylib::TextureUnmanaged TitleLogo;
 	//raylib::Texture logo;
-	bool Visible = true;						// Determines whether our Texture should be visible or hidden.
 	float Alpha = 0.0f;							// Current Alpha Color Value
 	float StartValue = 0.f;
 	float EndValue = 1.0f;
@@ -30,6 +29,9 @@ public:
 
 	void OnUpdate();
 	void OnRender();
+
+	void OnPause();
+	void OnResume();
 
 	//static TitleState* Instance()
 	//{

@@ -9,7 +9,13 @@ bool FSM::Init(GameState& state)
 
 bool FSM::Init()
 {
-	PushState(introState);
+//#ifdef _DEBUG
+//	PushState(dialogState);
+//#else
+	PushState(bootState);
+//#endif // DEBUG
+
+
 
 	return statesStack.size();
 }

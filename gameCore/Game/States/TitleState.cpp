@@ -46,9 +46,11 @@ void TitleState::OnUpdate()
 		switch (CurrentIndex)
 		{
 			case 0:
+
 				Game::Get().States.PushState(Game::Get().States.dialogState);
 				break;
-			case 1:
+			case 1:	
+
 				Game::Get().States.PushState(Game::Get().States.dialogState);
 				break;
 			case 2:
@@ -83,4 +85,14 @@ void TitleState::OnRender()
 					FontSize,
 					CurrentIndex == i++ ? Fade(WHITE, Alpha) : Fade(SKYBLUE, Alpha));
 	}
+}
+
+void TitleState::OnPause()
+{
+}
+
+void TitleState::OnResume()
+{
+	CurrentTime = 0.0f;
+	Alpha = 0.0f;
 }

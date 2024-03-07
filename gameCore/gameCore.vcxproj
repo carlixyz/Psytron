@@ -170,12 +170,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Audio\Audio.cpp" />
+    <ClCompile Include="Game\States\BootState.cpp" />
     <ClCompile Include="Game\States\DialogState.cpp" />
     <ClCompile Include="Game\ConversationManager.cpp" />
     <ClCompile Include="Game\Game.cpp" />
     <ClCompile Include="Game\States\FSM.cpp" />
     <ClCompile Include="Game\States\IntroState.cpp" />
     <ClCompile Include="Game\States\TitleState.cpp" />
+    <ClCompile Include="Game\VisualDialogManager.cpp" />
     <ClCompile Include="Graphics\ApplicationProperties.cpp" />
     <ClCompile Include="Graphics\Graphics.cpp" />
     <ClCompile Include="main.cpp" />
@@ -183,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\Audio.h" />
+    <ClInclude Include="Game\States\BootState.h" />
     <ClInclude Include="Game\States\DialogState.h" />
     <ClInclude Include="Game\ConversationManager.h" />
     <ClInclude Include="Game\Game.h" />
@@ -190,6 +193,7 @@
     <ClInclude Include="Game\States\GameState.h" />
     <ClInclude Include="Game\States\IntroState.h" />
     <ClInclude Include="Game\States\TitleState.h" />
+    <ClInclude Include="Game\VisualDialogManager.h" />
     <ClInclude Include="Graphics\ApplicationProperties.h" />
     <ClInclude Include="Graphics\Graphics.h" />
     <ClInclude Include="Libraries\raylib\include\AudioDevice.hpp" />
