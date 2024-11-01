@@ -2,13 +2,14 @@
   Window:
     Properties:
       _Name: PsyTron
-      _Width: 640 # 1280 1920
-      _Height: 480 # 512 1080
-      _Bits: 32
+      _Width: 640 # 640 1280 1920
+      _Height: 480 # 480 960 1080
+      _Bits: 16
       _FPS: 60
       _Fullscreen: false
   Resources:
     Language: Spanish
+    Resolution: DoubleScale
     DialogFile: Data/intro.yml
     Material:
      _name: Test

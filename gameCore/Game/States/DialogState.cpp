@@ -1,5 +1,6 @@
 #include "DialogState.h"
 #include "../ConversationManager.h"
+#include "../VisualDialogManager.h"
 
 
 void DialogState::OnInit()
@@ -12,6 +13,7 @@ void DialogState::OnInit()
 
 void DialogState::OnDeinit()
 {
+	VisualDialogManager::Get().UnLoadAll();
 }
 
 

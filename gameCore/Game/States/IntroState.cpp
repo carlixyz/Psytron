@@ -1,6 +1,7 @@
 #include "IntroState.h"
 #include "../Game.h"
 #include "../ConversationManager.h"
+#include "../VisualDialogManager.h"
 
 void IntroState::OnInit()
 {
@@ -11,7 +12,7 @@ void IntroState::OnInit()
 
 void IntroState::OnDeinit()
 {
-
+	VisualDialogManager::Get().UnLoadAll();
 }
 
 void IntroState::OnUpdate()

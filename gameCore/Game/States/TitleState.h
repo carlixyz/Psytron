@@ -20,6 +20,7 @@ class TitleState : public GameState//, public Singleton<TitleState>
 	std::list<std::string> MenuOptions;
 
 	bool ShowCredits = false;
+	std::list<std::string> credits;
 
 public:
 	//friend class Singleton<IntroState>;

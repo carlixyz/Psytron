@@ -6,6 +6,7 @@
 #include "../Utility/Utils.h"
 #include "ConversationManager.h"
 #include "VisualDialogManager.h"
+#include "Assets.h"
 
 bool Game::Init()
 {
@@ -18,6 +19,8 @@ bool Game::Init()
 	SetExitKey(KEY_Q);
 
 	if (!result) Graphics::Get().Deinit();	// CloseWindow();	// If something fails Kill Window
+
+	result = result && Assets::Get().Init();
 
 	result = result && States.Init();							//	States.Init(States.introState);
 
@@ -33,6 +36,10 @@ bool Game::Deinit()
 	bool result = States.Deinit();								// cleanup the all states
 
 	ConversationManager::Get().Deinit();
+
+	VisualDialogManager::Get().Deinit();
+
+	result = result && Assets::Get().Deinit();
 
 	result = result && Audio::Get().Deinit();
 

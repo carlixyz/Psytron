@@ -4,7 +4,7 @@
 #include <functional>
 
 #define PADDING 50
-#define POS_CENTER ((Graphics::Get().GetWindowArea().width * 0.5f) - (ImagesMap[imageId]->Size.width * 0.5f))
+#define POS_CENTER ((Graphics::Get().GetHorizontalCenter()) - (ImagesMap[imageId]->Size.width * 0.5f))
 #define POS_LEFT (PADDING)
 #define POS_RIGHT (Graphics::Get().GetWindowArea().width - ImagesMap[imageId]->Size.width - PADDING)
 #define POS_LEFT_OUT ((float)-ImagesMap[imageId]->Size.width - PADDING)
@@ -87,7 +87,7 @@ void VisualDialogManager::LoadImage(std::string imageId, std::string file)
 	ImagesMap[imageId]->FileSize.width = ImagesMap[imageId]->Size.width;
 	ImagesMap[imageId]->FileSize.height = ImagesMap[imageId]->Size.height;
 
-	ImagesMap[imageId]->PositionX = (Graphics::Get().GetWindowArea().width * 0.5f) - (ImagesMap[imageId]->Size.width * 0.5f);
+	ImagesMap[imageId]->PositionX = (Graphics::Get().GetHorizontalCenter()) - (ImagesMap[imageId]->Size.width * 0.5f);
 	ImagesMap[imageId]->PositionY = (Graphics::Get().GetWindowArea().height - ImagesMap[imageId]->Size.height);
 }
 
@@ -131,7 +131,7 @@ void VisualDialogManager::SetPosition(std::string imageId, EScreenPosition posit
 
 		case EScreenPosition::EPositionCenter:
 		default:
-			ImagesMap[imageId]->PositionX = (Graphics::Get().GetWindowArea().width * 0.5f) - (ImagesMap[imageId]->Size.width * 0.5f);
+			ImagesMap[imageId]->PositionX = (Graphics::Get().GetHorizontalCenter()) - (ImagesMap[imageId]->Size.width * 0.5f);
 			break;
 	}
 }
@@ -277,7 +277,7 @@ void VisualDialogManager::SetFullSize(std::string imageId, EImageSize formatSize
 	if (!ImagesMap.contains(imageId))
 		return;
 
-	if (formatSize == EImageSize::EStrechProportion) // Scale up to Viewport height and the rescale width in proportion
+	if (formatSize == EImageSize::EStrechProportion) // Scale up to Viewport height and then rescale width in proportion
 	{
 		if (ImagesMap[imageId]->Size.width > ImagesMap[imageId]->Size.height) 
 		{
@@ -328,7 +328,7 @@ void VisualDialogManager::SetFullSize(std::string imageId, EImageSize formatSize
 		ImagesMap[imageId]->Size.height = (float)ImagesMap[imageId]->GetHeight();
 	}
 
-	ImagesMap[imageId]->PositionX = (Graphics::Get().GetWindowArea().width * 0.5f) - (ImagesMap[imageId]->Size.width * 0.5f);
+	ImagesMap[imageId]->PositionX = (Graphics::Get().GetHorizontalCenter()) - (ImagesMap[imageId]->Size.width * 0.5f);
 	ImagesMap[imageId]->PositionY = Graphics::Get().GetWindowArea().height - ImagesMap[imageId]->Size.height;
 }
 

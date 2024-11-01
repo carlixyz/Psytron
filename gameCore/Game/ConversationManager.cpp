@@ -99,8 +99,16 @@ void ConversationManager::PreLoadImage(const YAML::const_iterator& element)
 		const std::string& imageID = image["SetImage"].as<std::string>();
 		const std::string& imagePath = image["file"].as<std::string>();
 		bool imageVisible = image["visible"] ? image["visible"].as<bool>() : false;
-
 		VisualDialogManager::Get().LoadImage( imageID, imagePath);
+
+		if (image["size"].IsDefined())
+		{
+			const std::string& imageSize = image["size"].as<std::string>();
+			const VisualDialogManager::EImageSize ScaleType = (imageSize == "Proportion") ?
+				VisualDialogManager::EImageSize::EStrechProportion : VisualDialogManager::EImageSize::EExtend;
+			VisualDialogManager::Get().SetFullSize(imageID, ScaleType);
+		}
+
 		VisualDialogManager::Get().SetImageVisible( imageID, imageVisible);
 	}
 }

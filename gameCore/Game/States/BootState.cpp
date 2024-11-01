@@ -26,6 +26,12 @@ void BootState::OnUpdate()
 	CurrentTime += GetFrameTime();
 	Alpha = EaseSineInOut(CurrentTime, 0.0f, 1.0f, TotalTime);
 
+	if (IsKeyDown(KEY_ENTER))
+	{
+		Game::Get().States.ChangeState(Game::Get().States.titleState);
+		return;
+	}
+
 	if (IsKeyDown(KEY_SPACE))
 	{
 		CurrentTime += GetFrameTime() * 4;
@@ -36,8 +42,7 @@ void BootState::OnUpdate()
 		CurrentTime = 0;
 		CurrentLogo++;
 
-		if (CurrentLogo >= Logos.size())
-			//Game::Get().States.ChangeState(Game::Get().States.titleState);
+		if (CurrentLogo >= Logos.size())		
 			Game::Get().States.ChangeState(Game::Get().States.introState);
 	}
 }

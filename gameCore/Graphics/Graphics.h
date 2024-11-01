@@ -33,6 +33,9 @@ public:
 
 	bool GetCloseApplication();
 
+	inline int GetHorizontalCenter()	{ return (int)(GetWindowArea().width * 0.5f); }
+	inline int GetVerticalCenter()		{ return (int)(GetWindowArea().height * 0.5f); }
+
 protected:
 	Graphics() { ; }					// Protected Constructor
 

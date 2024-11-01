@@ -17,6 +17,7 @@ Setup:
     - SetImage: News1
       # visible: true       # not visible by default thus not needed
       file: Data/Scenes/Intro/InfoNews_1.png
+      size: Proportion
     - SetFullHeight: News1
     - SetImage: News2
       file: "Data/Scenes/Intro/InfoNews_2.png"
@@ -44,6 +45,8 @@ Setup:
     - SetFullHeight: News9
     - SetImage: School
       file: "Data/Scenes/School.png"
+      size: Proportion
+    # - SetFullHeight: School
 
     - SetImage: TrackSide
       file: "Data/Scenes/Track/Track_Side.png"
@@ -527,4 +530,5 @@ EnterPsyTron:
     - 2: Ahora mismo!
       time: 5.0
       unskip:
+    - CleanUp: All
      

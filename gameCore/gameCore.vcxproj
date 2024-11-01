@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -169,7 +169,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\Assets.cpp" />
     <ClCompile Include="Audio\Audio.cpp" />
+    <ClCompile Include="Game\Shmup\Particles.cpp" />
+    <ClCompile Include="Game\Shmup\Enemy.cpp" />
+    <ClCompile Include="Game\Shmup\Player.cpp" />
+    <ClCompile Include="Game\Shmup\Shots\ChaseMove.cpp" />
+    <ClCompile Include="Game\Shmup\Shots\BrakeMove.cpp" />
+    <ClCompile Include="Game\Shmup\Shots\DelayedMove.cpp" />
+    <ClCompile Include="Game\Shmup\Shots\LockOnMove.cpp" />
+    <ClCompile Include="Game\Shmup\Shots\PetalMove.cpp" />
+    <ClCompile Include="Game\Shmup\Shots\RotatedMove.cpp" />
+    <ClCompile Include="Game\Shmup\Shots\SimpleMove.cpp" />
+    <ClCompile Include="Game\Shmup\Shots\ThrottleMove.cpp" />
     <ClCompile Include="Game\States\BootState.cpp" />
     <ClCompile Include="Game\States\DialogState.cpp" />
     <ClCompile Include="Game\ConversationManager.cpp" />
@@ -182,9 +194,24 @@
     <ClCompile Include="Graphics\Graphics.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Game\Register.cpp" />
+    <ClCompile Include="Game\States\RoadState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\Assets.h" />
     <ClInclude Include="Audio\Audio.h" />
+    <ClInclude Include="Game\Shmup\Bullet.h" />
+    <ClInclude Include="Game\Shmup\Particles.h" />
+    <ClInclude Include="Game\Shmup\Enemy.h" />
+    <ClInclude Include="Game\Shmup\Entity.h" />
+    <ClInclude Include="Game\Shmup\Player.h" />
+    <ClInclude Include="Game\Shmup\Shots\ChaseMove.h" />
+    <ClInclude Include="Game\Shmup\Shots\BrakeMove.h" />
+    <ClInclude Include="Game\Shmup\Shots\DelayedMove.h" />
+    <ClInclude Include="Game\Shmup\Shots\LockOnMove.h" />
+    <ClInclude Include="Game\Shmup\Shots\PetalMove.h" />
+    <ClInclude Include="Game\Shmup\Shots\RotatedMove.h" />
+    <ClInclude Include="Game\Shmup\Shots\SimpleMove.h" />
+    <ClInclude Include="Game\Shmup\Shots\ThrottleMove.h" />
     <ClInclude Include="Game\States\BootState.h" />
     <ClInclude Include="Game\States\DialogState.h" />
     <ClInclude Include="Game\ConversationManager.h" />
@@ -276,6 +303,7 @@
     <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\traits.h" />
     <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\yaml.h" />
     <ClInclude Include="Game\Register.h" />
+    <ClInclude Include="Game\States\RoadState.h" />
     <ClInclude Include="Utility\Singleton.h" />
     <ClInclude Include="Utility\Utils.h" />
   </ItemGroup>

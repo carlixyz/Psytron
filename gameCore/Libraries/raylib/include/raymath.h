@@ -230,6 +230,22 @@ RMAPI int FloatEquals(float x, float y)
 //----------------------------------------------------------------------------------
 
 // Vector with components value 0.0f
+RMAPI Vector2 Vector2Right(void)
+{
+    Vector2 result = { 1.0f, 0.0f };
+
+    return result;
+}
+
+// Vector with components value 0.0f
+RMAPI Vector2 Vector2Up(void)
+{
+    Vector2 result = { 0.0f, -1.0f };
+
+    return result;
+}
+
+// Vector with components value 0.0f
 RMAPI Vector2 Vector2Zero(void)
 {
     Vector2 result = { 0.0f, 0.0f };

@@ -10,7 +10,7 @@ bool FSM::Init(GameState& state)
 bool FSM::Init()
 {
 //#ifdef _DEBUG
-//	PushState(dialogState);
+//	PushState(roadState);
 //#else
 	PushState(bootState);
 //#endif // DEBUG
