@@ -2,13 +2,7 @@
 
 #include <raylib-cpp.hpp>
 #include <raymath.h>
-#include "../../../Graphics/Graphics.h"
 #include "../Bullet.h"
-
-//#define Stringify(name) #name
-//
-//#define ASSETS Assets::Get()
-//#define GetAsset(Name) ASSETS.GetSprite(#Name)
 
 struct SimpleMove : public BaseBehaviour
 {

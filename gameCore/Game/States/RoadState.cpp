@@ -18,11 +18,21 @@ void RoadState::OnInit()
 	CityBG = new raylib::TextureUnmanaged("Data/Scenes/Highway/MacroCityBG_Blue_SmartDott.png");
 	CityHighway = new raylib::TextureUnmanaged("Data/Scenes/Highway/MacroCityRoad.png");
 
-	BGPosition = {(Graphics::Get().GetHorizontalCenter() - (CityBG->width * 0.5f)), 0.f};
-	BGOffset = { 0, 0, (float)CityBG->width, (float)CityBG->height };
+	BGSource = { 0.f, 0.f, (float)CityBG->width, (float)CityBG->height };
+	BGDestiny = { 
+		(Graphics::Get().GetHorizontalCenter() - (CityBG->width * 0.5f) * Graphics::Get().GetFactorArea().x), 
+		(Graphics::Get().GetVerticalCenter() - (CityBG->height * 0.5f) * Graphics::Get().GetFactorArea().y),
+		CityBG->width* Graphics::Get().GetFactorArea().x, 
+		CityBG->height * Graphics::Get().GetFactorArea().y 
+	};
 
-	RoadPosition = { (Graphics::Get().GetHorizontalCenter() - (CityHighway->width * 0.5f)), 0.f };
-	RoadOffset = { 0, 0, (float)CityHighway->width, (float)CityHighway->height };
+	RoadSource = { 0.f, 0.f, (float)CityHighway->width, (float)CityHighway->height };
+	RoadDestiny = {
+		(Graphics::Get().GetHorizontalCenter() - (CityHighway->width * 0.5f) * Graphics::Get().GetFactorArea().x),
+		(Graphics::Get().GetVerticalCenter() - (CityHighway->height * 0.5f) * Graphics::Get().GetFactorArea().y),
+		CityHighway->width * Graphics::Get().GetFactorArea().x,
+		CityHighway->height * Graphics::Get().GetFactorArea().y
+	};
 }
 
 void RoadState::OnDeinit()
@@ -38,16 +48,17 @@ void RoadState::OnDeinit()
 
 void RoadState::OnUpdate()
 {
-	BGOffset.y -= BGSpeed * GetFrameTime();
-	RoadOffset.y -= RoadSpeed * GetFrameTime();
+	BGSource.y -= BGSpeed * GetFrameTime();
+	RoadSource.y -= RoadSpeed * GetFrameTime();
+
 	Particles::Get().OnUpdate();
 	player->Update();
 }
 
 void RoadState::OnRender()
 {
-	CityBG->Draw(BGOffset, BGPosition, WHITE);
-	CityHighway->Draw(RoadOffset, RoadPosition, WHITE);
+	CityBG->Draw(BGSource, BGDestiny);
+	CityHighway->Draw(RoadSource, RoadDestiny);
 
 	DrawText("Made by Carlixyz \n Thanks to Fulanos",
 			 Graphics::Get().GetHorizontalCenter() - 100,

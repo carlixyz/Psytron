@@ -3,36 +3,36 @@
 #include <raymath.h>
 #include "Texture.hpp"
 #include "../../Assets.h"
-//#include <../../../Utility/Utils.h>
-
+#include "../../../Graphics/Graphics.h"
 
 void RotatedMove::DoInit()
 {
 	if (Owner != nullptr)
 	{
-		BulletOwner = (Bullet*)Owner;
-		BulletOwner->Position = InitPosition;
 		LifeTime = 5;
 
+		BulletOwner = (Bullet*)Owner;
+		BulletOwner->SpriteScaled = Vector2Scale(BulletOwner->SpriteSize, Graphics::Get().GetFactorArea().y);
+		BulletOwner->Position = Vector2Subtract(InitPosition, Vector2Scale(BulletOwner->SpriteScaled, 0.5f));
 		
-
 		DoUpdate();
+
+		///------------------------------------------------------------------------///
 
 		BulletOwner->FrameRec = { 4 * BulletOwner->SpriteSize.x,
 									2 * BulletOwner->SpriteSize.y,
 										BulletOwner->SpriteSize.x,
 										BulletOwner->SpriteSize.y };
 
-		//float SpriteWidth = (float)(GetAsset("Sprites").width / 8);
-		//float SpriteHeight = (float)(GetAsset("Sprites").height / 8);
+		const float CollisionSizeFactor = 0.2f;
+		const float ColliderSide = BulletOwner->SpriteScaled.x * CollisionSizeFactor;
 
-		//BulletOwner->FrameRec = { 4 * BulletOwner->SpriteSize.x, 
-		//							2 * BulletOwner->SpriteSize.y,
-		//								BulletOwner->SpriteSize.x, 
-		//								BulletOwner->SpriteSize.y };
-		 
-		//Direction = Vector2Rotate(Direction, 180 * DEG2RAD);
-	}
+		BulletOwner->CollisionRec = {
+			BulletOwner->Position.x - ColliderSide * 0.5f,
+			BulletOwner->Position.y - ColliderSide * 0.5f,
+			ColliderSide, ColliderSide
+		};
+	};
 }
 
 void RotatedMove::DoUpdate()
@@ -41,24 +41,25 @@ void RotatedMove::DoUpdate()
 	LifeTime -= TimeFrame;
 
 	Direction = Vector2Rotate(Direction, RotationOffset * DEG2RAD);
-	//Speed = 10;
 	BulletOwner->Position.x += Direction.x * Speed * TimeFrame;
 	BulletOwner->Position.y += Direction.y * Speed * TimeFrame;
+
+	BulletOwner->CollisionRec.x = BulletOwner->Position.x - BulletOwner->CollisionRec.width * 0.5f;
+	BulletOwner->CollisionRec.y = BulletOwner->Position.y - BulletOwner->CollisionRec.height * 0.5f;
 }
 
 void RotatedMove::DoRender()
 {
 	if (BulletOwner != nullptr)
 	{
-
 		//DrawTextureRec(GetAsset("Sprites"), BulletOwner->FrameRec, BulletOwner->Position, WHITE);  // Draw part of the texture
-		DrawTexturePro(GetAsset("Sprites"), BulletOwner->FrameRec,
+		DrawTexturePro(GetAsset("Sprites"),
+					   BulletOwner->FrameRec,
 					   {
 						   BulletOwner->Position.x, BulletOwner->Position.y,
-						   BulletOwner->SpriteSize.x, BulletOwner->SpriteSize.y
+						   BulletOwner->SpriteScaled.x, BulletOwner->SpriteScaled.y
 					   },
-					   //Vector2Scale(BulletOwner->SpriteSize, 0.5f),
-					   BulletOwner->SpriteSize,
+					   Vector2Scale(BulletOwner->SpriteScaled, 0.5f), //BulletOwner->SpriteSize,
 					   Vector2Angle(Vector2Up(), Direction),
 					   WHITE);
 	}

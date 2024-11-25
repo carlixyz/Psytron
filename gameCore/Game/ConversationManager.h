@@ -263,8 +263,8 @@ class ConversationManager : public Singleton<ConversationManager>
     Rectangle TextArea;
     Font FontResource;
     Color FontColor                 = SKYBLUE;
-    const float FontSize            = 24;
-    const float FontOffset          = 20;
+    const float FontSize            = 24 *Graphics::Get().GetFactorArea().y;
+    const float FontOffset          = FontSize * 0.7f;
 
     typedef std::vector<CharacterSpeaker> CharactersVector; //Type definitions to simplify the syntax
     typedef CharactersVector::iterator CharactersIt;

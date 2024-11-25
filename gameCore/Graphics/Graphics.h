@@ -9,8 +9,12 @@ class Graphics : public Singleton<Graphics>
 
 	bool CloseApplication		= false;
 
-	raylib::Window* window		= nullptr;
-	Rectangle windowArea		{ 0, 0, 640, 480};
+	raylib::Window* Window		= nullptr;
+
+	Vector2 NativeArea			{ 640, 480 };
+	Vector2 ScaledFactor		{ 1.f, 1.f };
+
+	Rectangle WindowArea		{ 0, 0, NativeArea.x, NativeArea.y};
 
 public:
 	friend class Singleton<Graphics>;
@@ -29,7 +33,9 @@ public:
 	//void SetWorldMatrix(const cMatrix& matrix);
 	//void RefreshWorldView();
 
-	const Rectangle& GetWindowArea() { return windowArea; }
+	const Rectangle& GetWindowArea()	{ return WindowArea; }
+
+	const Vector2 GetFactorArea()		{ return ScaledFactor; }
 
 	bool GetCloseApplication();
 

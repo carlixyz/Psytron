@@ -21,12 +21,12 @@ public:
 	raylib::TextureUnmanaged* CityBG;
 	raylib::TextureUnmanaged* CityHighway;
 
-	raylib::Vector2 BGPosition;
-	raylib::Rectangle BGOffset;
+	raylib::Rectangle BGSource;
+	raylib::Rectangle BGDestiny;
 	float BGSpeed = 50;
 
-	raylib::Vector2 RoadPosition;
-	raylib::Rectangle RoadOffset;
+	raylib::Rectangle RoadSource;
+	raylib::Rectangle RoadDestiny;
 	float RoadSpeed = 500;
 
 	void OnInit();

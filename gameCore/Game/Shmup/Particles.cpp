@@ -39,17 +39,23 @@ void Particles::CreatePlayerShot(Vector2 position, float InitAngle, float Rotati
 {
 	Bullet& bulletRef = *RequestBullet();
 
+	const float speedFactor{ Graphics::Get().GetFactorArea().y };
+
 	//bulletRef.SetType(new SimpleMove(position));
 	//Vector2 center = Vector2( (float)Graphics::Get().GetHorizontalCenter(), (float)Graphics::Get().GetVerticalCenter());
-	//bulletRef.SetType(new LockOnMove(position, center, 500));
+	//bulletRef.SetType(new LockOnMove(position, center, 500 * speedFactor));
+
 
 	if (CurrentTarget == nullptr)
 	{
-		bulletRef.SetType(new RotatedMove(position, InitAngle, 1000, RotationDelta));
+		bulletRef.SetType(new RotatedMove(position, InitAngle, 1000 * speedFactor, RotationDelta ));
 	}
 	else
 	{
-		bulletRef.SetType(new LockOnMove(position, CurrentTarget->Position, 500));
+		bulletRef.SetType(new LockOnMove(position,
+										 CurrentTarget->Position, 
+										 500 * speedFactor,
+										 10.f / speedFactor));
 	}
 
 	bulletRef.Active = true;
@@ -90,9 +96,9 @@ void Particles::Create(Vector2 position, BehaviourType bType)
 			Bullet& bulletRef = *RequestBullet();
 
 			if (PlayerRef != nullptr)
-				bulletRef.SetType(new ChaseMove(Vector2(200, 100), PlayerRef->Position, 250));
+				bulletRef.SetType(new ChaseMove(Vector2(200, 100), PlayerRef->Position));
 			else
-				bulletRef.SetType(new ChaseMove(position, Vector2(position.x, 1000), 250));
+				bulletRef.SetType(new ChaseMove(position, Vector2(position.x, 1000)));
 
 			bulletRef.Active = true;
 		}
@@ -164,7 +170,6 @@ void Particles::Create(Vector2 position, BehaviourType bType)
 			for (int i = 0; i < BurstCount; i++)
 			{
 				Bullet& bulletRef = *RequestBullet();
-				//bulletRef.SetType(new StraightMove(position, CurrentBurstAngle, 100));
 				bulletRef.SetType(new ThrottleMove(position, CurrentBurstAngle, 350, -10, 50));
 				CurrentBurstAngle += BurstAngleOffset;
 				bulletRef.Active = true;
@@ -186,27 +191,6 @@ void Particles::Create(Vector2 position, BehaviourType bType)
 			{
 				Bullet& bulletRef = *RequestBullet();
 
-				//float extraSpeed = abs(Cotan(VertexCount * CurrentBurstAngle * PI / 360)) ;
-				//BaseBehaviour* wrappedBullet = new ThrottleMove(position, CurrentBurstAngle, 70, extraSpeed, 25, 150);
-				//bulletRef.SetType(new BrakedMove(position, CurrentBurstAngle, 300, wrappedBullet, 10.0f)); // + complex
-
-				//float extraSpeed = abs(tan(VertexCount * -CurrentBurstAngle * PI / 360)) ;
-				//BaseBehaviour* wrappedBullet = new ThrottleMove(position, CurrentBurstAngle, 25, extraSpeed, 20, 100);
-				//bulletRef.SetType(new BrakedMove(position, CurrentBurstAngle, 300, wrappedBullet, 10.f)); // + slow complex
-
-				//float extraSpeed = abs(tan(VertexCount * -CurrentBurstAngle * PI / 360));
-				//bulletRef.SetType(new ThrottleMove(position, CurrentBurstAngle, 25, extraSpeed, 20, 100)); // Base
-
-				//float extraSpeed = abs(tan(VertexCount * CurrentBurstAngle * PI / 360));
-				//bulletRef.SetType(new ThrottleMove(position, CurrentBurstAngle, 100, -extraSpeed, 25)); // Nice but Slow
-
-				//float extraSpeed = abs(sin(VertexCount * CurrentBurstAngle * PI/360)) * 0.5f;
-				//bulletRef.SetType(new ThrottleMove(position, CurrentBurstAngle, 50, extraSpeed, 25)); // Classic Flower
-
-				//float tang = 3 - tan(VertexCount * CurrentBurstAngle * PI / 360) ;
-				//float extraSpeed = abs(tang);
-				//bulletRef.SetType(new SimpleMove(position, CurrentBurstAngle, 70 + (extraSpeed * -2)));	// Boring Rose 
-				
 				float extraSpeed = abs(sin(VertexCount * CurrentBurstAngle * PI / 360));
 				bulletRef.SetType(new ThrottleMove(position, CurrentBurstAngle, 50, 1 - extraSpeed, 25)); // Classic Star
 
@@ -225,13 +209,15 @@ void Particles::Create(Vector2 position, BehaviourType bType)
 
 			float CurrentBurstAngle = BurstAngleOffset; /// Maybe define this inside Shooter entities classes?
 
+			float AngleFactor = Graphics::Get().GetFactorArea().y > 1.0f ? 0.5f : 1.0f;
+
 			for (int i = 0; i < BurstCount; i++)
 			{
 				Bullet& bulletRefRight = *RequestBullet();
 				Bullet& bulletRefLeft = *RequestBullet();
 
-				bulletRefRight.SetType(new PetalMove(position, CurrentBurstAngle, 300, 1.0f)); // 300, 2.0f)); // smaller leaves
-				bulletRefLeft.SetType(new PetalMove(position, CurrentBurstAngle, 300, -1.0f));
+				bulletRefRight.SetType(new PetalMove(position, CurrentBurstAngle, 300, AngleFactor)); // 300, 2.0f)); // smaller leaves
+				bulletRefLeft.SetType(new PetalMove(position, CurrentBurstAngle, 300, -AngleFactor));
 
 				bulletRefRight.Active = true;
 				bulletRefLeft.Active = true;

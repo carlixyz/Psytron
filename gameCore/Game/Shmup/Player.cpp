@@ -8,16 +8,34 @@
 #include <sstream>
 #include <string>
 
+#define MODULE_FULL 32
+#define MODULE_HALF (MODULE_FULL/2)
+#define MODULE_FOURTH (MODULE_HALF/2)
+
 
 Player::Player()
 {
 
-	Speed = 300.f;
-	Position = Vector2( (float)Graphics::Get().GetHorizontalCenter(), (float)Graphics::Get().GetVerticalCenter());
+	Speed = 300.f * Graphics::Get().GetFactorArea().y;
+	Position = Vector2((float)Graphics::Get().GetHorizontalCenter(), (float)Graphics::Get().GetVerticalCenter());
 
-	SpriteSize.x = (float)(GetAsset("Sprites").width / 16);
-	SpriteSize.y = (float)(GetAsset("Sprites").height / 8);
+	SpriteSize.x = (float)(GetAsset("Sprites").width / MODULE_HALF);
+	SpriteSize.y = (float)(GetAsset("Sprites").height / MODULE_FOURTH);
+
 	FrameRec = { 0 * SpriteSize.x, 0 * SpriteSize.y, SpriteSize.x, SpriteSize.y };
+
+	FrameOutput = { Position.x, Position.y,
+		FrameRec.width * Graphics::Get().GetFactorArea().x,
+		FrameRec.height * Graphics::Get().GetFactorArea().y
+	};
+
+	ColliderOffset = { FrameOutput.width * 0.3f, FrameOutput.height * 0.35f };
+
+	CollisionRec = {
+		Position.x + ColliderOffset.x,
+		Position.y + ColliderOffset.y,
+		FrameOutput.width * 0.3f, FrameOutput.height * 0.3f
+	};
 }
 
 void Player::Update()
@@ -59,10 +77,10 @@ void Player::Update()
 		Shoot(Variation);
 	}
 
-	CurrentFrame = (int)(GetTime() * 16);
+	CurrentFrame = (int)(GetTime() * MODULE_HALF);
 	CurrentFrame %= 4;
 
-	unsigned frameSide = (goDirection +1) * 4;
+	const unsigned frameSide = (goDirection +1) * 4;
 
 	// Left:	4 frames * -1 +1 
 	// Center:	4 frames * 0  +1
@@ -70,20 +88,22 @@ void Player::Update()
 
 	FrameRec.x = (frameSide + CurrentFrame) * SpriteSize.x;
 
+	FrameOutput.x = Position.x = Clamp(Position.x, LeftMargin, RightMargin);
+	FrameOutput.y = Position.y = Clamp(Position.y, 0, BottomMargin);
 
-	Position.x = Clamp(Position.x, 86, 486);
-	Position.y = Clamp(Position.y, 0, 432);
-
-	//DEBUG_COUT("Position y " << Position.y << std::endl);
+	CollisionRec.x = Position.x + ColliderOffset.x;
+	CollisionRec.y = Position.y + ColliderOffset.y;
 
 	if (IsKeyDown(KEY_ONE))
 	{
-		Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::ELockShot);
+		
+		//Particles::Get().Create(Vector2Add(Position, Vector2(21, 0)), BehaviourType::ELockShot);
+		Particles::Get().Create(Vector2Add(Position, ShotInitialOffset), BehaviourType::ELockShot);
 	}
 
 	if (IsKeyDown(KEY_TWO))
 	{
-		Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::ESeekShot);
+		Particles::Get().Create(Vector2Add(Position, Vector2(21, 0)), BehaviourType::ESeekShot);
 	}
 
 	if (IsKeyDown(KEY_THREE))
@@ -127,8 +147,7 @@ void Player::Update()
 void Player::Render()
 {
 	std::stringstream stream;
-	stream << "Position " << std::fixed << std::setprecision(2) <<
-		Position.x << " " << Position.y;
+	stream << "Position " << std::fixed << std::setprecision(2) << Position.x << " " << Position.y;
 	std::string Text = stream.str();
 
 	DrawText(Text.c_str(), 400, 400, 16, WHITE);
@@ -138,12 +157,21 @@ void Player::Render()
 	//else
 	//	DrawRectangle((int)Position.x, (int)Position.y, 42, 64, BLUE);
 
-
-	DrawTextureRec(GetAsset("Sprites"), FrameRec, Position, WHITE);  // Draw part of the texture
-
+	//DrawTextureRec(GetAsset("Sprites"), FrameRec, Position, WHITE);  // Draw part of the texture
+	DrawTexturePro(GetAsset("Sprites"), FrameRec, FrameOutput, Vector2Zero(), 0.f, WHITE);  // Draw part of the texture
 
 	//DrawRectanglePro({ Position.x, Position.y, 32, 64}, Vector2Zero(), 0.f, ALPHARED);
-	DrawRectanglePro({ Position.x + 8, Position.y + 16, 16, 32}, Vector2Zero(), 0.f, ALPHARED);
+	DrawRectanglePro(CollisionRec, Vector2Zero(), 0.f, ALPHARED);
+
+	//DrawCircle(Position.x, Position.y, 3, VIOLET);
+	//DrawCircle(Position.x + FrameOutput.width, Position.y + FrameOutput.height, 3, VIOLET);
+
+	//DrawCircle(Position.x + FrameOutput.width * 0.3f, 
+	//		   Position.y + FrameOutput.height * 0.3f, 3, RED);
+
+	//DrawCircle(Position.x + FrameOutput.width * 0.6f,
+	//		   Position.y + FrameOutput.height * 0.6f, 3, RED);
+
 }
 
 void Player::Shoot(float displacement)
@@ -157,7 +185,7 @@ void Player::Shoot(float displacement)
 
 	ShotAngle = Clamp(ShotAngle + displacement * 100, -70, 70) * 0.5f;		// Init Angle
 	ShotRotation = Clamp(ShotRotation + displacement, -1.0f, 1.0f) * 0.5f;	// Rotation
-	Particles::Get().CreatePlayerShot(Vector2Add(Position, Vector2(40, 24)), ShotAngle, ShotRotation);
+	Particles::Get().CreatePlayerShot(Vector2Add(Position, ShotInitialOffset), ShotAngle, ShotRotation);
 
 	//Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::ELinearShot);		/// -----
 	//Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::ELockShot);		/// -----

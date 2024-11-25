@@ -1,14 +1,16 @@
 #include "ChaseMove.h"
 #include <raylib-cpp.hpp>
 #include <raymath.h>
-//#include <../../../Utility/Utils.h>
+#include "../../../Graphics/Graphics.h"
 
 void ChaseMove::DoInit()
 {
 	if (Owner != nullptr)
 	{
 		BulletOwner = (Bullet*)Owner;
- 		BulletOwner->Position = InitPosition;
+
+		BulletOwner->SpriteScaled = Vector2Scale(BulletOwner->SpriteSize, Graphics::Get().GetFactorArea().y);
+		BulletOwner->Position = Vector2Subtract(InitPosition, Vector2Scale(BulletOwner->SpriteScaled, 0.5f));
 
 		Vector2 Orientation = Vector2Subtract(TargetPosition, BulletOwner->Position);
 		Direction = Vector2Normalize(Orientation);
@@ -19,6 +21,15 @@ void ChaseMove::DoInit()
 									BulletOwner->SpriteSize.y };
 
 		///----------------------------------------------------------------- ///
+
+		const float CollisionSizeFactor = 0.25f;
+		const float ColliderSide = BulletOwner->SpriteScaled.x * CollisionSizeFactor;
+
+		BulletOwner->CollisionRec = {
+			BulletOwner->Position.x - ColliderSide * 0.5f,
+			BulletOwner->Position.y - ColliderSide * 0.5f,
+			ColliderSide, ColliderSide
+		};
 	}
 }
 
@@ -29,6 +40,10 @@ void ChaseMove::DoUpdate()
 
 		BulletOwner->Position.x += Direction.x * Speed * GetFrameTime();
 		BulletOwner->Position.y += Direction.y * Speed * GetFrameTime();
+
+		BulletOwner->CollisionRec.x = BulletOwner->Position.x - BulletOwner->CollisionRec.width * 0.5f;
+		BulletOwner->CollisionRec.y = BulletOwner->Position.y - BulletOwner->CollisionRec.height * 0.5f;
+
 		return;
 	}
 
@@ -58,6 +73,9 @@ void ChaseMove::DoUpdate()
 		Vector2 deltaPosition = Vector2Add(BulletOwner->Position, offset);
 		BulletOwner->Position = deltaPosition;
 	}
+
+	BulletOwner->CollisionRec.x = BulletOwner->Position.x - BulletOwner->CollisionRec.width * 0.5f;
+	BulletOwner->CollisionRec.y = BulletOwner->Position.y - BulletOwner->CollisionRec.height * 0.5f;
 	
 }
 
@@ -69,15 +87,14 @@ void ChaseMove::DoRender()
 
 		const float angleVar = std::atan2(-Direction.x, Direction.y);
 
-		//DrawRectanglePro(rect, Vector2(0, 0), angleVar, RED);                 // Draw a color-filled rectangle with pro parameters
 		DrawTexturePro(GetAsset("Sprites"),
 					   BulletOwner->FrameRec,
 					   {
 						   BulletOwner->Position.x, BulletOwner->Position.y,
-						   BulletOwner->SpriteSize.x, BulletOwner->SpriteSize.y
+						   BulletOwner->SpriteScaled.x, BulletOwner->SpriteScaled.y
 					   },
-					   Vector2Scale(BulletOwner->SpriteSize, 0.5f), //BulletOwner->SpriteSize,
-					   angleVar* RAD2DEG,
+					   Vector2Scale(BulletOwner->SpriteScaled, 0.5f), //BulletOwner->SpriteSize,
+					   angleVar * RAD2DEG,
 					   WHITE);
 	}
 }

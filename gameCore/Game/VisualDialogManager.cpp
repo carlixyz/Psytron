@@ -80,10 +80,11 @@ void VisualDialogManager::LoadImage(std::string imageId, std::string file)
 	}
 
 	ImagesMap[imageId]->Load(file);
+	//---------------------------------------------------
 
-	ImagesMap[imageId]->Size.width = (float)ImagesMap[imageId]->GetWidth();
-	ImagesMap[imageId]->Size.height = (float)ImagesMap[imageId]->GetHeight();
+	SetFullSize(imageId, EImageSize::EScaleResolution);	
 
+	//---------------------------------------------------
 	ImagesMap[imageId]->FileSize.width = ImagesMap[imageId]->Size.width;
 	ImagesMap[imageId]->FileSize.height = ImagesMap[imageId]->Size.height;
 
@@ -204,54 +205,46 @@ void VisualDialogManager::SetEasing(std::string imageId, EActionEasing easing)
 			break;
 
 		case EActionEasing::EScrollLeft:
-			SetFullSize(imageId);
 			ImagesMap[imageId]->Easing = &ImageEase::ActionScroll;
 			ImagesMap[imageId]->StartValues(100, 0, 1.0f);
 			break;
 
 		case EActionEasing::EScrollRight:
-			SetFullSize(imageId);
 			ImagesMap[imageId]->Easing = &ImageEase::ActionScroll;
 			ImagesMap[imageId]->StartValues(0, 100, 1.0f);
 			break;
 
 		case EActionEasing::EScrollLeftCap:
-			SetFullSize(imageId);
 			ImagesMap[imageId]->PositionX = 0;
 			ImagesMap[imageId]->Easing = &ImageEase::ActionScrollClamp;
 			ImagesMap[imageId]->StartValues(ImagesMap[imageId]->Size.width - Graphics::Get().GetWindowArea().width,	0, 30.0f);
 			break;
 
 		case EActionEasing::EScrollRightCap:
-			SetFullSize(imageId);
 			ImagesMap[imageId]->PositionX = 0;
 			ImagesMap[imageId]->Easing = &ImageEase::ActionScrollClamp;
 			ImagesMap[imageId]->StartValues(0, ImagesMap[imageId]->Size.width - Graphics::Get().GetWindowArea().width, 30.0f);
 			break;
 
 		case EActionEasing::EScrollCycle:
-			SetFullSize(imageId);
 			ImagesMap[imageId]->PositionX = 0;
 			ImagesMap[imageId]->Easing = &ImageEase::ActionScrollLoop;
 			ImagesMap[imageId]->StartValues(0, ImagesMap[imageId]->Size.width - Graphics::Get().GetWindowArea().width, 10.0f);
 			break;
 
 		case EActionEasing::EScrollTopCap:
-			SetFullSize(imageId);
 			ImagesMap[imageId]->PositionY = 0;
 			ImagesMap[imageId]->Easing = &ImageEase::ActionScrollClampVertical;
 			ImagesMap[imageId]->StartValues(ImagesMap[imageId]->Size.height - Graphics::Get().GetWindowArea().height, 0, 30.0f);
 			break;
 
 		case EActionEasing::EScrollBottomCap:
-			SetFullSize(imageId);
 			ImagesMap[imageId]->PositionY = 0;
 			ImagesMap[imageId]->Easing = &ImageEase::ActionScrollClampVertical;
 			ImagesMap[imageId]->StartValues(0, ImagesMap[imageId]->Size.height - Graphics::Get().GetWindowArea().height, 30.0f);
 			break;
 
 		case EActionEasing::EScrollCycleVertical:
-			SetFullSize(imageId);
 			ImagesMap[imageId]->PositionY = 0;
 			ImagesMap[imageId]->Easing = &ImageEase::ActionScrollLoopVertical;
 			ImagesMap[imageId]->StartValues(0, ImagesMap[imageId]->Size.height - Graphics::Get().GetWindowArea().height, 10.0f);
@@ -302,6 +295,14 @@ void VisualDialogManager::SetFullSize(std::string imageId, EImageSize formatSize
 			ImagesMap[imageId]->Size.height = proportionalHeight;
 		}
 
+	}
+	else if (formatSize == EImageSize::EScaleResolution)	// Scale using a Factor calculated as: NewResolution / NativeResolution
+	{
+		ImagesMap[imageId]->Size.width = (float)ImagesMap[imageId]->GetWidth() * Graphics::Get().GetFactorArea().x;
+		ImagesMap[imageId]->Size.height = (float)ImagesMap[imageId]->GetHeight() * Graphics::Get().GetFactorArea().y;
+
+		ImagesMap[imageId]->SetWidth((int)ImagesMap[imageId]->Size.width);
+		ImagesMap[imageId]->SetHeight((int)ImagesMap[imageId]->Size.height);
 	}
 	//else if (formatSize == EImageSize::EStrechAll) // stretch up widht & heigh to Viewport (looks ugly)
 	//{

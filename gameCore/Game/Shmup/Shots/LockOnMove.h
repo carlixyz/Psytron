@@ -2,13 +2,9 @@
 
 #include <raylib-cpp.hpp>
 #include <raymath.h>
-#include "../../../Graphics/Graphics.h"
 #include "../Bullet.h"
 
-//#define Stringify(name) #name
-//
-//#define ASSETS Assets::Get()
-//#define GetAsset(Name) ASSETS.GetSprite(#Name)
+
 #define HALF_PI (PI / 2.0f )
 
 struct LockOnMove : public BaseBehaviour
@@ -16,7 +12,6 @@ struct LockOnMove : public BaseBehaviour
 	LockOnMove(Vector2 initPosition, Vector2 targetPosition, float speed = 200, float angSpeed = 10) :
 		InitPosition(initPosition), 
 		TargetPosition(targetPosition), 
-		//Direction(Vector2Up()), 
 		Speed(speed), 
 		AngSpeed(angSpeed)
 		{ ; }

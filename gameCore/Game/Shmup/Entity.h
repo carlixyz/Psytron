@@ -33,11 +33,11 @@ struct BaseBehaviour
 {
 	Entity* Owner;
 public:
-	void SetOwner(Entity* owner) { Owner = owner;}
+	void SetOwner(Entity* owner)	{ Owner = owner;}
 
-	virtual void DoInit() { ; }
-	virtual void DoUpdate() { ; }
-	virtual void DoRender() { ; }
+	virtual void DoInit()			{ ; }
+	virtual void DoUpdate()			{ ; }
+	virtual void DoRender()			{ ; }
 	virtual float GetScreenOffset() { return 50.f; }
 
 	float LifeTime = 10.0f;
@@ -45,16 +45,18 @@ public:
 
 struct Entity
 {
-	Vector2 Position{};
-	Vector2 SpriteSize{};
-	Rectangle FrameRec = { 0.0f, 0.0f, 1.0f, 1.0f };
-	Rectangle CollisionRec = { 0.0f, 0.0f, 1.0f, 1.0f };
+	Vector2 Position				{};
+	Vector2 SpriteSize				{};
+	Vector2 SpriteScaled			{ Vector2Scale(SpriteSize, Graphics::Get().GetFactorArea().x)};
+
+	Rectangle FrameRec =			{ 0.0f, 0.0f, 1.0f, 1.0f };
+	Rectangle CollisionRec =		{ 0.0f, 0.0f, 1.0f, 1.0f };
 
 	//raylib::TextureUnmanaged Sprite;
 
-	virtual void Update()		{ ; }
-	virtual void Render()		{ ; }
-	virtual void DoDebug()		{ ; }
+	virtual void Update()			{ ; }
+	virtual void Render()			{ ; }
+	virtual void DoDebug()			{ ; }
 
 	~Entity() 
 	{ 

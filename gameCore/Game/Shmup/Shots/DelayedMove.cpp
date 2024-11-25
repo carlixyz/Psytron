@@ -1,7 +1,7 @@
 #include "DelayedMove.h"
 #include <raylib-cpp.hpp>
 #include <raymath.h>
-//#include <../../../Utility/Utils.h>
+#include "../../../Graphics/Graphics.h"
 
 void DelayedMove::DoInit()
 {
@@ -24,6 +24,9 @@ void DelayedMove::DoUpdate()
 		BulletOwner->Position.x += Direction.x * Speed * GetFrameTime();
 		BulletOwner->Position.y += Direction.y * Speed * GetFrameTime();
 		CurrentDelay -= GetFrameTime();
+
+		BulletOwner->CollisionRec.x = BulletOwner->Position.x - BulletOwner->CollisionRec.width * 0.5f;
+		BulletOwner->CollisionRec.y = BulletOwner->Position.y - BulletOwner->CollisionRec.height * 0.5f;
 	}
 	else
 	{
@@ -35,7 +38,7 @@ void DelayedMove::DoRender()
 {
 	if (BulletOwner != nullptr)
 	{
-		DrawCircle((int)BulletOwner->Position.x, (int)BulletOwner->Position.y, BulletOwner->Radius, RED);
+		DrawCircle((int)BulletOwner->Position.x, (int)BulletOwner->Position.y, BulletOwner->Radius, BLUE);
 		//DEBUG_COUT("Position y " << bulletOwner->Position.y << std::endl);
 	}
 }

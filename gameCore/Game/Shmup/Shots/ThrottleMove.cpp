@@ -1,26 +1,35 @@
 #include "ThrottleMove.h"
 #include <raylib-cpp.hpp>
 #include <raymath.h>
-//#include <../../../Utility/Utils.h>
+#include "../../../Graphics/Graphics.h"
 
 void ThrottleMove::DoInit()
 {
 	if (Owner != nullptr)
 	{
 		BulletOwner = (Bullet*)Owner;
- 		BulletOwner->Position = InitPosition;
-		//Direction = Vector2Rotate(Direction, 180 * DEG2RAD);
+		BulletOwner->SpriteScaled = Vector2Scale(BulletOwner->SpriteSize, Graphics::Get().GetFactorArea().y);
+		BulletOwner->Position = InitPosition;
+
 
 		BulletOwner->FrameRec = { 7 * BulletOwner->SpriteSize.x,
-							2 * BulletOwner->SpriteSize.y,
-							BulletOwner->SpriteSize.x,
-							BulletOwner->SpriteSize.y };
+								2 * BulletOwner->SpriteSize.y,
+								BulletOwner->SpriteSize.x,
+								BulletOwner->SpriteSize.y };
+
+		const float CollisionSizeFactor = 0.2f;
+		const float ColliderSide = BulletOwner->SpriteScaled.x * CollisionSizeFactor;
+
+		BulletOwner->CollisionRec = {
+			BulletOwner->Position.x - ColliderSide * 0.5f,
+			BulletOwner->Position.y - ColliderSide * 0.5f,
+			ColliderSide, ColliderSide
+		};
 	}
 }
 
 void ThrottleMove::DoUpdate()
 {
-	//Direction = Vector2Rotate(Direction, 2 * DEG2RAD);
 	const float timeFrame = GetFrameTime();
 	Rotation += timeFrame * MaxSpeed;
 
@@ -29,6 +38,9 @@ void ThrottleMove::DoUpdate()
 
 	BulletOwner->Position.x += Direction.x * InitialSpeed * timeFrame;
 	BulletOwner->Position.y += Direction.y * InitialSpeed * timeFrame;
+
+	BulletOwner->CollisionRec.x = BulletOwner->Position.x - BulletOwner->CollisionRec.width * 0.5f;
+	BulletOwner->CollisionRec.y = BulletOwner->Position.y - BulletOwner->CollisionRec.height * 0.5f;
 }
 
 void ThrottleMove::DoRender()
@@ -36,17 +48,16 @@ void ThrottleMove::DoRender()
 	if (BulletOwner != nullptr)
 	{
 		//DrawCircle((int)BulletOwner->Position.x, (int)BulletOwner->Position.y, BulletOwner->Radius, RED);
-		//DEBUG_COUT("Position y " << bulletOwner->Position.y << std::endl);
 		DrawTexturePro(GetAsset("Sprites"),
 					   BulletOwner->FrameRec,
 					   {
 						   BulletOwner->Position.x, BulletOwner->Position.y,
-						   BulletOwner->SpriteSize.x, BulletOwner->SpriteSize.y
+						   BulletOwner->SpriteScaled.x, BulletOwner->SpriteScaled.y
 					   },
-					   Vector2Scale(BulletOwner->SpriteSize, 0.5f),
-					   //Rotation* RAD2DEG,
-					   std::atan2(-Direction.x, Direction.y) * RAD2DEG,
+					   Vector2Scale(BulletOwner->SpriteScaled, 0.5f), //BulletOwner->SpriteSize,
+					   std::atan2(-Direction.x, Direction.y)* RAD2DEG,
 					   WHITE);
+
 	}
 }
 

@@ -1,5 +1,6 @@
 #include "BootState.h"
 #include "../Game.h"
+#include "../../Graphics/Graphics.h"
 #include "./reasings.h"
 
 void BootState::OnInit()
@@ -49,10 +50,15 @@ void BootState::OnUpdate()
 
 void BootState::OnRender()
 {
-	if(Logos[CurrentLogo] && Logos[CurrentLogo]->IsReady())
-		Logos[CurrentLogo]->Draw({	(float)GetScreenWidth() * 0.5f - (float)(Logos[CurrentLogo]->GetWidth() * 0.5f),
-									(float)GetScreenHeight() * 0.5f - (float)(Logos[CurrentLogo]->GetHeight() * 0.5f) },
-									Fade(WHITE, Alpha));
+	if (Logos[CurrentLogo] && Logos[CurrentLogo]->IsReady())
+	{
+		const Vector2 Position = { 
+			Graphics::Get().GetHorizontalCenter() - (float)Logos[CurrentLogo]->GetWidth() * 0.5f * Graphics::Get().GetFactorArea().x,
+			Graphics::Get().GetVerticalCenter() - (float)Logos[CurrentLogo]->GetHeight() * 0.5f * Graphics::Get().GetFactorArea().y 
+		};
+
+		Logos[CurrentLogo]->Draw( Position, 0.0f, Graphics::Get().GetFactorArea().x, Fade(WHITE, Alpha));
+	}
 }
 
 

@@ -11,6 +11,8 @@ void TitleState::OnInit()
 {
 	TitleLogo.Load("Data/PsyTronTitle.png");
 
+	FontSize = 16 * (int)(Graphics::Get().GetFactorArea().y);
+
 	MenuOptions.push_back("Introduction");
 	MenuOptions.push_back(" Start Game ");
 	MenuOptions.push_back("   Credits  ");
@@ -42,9 +44,9 @@ void TitleState::OnUpdate()
 {
 	if (!ShowCredits)
 	{
-		if (IsKeyPressed(KEY_UP))
+		if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W))
 			CurrentIndex--;
-		if (IsKeyPressed(KEY_DOWN))
+		if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S))
 			CurrentIndex++;
 		CurrentIndex = (int)Clamp((float)CurrentIndex, 0.f, MenuOptions.size() - 1.f);
 	}
@@ -82,10 +84,13 @@ void TitleState::OnRender()
 	{
 		int i = 0, j = 0;
 
+		const int LeftColumn = Graphics::Get().GetHorizontalCenter() - 200 * (int)(Graphics::Get().GetFactorArea().x);
+		const int RightColumn = Graphics::Get().GetHorizontalCenter() + 100 * (int)(Graphics::Get().GetFactorArea().x);
+
 		for (auto& credit : credits)
 		{
 			DrawText(credit.c_str(),
-					 i % 2 == 0 ? Graphics::Get().GetHorizontalCenter() - 200 : Graphics::Get().GetHorizontalCenter() + 100,
+					 i % 2 == 0 ? LeftColumn : RightColumn,
 					 Graphics::Get().GetVerticalCenter() + FontSize * j,
 					 FontSize,
 					 SKYBLUE );
@@ -97,7 +102,18 @@ void TitleState::OnRender()
 	}
 
 	if (TitleLogo.IsReady())
-		TitleLogo.Draw({ 0, 0 }, Fade(WHITE, Alpha));
+		DrawTexturePro(TitleLogo, 
+					   { 0, 0, 
+					   (float)TitleLogo.width, 
+					   (float)TitleLogo.height},
+					   { Graphics::Get().GetHorizontalCenter() - TitleLogo.width * 0.5f * Graphics::Get().GetFactorArea().x,
+					     Graphics::Get().GetVerticalCenter() - TitleLogo.height * 0.5f * Graphics::Get().GetFactorArea().y,
+						TitleLogo.width * Graphics::Get().GetFactorArea().x,
+						TitleLogo.height * Graphics::Get().GetFactorArea().y },
+					   Vector2Zero(),
+					   0.0f,
+					   WHITE);
+		//TitleLogo.Draw({ 0, 0 }, Fade(WHITE, Alpha));
 
 	if ( Alpha >= 0.9f )
 	{

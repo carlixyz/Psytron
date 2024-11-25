@@ -2,34 +2,40 @@
 
 //#include <assert.h>
 
+#define SCALED_WINDOW 1	// If true, Define a special factor to scale X2 all sprites 
+
 bool Graphics::Init(ApplicationProperties* appProperties)
 {
- // Initialize the library 
+ // Initialize the library 23
 	bool Result = true;
 
-	//SetConfigFlags(FLAG_WINDOW_RESIZABLE);    
-	window = new raylib::Window(	appProperties->Width,
+	//SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+	Window = new raylib::Window(	appProperties->Width,
 									appProperties->Height, 
 									appProperties->ApplicationName);
-
 	SetTargetFPS(appProperties->FPS);
 
 	if (appProperties->Fullscreen) SwitchFullScreen();
 
-	windowArea = {	GetWindowPosition().x,
+	WindowArea = {	GetWindowPosition().x,
 					GetWindowPosition().y,
 					(float)appProperties->Width,
 					(float)appProperties->Height };
+
+#ifdef SCALED_WINDOW
+	ScaledFactor = { GetWindowArea().width / NativeArea.x,			// 1280 / 640 = 2
+						GetWindowArea().height / NativeArea.y };	// 960	/ 480 = 2;
+#endif // SCALED_WINDOW
 
 	return Result;
 }
 
 bool Graphics::Deinit()
 {
-	if (window)
+	if (Window)
 		CloseWindow();
 
-	delete window;
+	delete Window;
 
 	return true;
 }
@@ -37,25 +43,25 @@ bool Graphics::Deinit()
 void Graphics::SwitchFullScreen()
 {
 	// Don't mess with specs just toggle the state
-	window->ToggleFullscreen();
+	Window->ToggleFullscreen();
 
-	if ( !window->IsFullscreen())	//if (IsWindowFullscreen())
+	if ( !Window->IsFullscreen())	//if (IsWindowFullscreen())
 	{
 		// if we are full screen, then go back to the windowed size
-		window->SetSize((int)windowArea.width, (int)windowArea.height);
-		window->SetPosition((int)windowArea.x, (int)windowArea.y);
+		Window->SetSize((int)WindowArea.width, (int)WindowArea.height);
+		Window->SetPosition((int)WindowArea.x, (int)WindowArea.y);
 	}
 	else
 	{
 		// see what display we are on right now
 		int display = GetCurrentMonitor();
 		// if we are not full screen, set the window size to match the monitor we are on
-		window->SetSize(GetMonitorWidth(display), GetMonitorHeight(display));
+		Window->SetSize(GetMonitorWidth(display), GetMonitorHeight(display));
 	}
 }
 
 bool Graphics::GetCloseApplication()
 {
-	CloseApplication = window->ShouldClose();
+	CloseApplication = Window->ShouldClose();
 	return CloseApplication;
 }

@@ -17,7 +17,7 @@ Setup:
     - SetImage: News1
       # visible: true       # not visible by default thus not needed
       file: Data/Scenes/Intro/InfoNews_1.png
-      size: Proportion
+      # size: Proportion
     - SetFullHeight: News1
     - SetImage: News2
       file: "Data/Scenes/Intro/InfoNews_2.png"
@@ -115,7 +115,7 @@ InfoNews:
     time: 3.0
     unskip:
 
-  - 9: Finally SARS dispersion is the lowest since Pandemic beginings
+  - 9: Finally the Global warming is at its peak since the spring beginning
     time: 4.0
     unskip:
 
@@ -148,14 +148,14 @@ InfoNews:
 
   - ShowImage: News5
   - FadeOut: News4
-  - 9: Another unit sacrified itself spreading a big fire...
+  - 9: Then another model sacrified itself spreading a big fire...
   - 9: Resulting in a balance of 5 deaths and 12 injuries.
 
   - ShowImage: News6
   - FadeOut: News5
   # - FadeIn: News4
-  - 9: consulting BioTech part of InfoCom group about this
-  - 9: They expresed that all was just an isolated case
+  - 9: consulting the laboratories from DaliDavros group about this
+  - 9: The forum expresed that all was just an isolated case
 
   - ShowImage: News7
   - FadeOut: News6
@@ -178,7 +178,7 @@ InfoNews:
     
 IntroSchool:
   - 0: " "
-    time: 4.0
+    time: 2.0
     unskip:
   - 0: " "
     time: 2.0
@@ -236,9 +236,9 @@ GameOfLove:
   - 1: Toma, Estos son los que necesitamos para la entrega final.
   - 4: Genial, que  suerte que los conseguiste!
   - 1: Eh si claro...
-  - 4: Digo, clase final y luego se termina todo, es la ultima oportunidad
-  - 1: «Un momento, Dijo ultima oportunidad?»
-  - 1: «tengo que pensar algo rapido para darle charla!»
+  - 4: Digo, se agotan las oportunidades, ultima clase y luego se termino, 
+  - 1: «Un momento, Dijo oportunidad?»
+  - 1: «tengo que pensar algo para darle charla!»
   - 1: "«...»"
     time: 3.0
     unskip:
@@ -250,7 +250,7 @@ GameOfLove:
       - 4: En serio? puedes contarmelo a mi?
       - 1: Jejje por esta vez creo que puedo hacer una excepcion
       - 4: Genial y de que se trata entonces?
-      - 1: "emhhh..."
+      - 1: "Mmhhh..."
       - GoTo: GameOfWar
   
     - Option:
@@ -264,7 +264,7 @@ GameOfLove:
       - GoTo: GameOfWar
   
     - Option:
-      - 1: Disfrutando con nostalgia este momento por ultima vez.
+      - 1: Disfrutando con melancolia estos ultimos dias de clase.
       - 4: Wow, en serio eso es lo que piensas?
       - 1: Bueno, no siempre, pero me siento un poco asi estos dias
       - 4: "Vaya, no sabia que eras tan profundo\n No a todos les gusta mostrar sus emociones"
@@ -272,19 +272,19 @@ GameOfLove:
 
 
 GameOfWar:
-  - 1: "la verdad, no hacia nada en especial \nsolo me estoy despidiendo del instituto y todo esto."
+  - 1: "la verdad, no hacia nada en especial \nsolo me estoy despidiendo del instituto y eso."
   - 4: Nosotros estamos organizando con el grupo para ir a algun lado...
   - 4: Ah ahi viene Porter...
   - ShakeImage: School
   - MoveLeft: Porter
   - 5: Hey que pasa aca? de que estan hablando?
   - 1: "..."
-  - 5: Desde cuando son amigos? Tienes que pedir permiso antes eh
-  - 1: permiso? 
+  - 5: Vaya, vaya, Ustedes son amigos? No sabia que ya se conocian eh
+  - 1: Ehhh...
   - 5: Jajajja es broma, tranquilo, relajate chiquito.
   - MoveCenter: Amber
-  - 6: Que te pasa a ti Porter?
-  - 5: Ahh ehhhh... 
+  - 6: Y a ti que te pasa Porter?
+  - 5: Ehh no nada, nada... 
   - MoveLeft: Honey
   - 8: Creo que intenta hacerse el Bully de nuevo
   - 5: no, bueno, no es tan asi...
@@ -306,13 +306,13 @@ GameOfWar:
   - 4: Que cosa? que sucede?
   - 1: Hoy trabajo y tengo que ir hacia otro lugar.
   - 4: Ohhh Que pena
-  - 4: Bueno, Sera otro dia quiza.
+  - 4: Bueno, Quiza sera otro dia entonces.
   - 1: Por supuesto, Diviertanse, si me libero mas tarde, capaz vaya.
   - 4: Chiao.
   - StopMusic:
   - FadeOut: Ginger
-  - 1: «Ahora si, perdi mi ultima chance»
-  - 1: «Eso es todo, oficialmente soy un fracaso»
+  - 1: «Oh no, no, se esta yendo...»
+  - 1: «Ya se fue, demonios, que lento soy»
   - FadeOut: School
   - 1: Pero bueno, no tengo opcion, tengo que trabajar...
     time: 2.0
@@ -328,8 +328,8 @@ MiPrimeraChamba:
   - 1: Diablos, No Puedo creer lo que me acaba de pasar
   - MoveCenter: Ale2
   - PlayMusic: "Data/Sound/Cyber-Streets.mp3"
-  - 1: "No puedo tener tanta mala suerte"
-  - 1: "justo hablamos el ultimo dia \n y es justo cuando empiezo a trabajar"
+  - 1: «Que mala suerte»
+  - 1: "«justo el dia que hablamos \n y es justo cuando empiezo a trabajar tambien»"
     time: 6.0
   - FadeOut: Ale2
   - FadeIn: Ale
@@ -346,12 +346,11 @@ MiPrimeraChamba:
   - 1: "y no tiene sentido darle mas vueltas ahora"
   - MoveRightOut: Ale
   - SetLeft: TrackClose
-  - 1: "Hice lo que pude, no tenia alternativa, se me hace tarde"
-  - 1: "Es mi primer dia de trabajo y la verdad, necesito el dinero."
+  - 1: "Si, Hice lo que pude, no tenia alternativa, se me hace tarde"
+  - 1: "Es mi primer dia de trabajo y la verdad, necesito dinero."
   - FadeOut: NightCity
   - ScrollRightEnd: TrackClose
-  - 1: Lo unico que puedo hacer es aprender de esta experiencia
-  - 1: "Bueno y si eso fue todo, entonces... \n quiza resulto mejor de lo esperado"
+  - 1: Ahora lo unico que me queda es aprender de esta situacion
     time: 6.0
   - 1: Creo...
   - 1: Si, si, Mejor no mirar atras y concentrarme en el futuro...
@@ -395,6 +394,12 @@ MiPrimeraChamba:
       - 0: No tengo todo el dia!
       - JumpBack:
     - Option:
+      - 1: Entrar en el lugar
+      - 1: Oh, bueno
+      - 1: Alla vamos entonces...
+      - FadeOut: TrackClose
+      - GoTo: InsideLab
+    - Option:
       - 1: Ignorar la voz y huir del sitio a toda velocidad
       - 0: Espera adonde vas!? no venias a trabajar??
       - 1: Adios!
@@ -403,12 +408,7 @@ MiPrimeraChamba:
       - 1: Esto es muy sospechoso... parece una trampa!
       - 0: Haz lo que quieras, No tengo ganas de perder el tiempo 
       - JumpBack:
-    - Option:
-      - 1: Entrar en el lugar
-      - 1: Oh, bueno
-      - 1: Alla vamos entonces...
-      - FadeOut: TrackClose
-      - GoTo: InsideLab
+
 
 
 InsideLab:
@@ -467,7 +467,7 @@ QuickSpecs:
       time: 2.0
     - 2: Asi que no le prestes demasiada atencion nada mas...
     - 1: "..."
-      time: 3.0
+      time: 2.0
     - 2: Y por cierto, aqui abajo tenemos tu butaca de enlace...
       time: 3.0
       unskip:
@@ -481,24 +481,24 @@ QuickSpecs:
       time: 4.0
     - 1: "Ok"
       time: 3.0
-    - 2: Entonces, Esta todo claro hasta aqui?
-    - 2: Tienes alguna pregunta o duda?
-    - ChooseTalk :
+    - 2: Entonces, Esta todo claro hasta aqui o necesitas que repita algo?
+    - ChooseTalk:
         - Option:
-          - 1: Ehh Claro que si
-          - 1: Ahora que dice, Hay algo que no me quedo claro
-          - 2: Oh noo
-            time: 1.5
-            unskip:
-          - 2: Bueno, vamos de vuelta entonces...
-          - GoTo: QuickSpecs
+            - 1: Si señor, todo esta clarisimo
+            - 2: Excelente, veo que eres rapido
+            - MoveLeftOut: Pilsen
+            - 2: Pasemos a lo siguiente entonces
+              unskip:
+            - GoTo: EnterPsyTron
         - Option:
-          - 1: No señor, todo esta clarisimo
-          - 2: Excelente, ya estas aprendiendo
-          - MoveLeftOut: Pilsen
-          - 2: Pasemos a lo siguiente entonces
-            unskip:
-          - GoTo: EnterPsyTron
+            - 1: Ehhh momento, que fue lo ultimo que dijiste?
+            - 1: Hay algo que no me quedo claro
+            - 2: Oh noo
+              time: 1.5
+              unskip:
+            - 2: Bueno, vamos de vuelta entonces...
+            - GoTo: QuickSpecs
+
   
 EnterPsyTron:
     - ScrollVertical: RechargeStation

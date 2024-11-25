@@ -209,6 +209,7 @@ public:
 	enum EImageSize
 	{
 		ENormal = 0,
+		EScaleResolution,
 		EStrechProportion,
 		EExtend,
 		//EStrechAll

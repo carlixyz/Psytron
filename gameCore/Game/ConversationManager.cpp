@@ -16,14 +16,18 @@ void ConversationManager::Init(const std::string& conversationFile)
 	ChooseOption = 0;
 
 	FontResource = LoadFont("Data/NotoJp.fnt");
+	const float TextPadding = FontSize * 0.5f;
 
 	SetTextureFilter(FontResource.texture, TEXTURE_FILTER_BILINEAR);
 
-	TextBoxArea = { Graphics::Get().GetWindowArea().width * 0.025f,	Graphics::Get().GetWindowArea().height * 0.8f,
-					Graphics::Get().GetWindowArea().width * 0.95f, Graphics::Get().GetWindowArea().height * 0.2f - FontResource.baseSize * 0.5f };
+	SetTextLineSpacing((int)FontOffset);
 
-	TextArea = { TextBoxArea.x + FontResource.baseSize * 0.5f, TextBoxArea.y + (FontResource.baseSize * 0.2f),
-		TextBoxArea.x + FontResource.baseSize * 0.5f, TextBoxArea.y + (FontResource.baseSize * 0.2f) + FontResource.baseSize * 0.5f };
+	TextBoxArea = { TextPadding,	Graphics::Get().GetWindowArea().height - (FontSize * 4.5f),
+			Graphics::Get().GetWindowArea().width - FontSize, FontSize * 4 };
+
+	TextArea = {	TextBoxArea.x + TextPadding, TextBoxArea.y + FontSize * 0.2f,
+					TextBoxArea.x + TextPadding, TextBoxArea.y + FontSize };
+
 
 	YAML::Node dialogFile = YAML::LoadFile(conversationFile);	// load file
 
@@ -738,8 +742,9 @@ void ConversationManager::Render()
 				}
 			}
 			
-			DrawTextEx(FontResource, message.c_str(), Vector2{ TextArea.width, 
-					   TextArea.height + counter * FontResource.baseSize * 0.5f }, FontSize, 1, color);
+			DrawTextEx(FontResource, message.c_str(),
+					   Vector2{ TextArea.width, TextArea.height + counter * FontOffset },
+					   FontSize, 1, color);
 
 			counter++;
 		}

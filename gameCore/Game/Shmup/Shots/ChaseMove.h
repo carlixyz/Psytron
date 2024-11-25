@@ -2,12 +2,11 @@
 
 #include <raylib-cpp.hpp>
 #include <raymath.h>
-#include "../../../Graphics/Graphics.h"
 #include "../Bullet.h"
 
 struct ChaseMove : public BaseBehaviour
 {
-	ChaseMove(Vector2 initPosition, Vector2 targetPosition, float speed = 150, bool continousTracking = false) :
+	ChaseMove(Vector2 initPosition, Vector2 targetPosition, float speed = 250, bool continousTracking = false) :
 		InitPosition(initPosition), 
 		TargetPosition(targetPosition), 
 		Speed(speed), 
