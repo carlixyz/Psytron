@@ -15,7 +15,6 @@
 
 Player::Player()
 {
-
 	Speed = 300.f * Graphics::Get().GetFactorArea().y;
 	Position = Vector2((float)Graphics::Get().GetHorizontalCenter(), (float)Graphics::Get().GetVerticalCenter());
 
@@ -36,46 +35,54 @@ Player::Player()
 		Position.y + ColliderOffset.y,
 		FrameOutput.width * 0.3f, FrameOutput.height * 0.3f
 	};
+
+	Image imBase = LoadImageFromTexture(GetAsset("Sprites"));
+	Image imCopy = ImageCopy(imBase);
+	ImageColorBrightness(&imCopy, +1000);
+
+	SpriteBright.Load(imCopy);	LoadTextureFromImage(imCopy);
 }
 
 void Player::Update()
 {
 	CurrentDelay -= GetFrameTime();
+	OldPosition = Position;
+	goDirection = 0;
+	slowMove = 1.0f;
 
-	Vector2 OldPosition = Position;
-	int goDirection = 0;
-
+	if (IsKeyDown(KEY_SPACE) || IsKeyDown(KEY_LEFT_CONTROL))
+	{
+		Shoot();
+		slowMove = ++framesHoldingShot > 5 ? 0.4f : 1.0f;
+	}
 
 	if(IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT))
 	{
-		Position.x -= Speed * GetFrameTime();
+		Position.x -= Speed * GetFrameTime() * slowMove;
 		goDirection = -1;
 	}
 
 	if (IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT))
 	{
-		Position.x += Speed * GetFrameTime();
+		Position.x += Speed * GetFrameTime() * slowMove;
 		goDirection = 1;
 	}
 
 	if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP))
 	{
-		Position.y -= Speed * GetFrameTime();
+		Position.y -= Speed * GetFrameTime() * slowMove;
 	}
 
 	if (IsKeyDown(KEY_S) || IsKeyDown(KEY_DOWN))
 	{
-		Position.y += Speed * GetFrameTime();
+		Position.y += Speed * GetFrameTime() * slowMove;
 	}
 
-
-	if (IsKeyDown(KEY_SPACE))
+	if (IsKeyReleased(KEY_SPACE) && IsKeyReleased(KEY_LEFT_CONTROL))
 	{
-		float HorizontalOffset = Position.x - OldPosition.x;
-		float Variation = (HorizontalOffset > 0) ? 1.0f : ((HorizontalOffset < 0) ? -1.f : 0.f);
-
-		Shoot(Variation);
+		framesHoldingShot = 0;
 	}
+
 
 	CurrentFrame = (int)(GetTime() * MODULE_HALF);
 	CurrentFrame %= 4;
@@ -94,22 +101,16 @@ void Player::Update()
 	CollisionRec.x = Position.x + ColliderOffset.x;
 	CollisionRec.y = Position.y + ColliderOffset.y;
 
+	//static bool justOnce = true;
 	if (IsKeyDown(KEY_ONE))
+	//if (IsKeyDown(KEY_ONE) && justOnce)
 	{
-		
+		//justOnce = false;
 		//Particles::Get().Create(Vector2Add(Position, Vector2(21, 0)), BehaviourType::ELockShot);
-		Particles::Get().Create(Vector2Add(Position, ShotInitialOffset), BehaviourType::ELockShot);
+		//Particles::Get().Create(Vector2Add(Position, ShotInitialOffset), BehaviourType::ELockShot);
+		Particles::Get().Create(Vector2Add(Position, ShotInitialOffset), BehaviourType::EExplotion);
 	}
 
-	if (IsKeyDown(KEY_TWO))
-	{
-		Particles::Get().Create(Vector2Add(Position, Vector2(21, 0)), BehaviourType::ESeekShot);
-	}
-
-	if (IsKeyDown(KEY_THREE))
-	{
-		Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::EMultiShot); ///
-	}
 
 	if (IsKeyDown(KEY_FOUR))
 	{
@@ -140,17 +141,19 @@ void Player::Update()
 	{
 		Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::EArchShot);
 	}
+	//*/
 }
 
 
 
 void Player::Render()
 {
+	/*
 	std::stringstream stream;
 	stream << "Position " << std::fixed << std::setprecision(2) << Position.x << " " << Position.y;
 	std::string Text = stream.str();
-
 	DrawText(Text.c_str(), 400, 400, 16, WHITE);
+	*/
 
 	//if(CheckCollisionPointRec(Position, Graphics::Get().GetWindowArea()))
 	//	DrawRectangle((int)Position.x, (int)Position.y, 42, 64, WHITE);
@@ -163,29 +166,21 @@ void Player::Render()
 	//DrawRectanglePro({ Position.x, Position.y, 32, 64}, Vector2Zero(), 0.f, ALPHARED);
 	DrawRectanglePro(CollisionRec, Vector2Zero(), 0.f, ALPHARED);
 
-	//DrawCircle(Position.x, Position.y, 3, VIOLET);
-	//DrawCircle(Position.x + FrameOutput.width, Position.y + FrameOutput.height, 3, VIOLET);
-
-	//DrawCircle(Position.x + FrameOutput.width * 0.3f, 
-	//		   Position.y + FrameOutput.height * 0.3f, 3, RED);
-
-	//DrawCircle(Position.x + FrameOutput.width * 0.6f,
-	//		   Position.y + FrameOutput.height * 0.6f, 3, RED);
-
+	//DrawCircle(AimOffset.x, AimOffset.y, 5, RED);
 }
 
-void Player::Shoot(float displacement)
+void Player::Shoot()
 {
 	// https://www.youtube.com/watch?v=QQ3Yub9So2k&t=202s
 
-	if (CurrentDelay > 0.0f)
-		return;
+	if (CurrentDelay > 0.0f)	return;
 
 	CurrentDelay = DelayTime;
 
-	ShotAngle = Clamp(ShotAngle + displacement * 100, -70, 70) * 0.5f;		// Init Angle
-	ShotRotation = Clamp(ShotRotation + displacement, -1.0f, 1.0f) * 0.5f;	// Rotation
-	Particles::Get().CreatePlayerShot(Vector2Add(Position, ShotInitialOffset), ShotAngle, ShotRotation);
+
+	Particles::Get().CreatePlayerShot(Vector2Add(Position, ShotInitialOffset));
+
+
 
 	//Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::ELinearShot);		/// -----
 	//Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::ELockShot);		/// -----
@@ -196,5 +191,5 @@ void Player::Shoot(float displacement)
 	//Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::EHanaShot);		/// -----
 	//Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::ERingShot);		// ----- <
 	//Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::EStarShot);		// ----- <
-	//Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::EArchShot);		/// -----		
+	//Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::EArchShot);		/// -----
 }

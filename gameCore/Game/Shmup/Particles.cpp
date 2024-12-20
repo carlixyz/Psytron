@@ -2,7 +2,9 @@
 #include "Bullet.h"
 #include "Entity.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "Shots/SimpleMove.h"
+#include "Shots/AimMove.h"
 #include "Shots/ChaseMove.h"
 #include "Shots/LockOnMove.h"
 #include "Shots/ThrottleMove.h"
@@ -10,8 +12,12 @@
 #include "Shots/PetalMove.h"
 #include "Shots/DelayedMove.h"
 #include "Shots/BrakeMove.h"
+#include "Shots/Explotion.h"
 #include <raymath.h>
 #include <math.h>
+
+#include <../../../Utility/Utils.h>
+
 
 //#include <memory>
 
@@ -35,36 +41,25 @@ void Particles::OnDeinit()
 	Bullets.clear();
 }
 
-void Particles::CreatePlayerShot(Vector2 position, float InitAngle, float RotationDelta)
+void Particles::CreatePlayerShot(Vector2 startPosition)
 {
 	Bullet& bulletRef = *RequestBullet();
 
-	const float speedFactor{ Graphics::Get().GetFactorArea().y };
-
-	//bulletRef.SetType(new SimpleMove(position));
-	//Vector2 center = Vector2( (float)Graphics::Get().GetHorizontalCenter(), (float)Graphics::Get().GetVerticalCenter());
-	//bulletRef.SetType(new LockOnMove(position, center, 500 * speedFactor));
-
-
 	if (CurrentTarget == nullptr)
-	{
-		bulletRef.SetType(new RotatedMove(position, InitAngle, 1000 * speedFactor, RotationDelta ));
-	}
+		bulletRef.SetType(new RotatedMove(startPosition, 0.f, 500 * speedFactor));
 	else
-	{
-		bulletRef.SetType(new LockOnMove(position,
-										 CurrentTarget->Position, 
+		bulletRef.SetType(new LockOnMove(startPosition,
+										 CurrentTarget->Position,
 										 500 * speedFactor,
-										 10.f / speedFactor));
-	}
+										 (speedFactor <= 1.0f ? 10.f : 5.0f)) );
 
+	bulletRef.Type = EntityType::EPlayerShot;
 	bulletRef.Active = true;
 }
 
 void Particles::Create(Vector2 position, BehaviourType bType)
 {
 	//----------------------------------------------
-// 
 	/// Bullet& bulletRef = *RequestBullet();
 	static float ShotInitialAngle = 0;
 
@@ -74,9 +69,10 @@ void Particles::Create(Vector2 position, BehaviourType bType)
 		{
 			Bullet& bulletRef = *RequestBullet();
 			bulletRef.SetType(new SimpleMove(position));
+			bulletRef.Type = EntityType::EEnemyShot;
 			bulletRef.Active = true;
 		}
-			break;
+		break;
 
 		case BehaviourType::ELockShot:					/// <-
 		{
@@ -87,22 +83,40 @@ void Particles::Create(Vector2 position, BehaviourType bType)
 			else
 				bulletRef.SetType(new LockOnMove(position, Vector2(position.x, -1000), 250));
 
+			bulletRef.Type = EntityType::EEnemyShot;
 			bulletRef.Active = true;
 		}
 		break;
+
+		case BehaviourType::EAimShot:					/// <-
+		{
+			Bullet& bulletRef = *RequestBullet();
+
+			if (PlayerRef != nullptr)
+				bulletRef.SetType(new AimMove(position, PlayerRef->Position));
+			else
+				bulletRef.SetType(new AimMove(position, Vector2(position.x, 1000)));
+
+			bulletRef.Type = EntityType::EEnemyShot;
+			bulletRef.Active = true;
+		}
+		break;
+
 
 		case BehaviourType::ESeekShot:					/// <-
 		{
 			Bullet& bulletRef = *RequestBullet();
 
 			if (PlayerRef != nullptr)
-				bulletRef.SetType(new ChaseMove(Vector2(200, 100), PlayerRef->Position));
+				bulletRef.SetType(new ChaseMove(position, PlayerRef->Position, 1000.f));
 			else
 				bulletRef.SetType(new ChaseMove(position, Vector2(position.x, 1000)));
 
+			bulletRef.Type = EntityType::EEnemyShot;
 			bulletRef.Active = true;
 		}
 		break;
+
 		case BehaviourType::EMultiShot:					 /// <-
 		{
 			int BurstCount = 8;
@@ -116,11 +130,13 @@ void Particles::Create(Vector2 position, BehaviourType bType)
 				Bullet& bulletRef = *RequestBullet();
 				bulletRef.SetType(new SimpleMove(position, CurrentBurstAngle, 300));
 				CurrentBurstAngle += BurstAngleOffset;
+				bulletRef.Type = EntityType::EEnemyShot;
 				bulletRef.Active = true;
 			}
 		}
-			break;
-		case BehaviourType::ESpiralShot:			/// <-
+		break;
+
+		case BehaviourType::ESpiralShot:				/// <-
 		{
 			float ShotAngleOffset = 10.f;
 			//float ShotAngleOffset = 20.f;
@@ -132,10 +148,11 @@ void Particles::Create(Vector2 position, BehaviourType bType)
 
 			ShotInitialAngle += ShotAngleOffset;
 
+			bulletRef.Type = EntityType::EEnemyShot;
 			bulletRef.Active = true;
-
 		}
-			break;
+		break;
+
 		case BehaviourType::EMultiSpiralShot:
 		{
 			int BurstCount = 3;
@@ -154,11 +171,14 @@ void Particles::Create(Vector2 position, BehaviourType bType)
 				bulletRef.SetType(new SimpleMove(position, CurrentBurstAngle, 100));
 				//bulletRef.SetType(new ThrottleMove(position, CurrentBurstAngle, 350, 5, 100));
 				CurrentBurstAngle += BurstAngleOffset;
+
+				bulletRef.Type = EntityType::EEnemyShot;
 				bulletRef.Active = true;
 			}
 
 		}
 		break;
+
 		case BehaviourType::ERingShot:
 		{
 			int BurstCount = 32;
@@ -170,8 +190,9 @@ void Particles::Create(Vector2 position, BehaviourType bType)
 			for (int i = 0; i < BurstCount; i++)
 			{
 				Bullet& bulletRef = *RequestBullet();
-				bulletRef.SetType(new ThrottleMove(position, CurrentBurstAngle, 350, -10, 50));
+				bulletRef.SetType(new ThrottleMove(position, CurrentBurstAngle, 500, -10, 50));
 				CurrentBurstAngle += BurstAngleOffset;
+				bulletRef.Type = EntityType::EEnemyShot;
 				bulletRef.Active = true;
 			}
 		}
@@ -195,10 +216,11 @@ void Particles::Create(Vector2 position, BehaviourType bType)
 				bulletRef.SetType(new ThrottleMove(position, CurrentBurstAngle, 50, 1 - extraSpeed, 25)); // Classic Star
 
 				CurrentBurstAngle += BurstAngleOffset;
+				bulletRef.Type = EntityType::EEnemyShot;
 				bulletRef.Active = true;
 			}
 		}
-			break;
+		break;
 
 		case BehaviourType::EHanaShot:
 		{
@@ -219,13 +241,17 @@ void Particles::Create(Vector2 position, BehaviourType bType)
 				bulletRefRight.SetType(new PetalMove(position, CurrentBurstAngle, 300, AngleFactor)); // 300, 2.0f)); // smaller leaves
 				bulletRefLeft.SetType(new PetalMove(position, CurrentBurstAngle, 300, -AngleFactor));
 
+				bulletRefRight.Type = EntityType::EEnemyShot;
+				bulletRefLeft.Type = EntityType::EEnemyShot;
+
 				bulletRefRight.Active = true;
 				bulletRefLeft.Active = true;
 
 				CurrentBurstAngle += BurstAngleOffset;
 			}
 		}
-			break;
+		break;
+
 		case BehaviourType::EArchShot:
 		{
 			int BurstCount = 120;
@@ -270,19 +296,25 @@ void Particles::Create(Vector2 position, BehaviourType bType)
 					BaseBehaviour* delayedBullet = new DelayedMove(position, CurrentAngle, 50.0f, wrappedBullet, 1.5f);
 					bulletRef.SetType(new BrakedMove(position, CurrentAngle, 200, delayedBullet, 10.0f)); // + complex
 
+					bulletRef.Type = EntityType::EEnemyShot;
 					bulletRef.Active = true;
 
 					CurrentAngle += BurstAngleOffset;
 				}
 			}
 		}
-			break;
-		case BehaviourType::EEnemyShot:
-			break;
-		case BehaviourType::EPlayerShot:
-			break;
-		case BehaviourType::EExplosion:
-			break;
+		break;
+
+		case BehaviourType::EExplotion:
+		{
+			Bullet& bulletRef = *RequestBullet();
+			int randValue = GetRandomValue(0, 360);
+			bulletRef.SetType(new Explotion(position, 1.0f, (float)randValue));
+			bulletRef.Type = EntityType::EOther;
+			bulletRef.Active = true;
+		}
+		break;
+
 		default:
 			break;
 	}
@@ -313,14 +345,37 @@ void Particles::Disable(Bullet* bullet)
 	bullet->Active = false;
 }
 
-void Particles::OnUpdate()
+void Particles::OnUpdate(std::vector<Enemy*>& enemies)
 {
-
 	for (Bullet* bullet : Bullets)
 	{
 		if (bullet->Active)
 		{
 			bullet->Update();
+			
+			switch (bullet->Type)
+			{
+				case EntityType::EPlayerShot:
+					for (Enemy* enemy : enemies)
+					{
+						if (enemy->Active && CheckCollisionRecs(enemy->CollisionRec, bullet->CollisionRec))
+						{
+							enemy->ApplyDamage();//enemy->DoDamageFlash = true;
+							bullet->Active = false;
+						}
+					}
+					break;
+
+				case EntityType::EEnemyShot:
+					if (PlayerRef && CheckCollisionRecs(PlayerRef->CollisionRec, bullet->CollisionRec))
+					{
+
+					}
+					break;
+
+				default:
+					break;
+			}
 		}
 	}
 }

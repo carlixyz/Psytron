@@ -7,7 +7,10 @@ void BootState::OnInit()
 {
 	//* Add any of your logos
 	Logos.push_back(new raylib::TextureUnmanaged("raylib_logo.png"));
+	Logos.push_back(new raylib::TextureUnmanaged("Data/DaliDavros.png"));
 	Logos.push_back(new raylib::TextureUnmanaged("Data/Sun.png"));
+	Logos.push_back(new raylib::TextureUnmanaged("Data/InderFort.png"));
+	Logos.push_back(new raylib::TextureUnmanaged("Data/NazGaona.png"));
 	//Game::Get().States.ChangeState(Game::Get().States.titleState);
 }
 

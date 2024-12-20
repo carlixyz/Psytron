@@ -46,6 +46,15 @@ void ApplicationProperties::LoadConfiguration(const std::string filename)
 								properties["_Fullscreen"].as<bool>() :
 								false;
 
+			DebugMode		= properties["_DebugMode"].IsDefined() ?
+								properties["_DebugMode"].as<bool>() :
+								false;
+
+			SkipIntro		= properties["_SkipIntro"].IsDefined() ?
+								properties["_SkipIntro"].as<bool>() :
+								false;
+
+
 			DEBUG_COUT("ApplicationName \t-> "<< ApplicationName << "\n");
 			DEBUG_COUT("Width \t\t\t-> "	<< Width << "\n");
 			DEBUG_COUT("Height \t\t\t-> "	<< Height << "\n");

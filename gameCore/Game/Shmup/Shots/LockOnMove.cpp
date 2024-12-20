@@ -44,7 +44,6 @@ void LockOnMove::DoUpdate()
 	/// Direction = Vector2Subtract(TargetPosition, BulletOwner->Position);
 	/// Rotation = std::atan2(-Direction.x, Direction.y);
 	/// 
-	/// 
 	const float timeLapse = GetFrameTime();
 
 	LifeTime -= timeLapse;
@@ -60,6 +59,7 @@ void LockOnMove::DoUpdate()
 
 	///----------------------------------------------------------------- ///
 	AngAcumulation = Lerp(AngAcumulation, AngSpeed, timeLapse);
+
 	//Direction = Vector2Lerp(Forward, Distance, AngSpeed * timeLapse);
 	Direction = Vector2Lerp(Forward, Distance, AngAcumulation * timeLapse);
 
@@ -89,7 +89,6 @@ void LockOnMove::DoRender()
 					   Vector2Scale(BulletOwner->SpriteScaled, 0.5f), //BulletOwner->SpriteSize,
 					   Rotation * RAD2DEG,
 					   WHITE);
-
 
 		//DrawCircle(BulletOwner->Position.x, BulletOwner->Position.y, 3, VIOLET);
 	}

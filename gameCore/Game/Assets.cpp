@@ -31,6 +31,22 @@ void Assets::LoadSprites()
 		};
 
 	Load("Sprites", "Data/Sprites/VisualSprites.png");
+	Load("Prop", "Data/Sprites/Car5.png");
+
+	Load("BarricadeA", "Data/Sprites/BarricadeA.png");	// ok
+	Load("BarricadeB", "Data/Sprites/BarricadeB.png");	// okish
+	Load("BarricadeC", "Data/Sprites/BarricadeC.png");	// ok
+	Load("BarricadeD", "Data/Sprites/BarricadeD.png");	// Meh
+	Load("BarricadeE", "Data/Sprites/BarricadeE.png");	// Nice!
+
+	Load("Truck", "Data/Sprites/Truck.png");// Ok
+	Load("Car1", "Data/Sprites/Car1.png");	// Ok
+	Load("Car2", "Data/Sprites/Car2.png");	// Ok
+	Load("Car3", "Data/Sprites/Car3.png");	// No, too dark
+	Load("Car4", "Data/Sprites/Car4.png");	// Ok
+	Load("Car5", "Data/Sprites/Car5.png");	// Ok
+	//Load("Car6", "Data/Sprites/Car6.png");	// NO!
+	//Load("Car7", "Data/Sprites/Car7.png");	// NO!
 	//BulletOwner->Sprite = new raylib::Texture2D("Data/Sprites/VisualSprites.png");
 }
 

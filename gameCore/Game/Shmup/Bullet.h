@@ -4,6 +4,7 @@
 #include "../../Graphics/Graphics.h"
 #include "Entity.h"
 #include "../Assets.h"
+#include "../Game.h"
 
 #define ALPHARED CLITERAL(Color){ 230, 41, 55, 128 }     // Red
 
@@ -11,7 +12,7 @@ struct Player;
 
 struct Bullet : public Entity
 {
-	Bullet() : Damage(10), IsHit(false), Active(false)
+	Bullet() : Damage(10)
 	{
 		SpriteSize.x = (float)(GetAsset("Sprites").width / 8);
 		SpriteSize.y = (float)(GetAsset("Sprites").height / 8);
@@ -37,8 +38,8 @@ struct Bullet : public Entity
 		{
 			Behaviour->DoRender();
 
-			//if (bDebug)
-				//DoDebug();
+			if (Game::Get().IsDebugMode())
+				DoDebug();
 		}
 	}
 
@@ -46,25 +47,16 @@ struct Bullet : public Entity
 	{
 		DrawRectangleRec(CollisionRec, ALPHARED);
 
-		//DrawRectanglePro(CollisionRec, Vector2Zero(), Angle, ALPHARED);
-
 		DrawCircle((int)(CollisionRec.x + CollisionRec.width * 0.5f),
 				   (int)(CollisionRec.y + CollisionRec.height * 0.5f),
 				   2, MAGENTA);
-
-		//DrawRectangleV(Vector2Subtract(Position, Vector2Scale(SpriteSize, 0.125f)),
-		//			   Vector2Scale(SpriteSize, 0.25f), ALPHARED);
-
-
-		//DrawCircle(BulletOwner->Position.x, BulletOwner->Position.y, 10, ALPHARED);
 	}
 
 
 	float Radius				{ 5 };
 	unsigned short Damage;
 
-	bool IsHit;
-	bool Active;
+	EntityType Type = EntityType::EOther;
 
 //private:
 	//bool bDebug{};

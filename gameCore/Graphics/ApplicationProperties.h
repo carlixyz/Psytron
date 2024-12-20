@@ -5,14 +5,16 @@
 struct ApplicationProperties
 {
 	std::string ApplicationName = "Test 1";
-	std::string DialogFilePath = "";
+	std::string DialogFilePath	= "";
 
-	unsigned Width = 640;
-	unsigned Height = 480;
-	unsigned Bits = 32;
-	unsigned FPS = 60;
-	bool Fullscreen = false;
+	unsigned Width				= 640;
+	unsigned Height				= 480;
+	unsigned Bits				= 32;
+	unsigned FPS				= 60;
 
+	bool Fullscreen				= false;
+	bool DebugMode				= false;
+	bool SkipIntro				= false;
 
 	void LoadConfiguration(const std::string filename);
 };

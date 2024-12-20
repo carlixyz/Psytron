@@ -93,6 +93,12 @@
     <ClCompile Include="Game\Shmup\Shots\PetalMove.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="Game\Shmup\Shots\Explotion.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Shmup\Shots\AimMove.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\States\FSM.h">
@@ -420,6 +426,15 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="Game\Shmup\Shots\PetalMove.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Shmup\Shots\Explotion.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Shmup\StepAction.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Shmup\Shots\AimMove.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

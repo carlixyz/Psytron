@@ -41,6 +41,7 @@ public:
 
 	inline int GetHorizontalCenter()	{ return (int)(GetWindowArea().width * 0.5f); }
 	inline int GetVerticalCenter()		{ return (int)(GetWindowArea().height * 0.5f); }
+	inline Vector2 GetScreenCenter()	{ return Vector2(GetWindowArea().width * 0.5f, GetWindowArea().height * 0.5f); }
 
 protected:
 	Graphics() { ; }					// Protected Constructor

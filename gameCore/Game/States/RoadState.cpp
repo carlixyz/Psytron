@@ -1,8 +1,11 @@
 #include "RoadState.h"
 #include "../../Graphics/Graphics.h"
+#include "../Assets.h"
 #include "../Shmup/Player.h"
+#include "../Shmup/Enemy.h"
 #include "../Shmup/Bullet.h"
 #include "../Shmup/Particles.h"
+#include "../Shmup/StepAction.h"
 #include <list>
 
 
@@ -12,9 +15,38 @@ void RoadState::OnInit()
 	Particles::Get().OnInit();
 	Particles::Get().PlayerRef = player;
 
+	std::vector<IStepAction*> StepActions = {
+		new StepMoveTowards(Vector2(128, 256)),
+		new StepShoot(BehaviourType::EArchShot, 2, 0.15f),
+		new StepWait(5.0f),
+		new StepShoot(BehaviourType::EAimShot, 5, 0.5f),
+		new StepShoot(BehaviourType::ESeekShot, 5, 0.5f),
+		//new StepShoot(BehaviourType::EHanaShot, 50, 0.25f),
+		//new StepWait(1.0f),
+		//new StepShoot(BehaviourType::EMultiSpiralShot, 30, 0.1f),
+		new StepWait(1.0f),
+		new StepMoveAbovePlayer(350.f),
+		new StepWait(1.0f),
+		new StepShoot(BehaviourType::ERingShot, 3, 1.0f),
+		new StepShoot(BehaviourType::EStarShot, 1, 0.1f),
+		new StepWait(1.5f),
+		new StepMoveTowards(),
+		new StepWait(1.5f),
+		new StepShoot(BehaviourType::EMultiShot, 5, 0.15f),
+		new StepWait(1.0f),
+	};
+
+	//Enemies.push_back(new Bungie(Graphics::Get().GetScreenCenter(), StepActions));
+	EnemyProperties enemySettings;
+
+	//Enemies.push_back(new Enemy(Graphics::Get().GetScreenCenter(), StepActions, Vector2(1,1)));
+	Enemies.push_back(new Enemy(enemySettings, StepActions));
+// 
+	//Enemies.push_back(new Bungie());
+
+	//enemy = new Enemy();
+
 	//Data / Scenes / Track / Track_Side.png
-	//CityBG = new raylib::TextureUnmanaged("Data/Scenes/Highway/MacroCityBG_Undot.png");
-	//CityBG = new raylib::TextureUnmanaged("Data/Scenes/Highway/MacroCityBG_Blue_Dot.png");
 	CityBG = new raylib::TextureUnmanaged("Data/Scenes/Highway/MacroCityBG_Blue_SmartDott.png");
 	CityHighway = new raylib::TextureUnmanaged("Data/Scenes/Highway/MacroCityRoad.png");
 
@@ -44,6 +76,14 @@ void RoadState::OnDeinit()
 
 	delete CityBG;
 	delete CityHighway;
+
+	for (Enemy* enemy : Enemies)
+	{
+		delete enemy;
+	}
+
+	Enemies.clear();
+
 }
 
 void RoadState::OnUpdate()
@@ -51,8 +91,15 @@ void RoadState::OnUpdate()
 	BGSource.y -= BGSpeed * GetFrameTime();
 	RoadSource.y -= RoadSpeed * GetFrameTime();
 
-	Particles::Get().OnUpdate();
 	player->Update();
+
+	for (Enemy* enemy : Enemies)
+	{
+		if (enemy->Active) 
+			enemy->Update();
+	}
+
+	Particles::Get().OnUpdate(Enemies);
 }
 
 void RoadState::OnRender()
@@ -66,10 +113,20 @@ void RoadState::OnRender()
 			 12,
 			 SKYBLUE);
 
+
+	OnIntroRender();
+	
 	Particles::Get().OnRender();
 
-
 	player->Render();
+
+	for (Enemy* enemy : Enemies)
+	{
+		if (enemy->Active)
+			enemy->Render();
+	}
+
+
 }
 
 void RoadState::OnPause()
@@ -78,4 +135,16 @@ void RoadState::OnPause()
 
 void RoadState::OnResume()
 {
+}
+
+void RoadState::OnIntroUpdate()
+{
+}
+
+void RoadState::OnIntroRender()
+{
+
+	DrawTextureEx(Assets::Get().GetSprite("Truck"), Vector2(200, -200), 0.f, 2.f, WHITE);
+
+	DrawTextureEx(Assets::Get().GetSprite("Prop"), Vector2(200, 200), 0.f, 2.f, WHITE);
 }

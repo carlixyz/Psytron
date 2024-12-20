@@ -19,8 +19,9 @@ public:
 	void Render();
 	bool Deinit();
 
-	inline bool HasFinished() { return finish; }
-
+	inline bool HasFinished()	{ return finish; }
+	inline bool IsDebugMode()	{ return appProperties.DebugMode; }
+	inline bool SkipIntro()		{ return appProperties.SkipIntro; }
 protected:
 	Game() { ; } // Protected Constructor
 };

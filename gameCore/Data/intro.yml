@@ -153,19 +153,18 @@ InfoNews:
 
   - ShowImage: News6
   - FadeOut: News5
-  # - FadeIn: News4
   - 9: consulting the laboratories from DaliDavros group about this
   - 9: The forum expresed that all was just an isolated case
 
   - ShowImage: News7
   - FadeOut: News6
-  - 9: due to an usual lack of prefecture's general checks 
+  - 9: due to an usual lack of prefecture's general checks
   - 9: by improper maintenance of the respective subsystems
 
   - ShowImage: News8
   - FadeOut: News7
   - 9: and no way related to deviations in automaton learning # Neural link automaton
-  - 9: as the unfounded rumors of some dissident minorities suggest.  
+  - 9: as the unfounded rumors of some dissident minorities suggest.
 
   - ShowImage: News9
   - FadeOut: News8
@@ -190,14 +189,14 @@ IntroSchool:
   - FadeIn: Ale
   - 1: "Soy Alex, tengo 21 años y este es mi ultimo mes \nen el instituto tecnologico."
   - FadeIn: School
-  - 1: "Espere años para certificarme pero ahora... \ntengo pensamientos mezclados."
+  - 1: "Espere años para certificarme y ahora... \ntengo pensamientos mezclados."
   - 1: "Por fin se terminan los examenes y nunca mas tendre que estudiar \ndurante horas para aprobar asignaturas!"
   - 1: Pero por otro lado siento que voy a extrañar algunas cosas...
   - FadeOut: Ale
-  - 1: "Este lugar tenia una energia especial"
+  - 1: "Este lugar tiene una energia especial"
   - SetLeftOut: Hoppy
-  - 1: "Los chistes de Hoppy, mis tontos amigos, locas fiestas Uff... \n Sin palabras!"
-  - 1: Siento que estoy dejando aqui un pedazo de mi para siempre...
+  - 1: "Los chistes de Hoppy, mis tontos amigos, locas fiestas Uff... \n Muchas cosas intensas!"
+  - 1: Creo que estoy dejando aqui una parte de mi...
   - MoveCenter: Hoppy
 
   - SetLeftOut: Ginger2
@@ -252,7 +251,14 @@ GameOfLove:
       - 4: Genial y de que se trata entonces?
       - 1: "Mmhhh..."
       - GoTo: GameOfWar
-  
+    
+    - Option:
+      - 1: Disfrutando con melancolia estos ultimos dias de clase.
+      - 4: Wow, en serio eso es lo que piensas?
+      - 1: Bueno, no siempre, pero me siento un poco asi estos dias
+      - 4: "Vaya, no sabia que eras tan profundo\n No a todos les gusta mostrar sus emociones"
+      - GoTo: GameOfWar
+    
     - Option:
       - 1: Planificando a que fiestas voy a ir esta noche
       - 4: Ohh vaya, vaya, pero que loco!
@@ -261,13 +267,6 @@ GameOfLove:
       - 1: "mhhh..."
       - 1: A ningun lugar realmente, tengo que trabajar
       - 4: infelizmente jaja
-      - GoTo: GameOfWar
-  
-    - Option:
-      - 1: Disfrutando con melancolia estos ultimos dias de clase.
-      - 4: Wow, en serio eso es lo que piensas?
-      - 1: Bueno, no siempre, pero me siento un poco asi estos dias
-      - 4: "Vaya, no sabia que eras tan profundo\n No a todos les gusta mostrar sus emociones"
       - GoTo: GameOfWar
 
 
@@ -327,8 +326,8 @@ MiPrimeraChamba:
   - ScrollRightEnd: NightCity
   - 1: Diablos, No Puedo creer lo que me acaba de pasar
   - MoveCenter: Ale2
-  - PlayMusic: "Data/Sound/Cyber-Streets.mp3"
   - 1: «Que mala suerte»
+  - PlayMusic: "Data/Sound/Cyber-Streets.mp3"
   - 1: "«justo el dia que hablamos \n y es justo cuando empiezo a trabajar tambien»"
     time: 6.0
   - FadeOut: Ale2
@@ -364,8 +363,8 @@ MiPrimeraChamba:
     time: 5.0
     unskip:
   - SetRight: TrackOpen
-  - 1: Deberia tener un logo para identificar la empresa
-  - 1: o algo aunque sea para saber quienes son los dueños
+  - 1: Creo que este era el logo que identifica la empresa
+  - 1: Aunque no esta muy claro quienes son los dueños
     time: 3.0
   - 1: No se porque en el instructivo insistian con tanta confidencialidad
   - 1: Que cosa mas misteriosa...
@@ -381,7 +380,7 @@ MiPrimeraChamba:
     time: 4.0
   - 0: Oye tu eres el nuevo pasante?
   - 1: ¿!?
-  - 0: Entonces Que estas esperando? Vas a entrar o no?
+  - 0: Entonces Que estas esperando? Vas a entrar o 
     time: 4.0
   - 1: Y Ahora que se supone que tengo que hacer?
   - ChooseTalk :
@@ -491,7 +490,7 @@ QuickSpecs:
               unskip:
             - GoTo: EnterPsyTron
         - Option:
-            - 1: Ehhh momento, que fue lo ultimo que dijiste?
+            - 1: Ehhh momento, que era lo que dijiste antes?
             - 1: Hay algo que no me quedo claro
             - 2: Oh noo
               time: 1.5

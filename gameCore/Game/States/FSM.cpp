@@ -1,4 +1,5 @@
 #include "FSM.h"
+#include "../Game.h"
 
 bool FSM::Init(GameState& state)
 {
@@ -9,12 +10,11 @@ bool FSM::Init(GameState& state)
 
 bool FSM::Init()
 {
-//#ifdef _DEBUG
-//	PushState(roadState);
-//#else
-	PushState(bootState);
-//#endif // DEBUG
 
+	if (Game::Get().SkipIntro())
+		PushState(roadState);
+	else
+		PushState(bootState);
 
 
 	return statesStack.size();

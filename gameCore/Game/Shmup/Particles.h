@@ -6,6 +6,7 @@
 #include <vector>
 
 struct Entity;
+struct Enemy;
 struct Bullet;
 struct BaseBehaviour;
 
@@ -14,24 +15,24 @@ class Particles : public Singleton<Particles>
 
 	friend class Singleton<Particles>;
 
-	//struct Player* playerRef = nullptr;
-
 	// --------------------------------- GENERAL
 
 	const unsigned TotalAmount = 10000;
 
-	std::vector<Bullet*> Bullets{ TotalAmount };
+	std::vector<Bullet*> Bullets		{ TotalAmount };
 
 	unsigned CurrentBulletIndex = 0;
 
 	Bullet* RequestBullet();
+
+	const float speedFactor				{ Graphics::Get().GetFactorArea().y };
 
 public:
 	void OnInit();
 	void OnDeinit();
 
 
-	void OnUpdate();
+	void OnUpdate(std::vector<Enemy*>& enemies);
 	void OnRender();
 
 	void OnPause();
@@ -39,7 +40,7 @@ public:
 
 	void Create(Vector2 Position, enum class BehaviourType bType/*, Entity* target = nullptr*/); /// Abstract Factory trough A Function :
 
-	void CreatePlayerShot(Vector2 position, float InitAngle, float RotationDelta);
+	void CreatePlayerShot(Vector2 startPosition);
 
 	Entity* CurrentTarget = nullptr;
 

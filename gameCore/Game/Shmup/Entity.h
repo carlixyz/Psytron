@@ -8,27 +8,38 @@
 //#define ASSETS Assets::Get()
 //#define GetAsset(Name) ASSETS.GetSprite(#Name)
 
+
+enum class EntityType
+{
+	EPlayerShot,
+	EEnemyShot,
+	EItem,
+	EOther,
+	MAX
+};
+
 enum class BehaviourType
 {
-	EPlayerShot = 0,
-	EEnemyShot,
+	ENone = 0,
+	EExplotion,
 	ELinearShot,
-	EMultiShot,
+	EAimShot,			// Simple one time Aiming target shot
+	ESeekShot,			// fast one time Aiming target shot
+	ELockShot,			// Player Lock on shot
+	EMultiShot,			// 8 shots in 8 directions
 	ESpiralShot,
 	EMultiSpiralShot,
-	ERingShot,
-	EStarShot,
+	ERingShot,			// Multiple 30 shots
+	EStarShot,			// Multiple 30 shape star shot
 	EHanaShot,
 	EArchShot,
-	ESeekShot,
-	ELockShot,
-	EExplosion,
 	MAX
 };
 
 
 struct Entity;
 
+/// Common customizable behavior interface for anything Entity inherited 
 struct BaseBehaviour
 {
 	Entity* Owner;
@@ -38,6 +49,7 @@ public:
 	virtual void DoInit()			{ ; }
 	virtual void DoUpdate()			{ ; }
 	virtual void DoRender()			{ ; }
+	virtual void DoDebug()			{ ; }
 	virtual float GetScreenOffset() { return 50.f; }
 
 	float LifeTime = 10.0f;
@@ -51,6 +63,9 @@ struct Entity
 
 	Rectangle FrameRec =			{ 0.0f, 0.0f, 1.0f, 1.0f };
 	Rectangle CollisionRec =		{ 0.0f, 0.0f, 1.0f, 1.0f };
+
+	bool IsHit = false;
+	bool Active = false;
 
 	//raylib::TextureUnmanaged Sprite;
 

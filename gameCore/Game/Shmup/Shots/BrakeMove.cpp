@@ -60,17 +60,6 @@ void BrakedMove::DoRender()
 
 		const float angleVar = std::atan2(-Direction.x, Direction.y);
 
-		//DrawTexturePro(GetAsset("Sprites"), BulletOwner->FrameRec,
-		//			   {
-		//				   BulletOwner->Position.x, BulletOwner->Position.y,
-		//				   BulletOwner->SpriteSize.x, BulletOwner->SpriteSize.y
-		//			   },
-		//			   //BulletOwner->SpriteSize,
-		//			   Vector2Scale(BulletOwner->SpriteSize, 0.5f),
-		//			   //Vector2Angle(Vector2Up(), Direction) * VisualRotationScaling,
-		//			   angleVar * RAD2DEG,
-		//			   WHITE);
-
 		DrawTexturePro(GetAsset("Sprites"),
 					   BulletOwner->FrameRec,
 					   {

@@ -5,6 +5,8 @@
 #include <raylib-cpp.hpp>
 
 struct Player;
+struct Enemy;
+struct Bungie;
 
 namespace raylib
 {
@@ -16,7 +18,11 @@ class RoadState : public GameState
 public:
 	//friend class Singleton<IntroState>;
 
-	Player* player;
+	Player* player = nullptr;
+
+	Enemy* enemy = nullptr;
+
+	std::vector<Enemy*> Enemies;
 
 	raylib::TextureUnmanaged* CityBG;
 	raylib::TextureUnmanaged* CityHighway;
@@ -37,6 +43,10 @@ public:
 
 	void OnPause();
 	void OnResume();
+
+private:
+	void OnIntroUpdate();
+	void OnIntroRender();
 
 
 };

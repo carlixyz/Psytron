@@ -10,7 +10,8 @@ void ChaseMove::DoInit()
 		BulletOwner = (Bullet*)Owner;
 
 		BulletOwner->SpriteScaled = Vector2Scale(BulletOwner->SpriteSize, Graphics::Get().GetFactorArea().y);
-		BulletOwner->Position = Vector2Subtract(InitPosition, Vector2Scale(BulletOwner->SpriteScaled, 0.5f));
+		//BulletOwner->Position = Vector2Subtract(InitPosition, Vector2Scale(BulletOwner->SpriteScaled, 0.5f));
+		BulletOwner->Position = InitPosition;
 
 		Vector2 Orientation = Vector2Subtract(TargetPosition, BulletOwner->Position);
 		Direction = Vector2Normalize(Orientation);
