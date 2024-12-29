@@ -71,8 +71,6 @@ void VisualDialogManager::Render()
 
 void VisualDialogManager::LoadImage(std::string imageId, std::string file)
 {
-	//if(ImagesMap.find(imageId) != ImagesMap.end())
-	//if (ImagesMap[imageId] == nullptr)
 	if (!ImagesMap.contains(imageId))
 	{
 		ImagesMap[imageId] = new ImageEase(imageId);

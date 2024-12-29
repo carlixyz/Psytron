@@ -53,11 +53,6 @@ void BrakedMove::DoRender()
 {
 	if (BulletOwner != nullptr)
 	{
-		//DrawCircle((int)BulletOwner->Position.x, (int)BulletOwner->Position.y, BulletOwner->Radius, RED);
-		//DEBUG_COUT("Position y " << bulletOwner->Position.y << std::endl);
-
-		//static const float VisualRotationScaling = 10;
-
 		const float angleVar = std::atan2(-Direction.x, Direction.y);
 
 		DrawTexturePro(GetAsset("Sprites"),

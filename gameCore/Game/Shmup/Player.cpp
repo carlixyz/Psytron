@@ -7,6 +7,9 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
+#include "../../Audio/Audio.h"
+#include "reasings.h"
+
 
 #define MODULE_FULL 32
 #define MODULE_HALF (MODULE_FULL/2)
@@ -16,7 +19,10 @@
 Player::Player()
 {
 	Speed = 300.f * Graphics::Get().GetFactorArea().y;
-	Position = Vector2((float)Graphics::Get().GetHorizontalCenter(), (float)Graphics::Get().GetVerticalCenter());
+	Position = Vector2(Graphics::Get().GetScreenCenter().x , OutMargin);
+	Shield = 5;
+
+	//Position = Graphics::Get().GetScreenCenter();
 
 	SpriteSize.x = (float)(GetAsset("Sprites").width / MODULE_HALF);
 	SpriteSize.y = (float)(GetAsset("Sprites").height / MODULE_FOURTH);
@@ -36,16 +42,18 @@ Player::Player()
 		FrameOutput.width * 0.3f, FrameOutput.height * 0.3f
 	};
 
-	Image imBase = LoadImageFromTexture(GetAsset("Sprites"));
-	Image imCopy = ImageCopy(imBase);
-	ImageColorBrightness(&imCopy, +1000);
-
-	SpriteBright.Load(imCopy);	LoadTextureFromImage(imCopy);
+	//Image imBase = LoadImageFromTexture(GetAsset("Sprites"));
+	//Image imCopy = ImageCopy(imBase);
+	//ImageColorBrightness(&imCopy, +100);
+	//SpriteFlash.Load(imCopy);
+	//LoadTextureFromImage(imCopy);
+	CurrentFlashTime = totalFlashTime;
 }
 
 void Player::Update()
 {
 	CurrentDelay -= GetFrameTime();
+	SoundDelay -= GetFrameTime();
 	OldPosition = Position;
 	goDirection = 0;
 	slowMove = 1.0f;
@@ -96,55 +104,53 @@ void Player::Update()
 	FrameRec.x = (frameSide + CurrentFrame) * SpriteSize.x;
 
 	FrameOutput.x = Position.x = Clamp(Position.x, LeftMargin, RightMargin);
-	FrameOutput.y = Position.y = Clamp(Position.y, 0, BottomMargin);
+	FrameOutput.y = Position.y = Clamp(Position.y, 0, IntroMode ? OutMargin : BottomMargin);
 
 	CollisionRec.x = Position.x + ColliderOffset.x;
 	CollisionRec.y = Position.y + ColliderOffset.y;
 
-	//static bool justOnce = true;
 	if (IsKeyDown(KEY_ONE))
-	//if (IsKeyDown(KEY_ONE) && justOnce)
 	{
-		//justOnce = false;
-		//Particles::Get().Create(Vector2Add(Position, Vector2(21, 0)), BehaviourType::ELockShot);
-		//Particles::Get().Create(Vector2Add(Position, ShotInitialOffset), BehaviourType::ELockShot);
 		Particles::Get().Create(Vector2Add(Position, ShotInitialOffset), BehaviourType::EExplotion);
 	}
 
-
-	if (IsKeyDown(KEY_FOUR))
-	{
-		Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::ESpiralShot); ///
-	}
-
-	if (IsKeyDown(KEY_FIVE))
-	{
-		Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::EMultiSpiralShot);
-	}
-
-	if (IsKeyDown(KEY_SIX))
-	{
-		Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::ERingShot);
-	}
-
-	if (IsKeyDown(KEY_SEVEN))
-	{
-		Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::EHanaShot);
-	}
-
-	if (IsKeyDown(KEY_EIGHT))
-	{
-		Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::EStarShot);
-	}
-
-	if (IsKeyDown(KEY_NINE))
-	{
-		Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::EArchShot);
-	}
-	//*/
+	UpdateDamage();
 }
 
 
+bool Player::ApplyDamage()
+{
+	if (DoDamageFlash)
+		return false;
+
+	DoDamageFlash = true;
+	Shield -= 1;
+
+	if (Shield <= 0)
+	{
+		const Vector2 explotion(Position.x + FrameOutput.width * 0.5f, Position.y + FrameOutput.height * 0.5f);
+		Particles::Get().Create(explotion, BehaviourType::EExplotion);
+		Audio::Get().PlaySound("Data/Sound/Explode.wav");
+		Active = false;
+	}
+	return true;
+}
+
+void Player::UpdateDamage()
+{
+	if (!DoDamageFlash)
+		return;
+
+	CurrentFlashTime -= GetFrameTime();
+	ShowSpriteFlash = EaseSineInOut(CurrentFlashTime, 0.f, 1.0f, 0.05f) > 0.5f;
+
+	if (CurrentFlashTime < 0)
+	{
+		DoDamageFlash = false;
+		ShowSpriteFlash = false;
+		CurrentFlashTime = totalFlashTime;
+	}
+}
 
 void Player::Render()
 {
@@ -155,41 +161,35 @@ void Player::Render()
 	DrawText(Text.c_str(), 400, 400, 16, WHITE);
 	*/
 
-	//if(CheckCollisionPointRec(Position, Graphics::Get().GetWindowArea()))
-	//	DrawRectangle((int)Position.x, (int)Position.y, 42, 64, WHITE);
-	//else
-	//	DrawRectangle((int)Position.x, (int)Position.y, 42, 64, BLUE);
+	if (!ShowSpriteFlash)
+		DrawTexturePro(GetAsset("Sprites"), FrameRec, FrameOutput, Vector2Zero(), 0.f, WHITE);  // Draw part of the texture
 
-	//DrawTextureRec(GetAsset("Sprites"), FrameRec, Position, WHITE);  // Draw part of the texture
-	DrawTexturePro(GetAsset("Sprites"), FrameRec, FrameOutput, Vector2Zero(), 0.f, WHITE);  // Draw part of the texture
-
-	//DrawRectanglePro({ Position.x, Position.y, 32, 64}, Vector2Zero(), 0.f, ALPHARED);
-	DrawRectanglePro(CollisionRec, Vector2Zero(), 0.f, ALPHARED);
-
-	//DrawCircle(AimOffset.x, AimOffset.y, 5, RED);
+	if (Game::Get().IsDebugMode())
+		DrawRectanglePro(CollisionRec, Vector2Zero(), 0.f, ALPHARED);
 }
 
 void Player::Shoot()
 {
+	//Audio::Get().PlaySound("Fire");
+	//PlaySound(Assets::Get().GetSound("Fire"));     
+
 	// https://www.youtube.com/watch?v=QQ3Yub9So2k&t=202s
 
-	if (CurrentDelay > 0.0f)	return;
+	if (CurrentDelay > 0.0f)	
+		return;
 
 	CurrentDelay = DelayTime;
 
-
 	Particles::Get().CreatePlayerShot(Vector2Add(Position, ShotInitialOffset));
 
+	if (SoundDelay < 0)
+	{
+		SoundDelay = 0.01f; // = 0.1f; 0.325f;
+		Audio::Get().PlaySound("Data/Sound/MiniGun_A.wav");
+	}
 
-
-	//Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::ELinearShot);		/// -----
-	//Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::ELockShot);		/// -----
-	//Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::ESeekShot);		/// -----
-	//Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::EMultiShot);		/// ----- 
-	//Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::ESpiralShot);		/// ----- 
-	//Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::EMultiSpiralShot);	/// -----
-	//Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::EHanaShot);		/// -----
-	//Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::ERingShot);		// ----- <
-	//Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::EStarShot);		// ----- <
-	//Particles::Get().Create(Vector2Add( Position, Vector2(21, 0) ), BehaviourType::EArchShot);		/// -----
 }
+
+#undef MODULE_FOURTH
+#undef MODULE_HALF
+#undef MODULE_FULL

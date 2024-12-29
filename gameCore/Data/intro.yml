@@ -201,18 +201,18 @@ IntroSchool:
 
   - SetLeftOut: Ginger2
   - 1: Mhhh ahi se acerca Hoppy, que estara tramando ahora?
-  - 3: "Hey Al, Donde estabas? \n seguro que otra vez en tu onanismo mental! jajajaaj" 
+  - 3: "Hey Al, Donde estabas? \n seguro que otra vez pensando tonterias! jajajaaj" 
   - 3: No te olvides que me debes una apuesta...
   - 1: Rayos y ahora que diablos quieres?
     time: 6.0
   - MoveRight: Ginger2
-  - 3: "Ahi esta saliendo Ginger...\ncreo que ahora tienes una chance con ella..."
+  - 3: "Ahi esta saliendo Ginger...\ncreo que ahora puedes acercarte a ella..."
     time: 6.0
   - 1: Que quee? No tengo idea de que hablas 
   - 1: y ya tengo que irme, se me empieza a hacer tarde...
   - 3: Hey, deja de esconderte, te digo que tiene algo contigo... 
-  - 3: tengo el presentimiento que sino lo intentas...
-  - 3: te arrepentiras para siempre.
+  - 3: tengo el presentimiento que es ahora...
+  - 3: Sino lo intentas, te arrepentiras para siempre.
     time: 6.0
   - 1: Estas loco? No tengo nada que hacer ahi! 
   - 1: Es obvio que ella se lleva mejor con tontos como Porter o Lager...
@@ -235,13 +235,13 @@ GameOfLove:
   - 1: Toma, Estos son los que necesitamos para la entrega final.
   - 4: Genial, que  suerte que los conseguiste!
   - 1: Eh si claro...
-  - 4: Digo, se agotan las oportunidades, ultima clase y luego se termino, 
-  - 1: «Un momento, Dijo oportunidad?»
+  - 4: Digo, se termina el año, ultima clase y luego adios! 
+  - 1: «Un momento, Dijo adios?»
   - 1: «tengo que pensar algo para darle charla!»
   - 1: "«...»"
-    time: 3.0
+    time: 2.0
     unskip:
-  - 1: «Diablos, no se me ocurre nada!»
+  - 1: «que mal, no se me ocurre nada!»
   - 4: Y tu que estas haciendo? 
   - ChooseTalk :
     - Option:
@@ -294,7 +294,7 @@ GameOfWar:
   - FadeOut: Porter
   - 6: Bueno Chicos, basta de perder tiempo y vamos al Viel Glück!
   - FadeOut: Amber
-  - 8: Yeah! Hay que aprovechar ese antro, antes que lo cierren jaja
+  - 8: Oh Yeah! Hay que visitar ese antro, antes que lo cierren jaja
   - FadeOut: Honey
   - MoveCenter: Ginger
   - 4: Al, Nos vamos al Pool, quieres venir con nosotros?
@@ -311,7 +311,7 @@ GameOfWar:
   - StopMusic:
   - FadeOut: Ginger
   - 1: «Oh no, no, se esta yendo...»
-  - 1: «Ya se fue, demonios, que lento soy»
+  - 1: «Ya se fue, porque soy tan lento»
   - FadeOut: School
   - 1: Pero bueno, no tengo opcion, tengo que trabajar...
     time: 2.0
@@ -324,11 +324,11 @@ MiPrimeraChamba:
   - 1: Que Barbaro
   - FadeIn: NightCity
   - ScrollRightEnd: NightCity
-  - 1: Diablos, No Puedo creer lo que me acaba de pasar
+  - 1: Diablos, No Puedo creer lo que acaba de pasar
   - MoveCenter: Ale2
   - 1: «Que mala suerte»
   - PlayMusic: "Data/Sound/Cyber-Streets.mp3"
-  - 1: "«justo el dia que hablamos \n y es justo cuando empiezo a trabajar tambien»"
+  - 1: "«justo el dia que nos cruzamos \n y es justo cuando empiezo a trabajar tambien»"
     time: 6.0
   - FadeOut: Ale2
   - FadeIn: Ale
@@ -510,9 +510,9 @@ EnterPsyTron:
     - 2: Unidad remota de enlace psiquico con capacidad de combate urbano
       time: 5.0
       unskip:
-    - 2: Tecnicamente puede acelerar a mas de 100 Km en 6 segundos
+    - 2: Tecnicamente puede acelerar a mas de 300 Km en 6 segundos
       time: 5.0
-    - 2: "Saltar casi 7 metros de altura \ny soportar impactos de hasta 500 toneladas"
+    - 2: "soporta impactos de hasta 100 toneladas \ny Tiene disparo teledirigido con autoaiming"
       time: 5.0
     - 2: "en este momento reposa sobre su plataforma de carga inalambrica\n y con su bateria completa al 100%"
       time: 5.0

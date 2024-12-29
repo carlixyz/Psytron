@@ -8,7 +8,7 @@
       _FPS: 60
       _Fullscreen: false
       _DebugMode: false
-      _SkipIntro: true
+      _SkipIntro: false
   Resources:
     Language: Spanish
     DialogFile: Data/intro.yml

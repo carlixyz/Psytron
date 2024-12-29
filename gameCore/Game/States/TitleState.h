@@ -12,7 +12,7 @@ class TitleState : public GameState//, public Singleton<TitleState>
 	float StartValue = 0.f;
 	float EndValue = 1.0f;
 	float CurrentTime = 0.0f;
-	float TotalTime = 1.0f;
+	float TotalTime = 3.0f;
 
 	int CurrentIndex = 0;
 	int MaxIndex = 3;

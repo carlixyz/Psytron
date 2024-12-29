@@ -4,8 +4,10 @@
 #include "../../Graphics/Graphics.h"
 //#include <iostream>
 #include <vector>
+#include <optional>
 
 struct Entity;
+struct Player;
 struct Enemy;
 struct Bullet;
 struct BaseBehaviour;
@@ -17,7 +19,7 @@ class Particles : public Singleton<Particles>
 
 	// --------------------------------- GENERAL
 
-	const unsigned TotalAmount = 10000;
+	const unsigned TotalAmount = 8000;
 
 	std::vector<Bullet*> Bullets		{ TotalAmount };
 
@@ -25,14 +27,23 @@ class Particles : public Singleton<Particles>
 
 	Bullet* RequestBullet();
 
+	// --------------------------------- PLAYER
+
+	const unsigned TotalPlayerAmount = 2000;
+
+	std::vector<Bullet*> PlayerBullets{ TotalPlayerAmount };
+
+	unsigned CurrentPlayerBulletIndex = 0;
+
+	Bullet* RequestPlayerBullet();
+
 	const float speedFactor				{ Graphics::Get().GetFactorArea().y };
 
 public:
 	void OnInit();
 	void OnDeinit();
 
-
-	void OnUpdate(std::vector<Enemy*>& enemies);
+	void OnUpdate(const std::optional<std::vector<Enemy*>>& enemies);
 	void OnRender();
 
 	void OnPause();
@@ -42,11 +53,11 @@ public:
 
 	void CreatePlayerShot(Vector2 startPosition);
 
-	Entity* CurrentTarget = nullptr;
+	Enemy* CurrentTarget = nullptr;
 
-	Entity* PlayerRef = nullptr;
+	Player* PlayerRef = nullptr;
 
-	void Disable(Bullet* bullet);
+	//void Disable(Bullet* bullet);
 
 };
 

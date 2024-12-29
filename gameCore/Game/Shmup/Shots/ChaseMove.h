@@ -19,10 +19,10 @@ struct ChaseMove : public BaseBehaviour
 	virtual float GetScreenOffset() { return 500.f; }
 
 protected:
-	Bullet* BulletOwner = nullptr;
+	Bullet* BulletOwner			= nullptr;
 	Vector2 InitPosition;
 	Vector2 TargetPosition;
-	Vector2 Direction;
+	Vector2 Direction			= Vector2Up();
 	float Speed;
 	bool Tracking;
 };

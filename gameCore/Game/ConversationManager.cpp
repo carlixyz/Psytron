@@ -1,11 +1,11 @@
 ﻿#include "ConversationManager.h"
 #include "../Utility/Utils.h"
+#include "Assets.h"
 #include "raylib-cpp.hpp"
 
 
 using namespace std;
 
-/// TODO: General Code CleanUp here
 void ConversationManager::Init(const std::string& conversationFile)
 {
 	Characters.reserve(10);
@@ -14,13 +14,16 @@ void ConversationManager::Init(const std::string& conversationFile)
 	CurrentConversationNode = nullptr;
 	ConversationEnded = false;
 	ChooseOption = 0;
+	
+	FontResource = GetFont("Noto");
+	//FontResource = GetFont("PC98");
 
-	FontResource = LoadFont("Data/NotoJp.fnt");
-	const float TextPadding = FontSize * 0.5f;
+	//SetTextureFilter(FontResource.texture, TEXTURE_FILTER_BILINEAR);
 
-	SetTextureFilter(FontResource.texture, TEXTURE_FILTER_BILINEAR);
 
 	SetTextLineSpacing((int)FontOffset);
+
+	const float TextPadding = FontSize * 0.5f;
 
 	TextBoxArea = { TextPadding,	Graphics::Get().GetWindowArea().height - (FontSize * 4.5f),
 			Graphics::Get().GetWindowArea().width - FontSize, FontSize * 4 };
@@ -163,8 +166,6 @@ void ConversationManager::ParseNode(YAML::const_iterator& iterator, YAML::const_
 		currentNode->CharacterId = talkIt->first.as<int>();
 		CHECK(currentNode->CharacterId >= 0);
 		CHECK(currentNode->CharacterId < (int)Characters.size());
-
-		//DEBUG_COUT("CharacterId: " << currentNode->CharacterId << " value:  " << currentNode->Text << "\n ");
 
 		if (talkNode["time"]) 													//Get the duration (optional parametter)
 			currentNode->Duration = talkNode["time"].as<float>();

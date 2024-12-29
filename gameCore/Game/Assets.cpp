@@ -33,11 +33,11 @@ void Assets::LoadSprites()
 	Load("Sprites", "Data/Sprites/VisualSprites.png");
 	Load("Prop", "Data/Sprites/Car5.png");
 
-	Load("BarricadeA", "Data/Sprites/BarricadeA.png");	// ok
-	Load("BarricadeB", "Data/Sprites/BarricadeB.png");	// okish
-	Load("BarricadeC", "Data/Sprites/BarricadeC.png");	// ok
-	Load("BarricadeD", "Data/Sprites/BarricadeD.png");	// Meh
-	Load("BarricadeE", "Data/Sprites/BarricadeE.png");	// Nice!
+	Load("BlockA", "Data/Sprites/BarricadeA.png");	// ok
+	Load("BlockB", "Data/Sprites/BarricadeB.png");	// okish
+	Load("BlockC", "Data/Sprites/BarricadeC.png");	// ok
+	Load("BlockD", "Data/Sprites/BarricadeD.png");	// Meh
+	Load("BlockE", "Data/Sprites/BarricadeE.png");	// Nice!
 
 	Load("Truck", "Data/Sprites/Truck.png");// Ok
 	Load("Car1", "Data/Sprites/Car1.png");	// Ok
@@ -78,7 +78,9 @@ void Assets::LoadFonts()
 			Fonts[Name] = Font;
 		};
 
-	//Load("Locust", "Fonts/CGF Locust Resistance.ttf");
+	Load("Noto", "Data/NotoJp.fnt");
+	Load("PC98", "Data/pc-9800.ttf");
+	//Load("Start", "Data/PressStart2P.ttf");
 	//LoadFont("Data/NotoJp.fnt");
 }
 
@@ -98,6 +100,7 @@ void Assets::LoadSounds()
 			Sounds[Name] = Sound;
 		};
 
+	Load("Fire", "Data/Sound/MiniGun.wav");
 	//Load("Fire", "Sounds/BulletFire.wav");
 }
 
@@ -118,6 +121,7 @@ void Assets::LoadMusic()
 			Musics[Name] = Music;
 		};
 
+	//Load("Firer", "Data/Sound/stg_st003_88pro.ogg");
 	//Load("Menu", "Music/Carpenter_Brut-Hang'Em_All.ogg");
 }
 

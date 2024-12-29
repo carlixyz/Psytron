@@ -11,11 +11,13 @@ void LockOnMove::DoInit()
 {
 	if (Owner != nullptr)
 	{
-		LifeTime = 3.f;
-		BulletOwner = (Bullet*)Owner;
+		LifeTime = 2.f;
 
+		BulletOwner = (Bullet*)Owner;
 		BulletOwner->SpriteScaled = Vector2Scale(BulletOwner->SpriteSize, Graphics::Get().GetFactorArea().y);
-		BulletOwner->Position = Vector2Subtract(InitPosition, Vector2Scale(BulletOwner->SpriteScaled, 0.5f));
+		BulletOwner->Position = Vector2Subtract(InitPosition, Vector2(BulletOwner->SpriteScaled.x * 0.5f,
+																	  BulletOwner->SpriteScaled.y * 0.2f));
+
 		Direction = Vector2Up(); //Direction = Vector2Rotate(Vector2Up(), Rotation * DEG2RAD);
 
 		DoUpdate();
@@ -90,6 +92,5 @@ void LockOnMove::DoRender()
 					   Rotation * RAD2DEG,
 					   WHITE);
 
-		//DrawCircle(BulletOwner->Position.x, BulletOwner->Position.y, 3, VIOLET);
 	}
 }

@@ -15,6 +15,7 @@
 #include "Shots/Explotion.h"
 #include <raymath.h>
 #include <math.h>
+#include <optional>
 
 #include <../../../Utility/Utils.h>
 
@@ -23,35 +24,36 @@
 
 void Particles::OnInit()
 {
+	Bullets = std::vector<Bullet*>(TotalAmount);
+	PlayerBullets = std::vector<Bullet*>(TotalPlayerAmount);
 
 	for (unsigned i = 0; i < TotalAmount; i++)
-	{
 		Bullets[i] = new Bullet();
-	}
 
+	for (unsigned i = 0; i < TotalPlayerAmount; i++)
+		PlayerBullets[i] = new Bullet();
 }
 
 void Particles::OnDeinit()
 {
 	for (unsigned i = 0; i < TotalAmount; i++)
-	{
 		delete Bullets[i];
-	}
+
+	for (unsigned i = 0; i < TotalPlayerAmount; i++)
+		delete PlayerBullets[i];
 
 	Bullets.clear();
+	PlayerBullets.clear();
 }
 
 void Particles::CreatePlayerShot(Vector2 startPosition)
 {
-	Bullet& bulletRef = *RequestBullet();
+	Bullet& bulletRef = *RequestPlayerBullet();
 
-	if (CurrentTarget == nullptr)
-		bulletRef.SetType(new RotatedMove(startPosition, 0.f, 500 * speedFactor));
+	if (CurrentTarget)
+		bulletRef.SetType(new LockOnMove(startPosition, CurrentTarget->GetTargetCenter(), 500 * speedFactor, 20.f)); //(speedFactor <= 1.0f ? 10.f : 5.0f)) );
 	else
-		bulletRef.SetType(new LockOnMove(startPosition,
-										 CurrentTarget->Position,
-										 500 * speedFactor,
-										 (speedFactor <= 1.0f ? 10.f : 5.0f)) );
+		bulletRef.SetType(new RotatedMove(startPosition, 0.f, 500 * speedFactor));
 
 	bulletRef.Type = EntityType::EPlayerShot;
 	bulletRef.Active = true;
@@ -102,15 +104,14 @@ void Particles::Create(Vector2 position, BehaviourType bType)
 		}
 		break;
 
-
 		case BehaviourType::ESeekShot:					/// <-
 		{
 			Bullet& bulletRef = *RequestBullet();
 
 			if (PlayerRef != nullptr)
-				bulletRef.SetType(new ChaseMove(position, PlayerRef->Position, 1000.f));
+				bulletRef.SetType(new ChaseMove(position, PlayerRef->Position, 750.f));
 			else
-				bulletRef.SetType(new ChaseMove(position, Vector2(position.x, 1000)));
+				bulletRef.SetType(new ChaseMove(position, Vector2(position.x, 750.f)));
 
 			bulletRef.Type = EntityType::EEnemyShot;
 			bulletRef.Active = true;
@@ -309,7 +310,7 @@ void Particles::Create(Vector2 position, BehaviourType bType)
 		{
 			Bullet& bulletRef = *RequestBullet();
 			int randValue = GetRandomValue(0, 360);
-			bulletRef.SetType(new Explotion(position, 1.0f, (float)randValue));
+			bulletRef.SetType(new Explotion(position, 2, (float)randValue));
 			bulletRef.Type = EntityType::EOther;
 			bulletRef.Active = true;
 		}
@@ -318,7 +319,6 @@ void Particles::Create(Vector2 position, BehaviourType bType)
 		default:
 			break;
 	}
-
 
 	/// bulletRef.Active = true;
 }
@@ -339,45 +339,57 @@ Bullet* Particles::RequestBullet()
 	return BulletRef;
 }
 
-
-void Particles::Disable(Bullet* bullet)
+Bullet* Particles::RequestPlayerBullet()
 {
-	bullet->Active = false;
+	if (PlayerBullets.empty())
+		return nullptr;
+
+	CurrentPlayerBulletIndex %= TotalPlayerAmount;
+
+	Bullet* BulletRef = PlayerBullets[CurrentPlayerBulletIndex];
+
+	BulletRef->Active = false;
+
+	CurrentPlayerBulletIndex++;
+
+	return BulletRef;
 }
 
-void Particles::OnUpdate(std::vector<Enemy*>& enemies)
+void Particles::OnUpdate(const std::optional<std::vector<Enemy*>>& enemies)
 {
+	for (Bullet* pBullet : PlayerBullets)
+	{
+		if (pBullet->Active)
+		{
+			pBullet->Update();
+
+			if (enemies.has_value())
+				for (Enemy* enemy : enemies.value())
+				{
+					if (enemy && enemy->Active && CheckCollisionRecs(enemy->CollisionRec, pBullet->CollisionRec))
+					{
+						pBullet->Active = false;
+						enemy->Active = enemy->ApplyDamage();
+						CurrentTarget = (enemy->Active) ? enemy : nullptr;
+					}
+				}
+		}
+	}
+
+	
 	for (Bullet* bullet : Bullets)
 	{
 		if (bullet->Active)
 		{
 			bullet->Update();
-			
-			switch (bullet->Type)
+
+			if (PlayerRef && CheckCollisionRecs(PlayerRef->CollisionRec, bullet->CollisionRec))
 			{
-				case EntityType::EPlayerShot:
-					for (Enemy* enemy : enemies)
-					{
-						if (enemy->Active && CheckCollisionRecs(enemy->CollisionRec, bullet->CollisionRec))
-						{
-							enemy->ApplyDamage();//enemy->DoDamageFlash = true;
-							bullet->Active = false;
-						}
-					}
-					break;
-
-				case EntityType::EEnemyShot:
-					if (PlayerRef && CheckCollisionRecs(PlayerRef->CollisionRec, bullet->CollisionRec))
-					{
-
-					}
-					break;
-
-				default:
-					break;
+				if (PlayerRef->ApplyDamage())
+					bullet->Active = false;
 			}
 		}
-	}
+	}	
 }
 
 void Particles::OnRender()
@@ -387,6 +399,14 @@ void Particles::OnRender()
 		if (bullet->Active)
 		{
 			bullet->Render();
+		}
+	}
+
+	for (Bullet* pBullet : PlayerBullets)
+	{
+		if (pBullet->Active)
+		{
+			pBullet->Render();
 		}
 	}
 }

@@ -43,9 +43,6 @@ void SimpleMove::DoRender()
 {
 	if (BulletOwner != nullptr)
 	{
-		//DrawTextureRec(GetAsset("Sprites"), BulletOwner->FrameRec, 
-		//			   Vector2Subtract(BulletOwner->Position, Vector2Scale(BulletOwner->SpriteSize, 0.5f)), WHITE);
-
 		DrawTexturePro(GetAsset("Sprites"),
 					   BulletOwner->FrameRec,
 					   {

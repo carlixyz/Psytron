@@ -9,7 +9,7 @@
 
 struct LockOnMove : public BaseBehaviour
 {
-	LockOnMove(Vector2 initPosition, Vector2 targetPosition, float speed = 200, float angSpeed = 10) :
+	LockOnMove(Vector2 initPosition, Vector2 targetPosition, float speed = 500, float angSpeed = 15) :
 		InitPosition(initPosition), 
 		TargetPosition(targetPosition), 
 		Speed(speed), 
@@ -21,7 +21,7 @@ struct LockOnMove : public BaseBehaviour
 	virtual void DoInit();
 	virtual void DoUpdate();
 	virtual void DoRender();
-	virtual float GetScreenOffset() { return 500.f; }
+	virtual float GetScreenOffset() { return 320.f; }
 
 protected:
 	Bullet* BulletOwner = nullptr;
@@ -30,8 +30,8 @@ protected:
 	Vector2 Direction;
 
 	float Rotation = 0.f;
-	float Speed;
-	float AngSpeed;
+	float Speed = 500;
+	float AngSpeed = 15;
 	float AngAcumulation = 0.f;
 };
 

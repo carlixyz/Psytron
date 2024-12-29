@@ -22,7 +22,13 @@ public:
 	inline bool HasFinished()	{ return finish; }
 	inline bool IsDebugMode()	{ return appProperties.DebugMode; }
 	inline bool SkipIntro()		{ return appProperties.SkipIntro; }
+	
+	void AddScore()				{ score += 100; }
+	int GetScore()				{ return score; }
+
 protected:
 	Game() { ; } // Protected Constructor
+
+	int score = 0;
 };
 

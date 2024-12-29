@@ -10,7 +10,6 @@ void ChaseMove::DoInit()
 		BulletOwner = (Bullet*)Owner;
 
 		BulletOwner->SpriteScaled = Vector2Scale(BulletOwner->SpriteSize, Graphics::Get().GetFactorArea().y);
-		//BulletOwner->Position = Vector2Subtract(InitPosition, Vector2Scale(BulletOwner->SpriteScaled, 0.5f));
 		BulletOwner->Position = InitPosition;
 
 		Vector2 Orientation = Vector2Subtract(TargetPosition, BulletOwner->Position);
@@ -84,8 +83,6 @@ void ChaseMove::DoRender()
 {
 	if (BulletOwner != nullptr)
 	{
-		//DrawCircle((int)BulletOwner->Position.x, (int)BulletOwner->Position.y, BulletOwner->Radius, RED);
-
 		const float angleVar = std::atan2(-Direction.x, Direction.y);
 
 		DrawTexturePro(GetAsset("Sprites"),

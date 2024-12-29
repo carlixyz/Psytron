@@ -17,8 +17,6 @@ void DelayedMove::DoInit()
 
 void DelayedMove::DoUpdate()
 {
-	//Direction = Vector2Rotate(Direction, 2 * DEG2RAD);
-
 	if (CurrentDelay > 0.0f)
 	{
 		BulletOwner->Position.x += Direction.x * Speed * GetFrameTime();
@@ -39,6 +37,5 @@ void DelayedMove::DoRender()
 	if (BulletOwner != nullptr)
 	{
 		DrawCircle((int)BulletOwner->Position.x, (int)BulletOwner->Position.y, BulletOwner->Radius, BLUE);
-		//DEBUG_COUT("Position y " << bulletOwner->Position.y << std::endl);
 	}
 }

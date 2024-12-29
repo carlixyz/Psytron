@@ -5,9 +5,6 @@
 #include "../../../Graphics/Graphics.h"
 #include "../../../Utility/Utils.h"
 
-#define MODULE_FULL 32
-#define MODULE_HALF (MODULE_FULL/2)
-#define MODULE_FOURTH (MODULE_HALF/2)
 
 void Explotion::DoInit()
 {

@@ -63,6 +63,7 @@ private:
 };
 
 #define GetAsset( Name ) Assets::Get().GetSprite( Name )
+#define GetFont( Name ) Assets::Get().GetFont( Name )
 //#define Stringify(name) #name
 //
 //#define ASSETS Assets::Get()

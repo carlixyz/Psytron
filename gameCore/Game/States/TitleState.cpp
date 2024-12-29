@@ -2,6 +2,9 @@
 #include "../Game.h"
 #include "../../Graphics/Graphics.h"
 #include "./reasings.h"
+#include "../Assets.h"
+#include <iostream>
+#include <string>
 
 #define PADDING 100
 #define SCREEN_CENTER_H (int)(Graphics::Get().GetWindowArea().width * 0.5f)
@@ -112,7 +115,7 @@ void TitleState::OnRender()
 						TitleLogo.height * Graphics::Get().GetFactorArea().y },
 					   Vector2Zero(),
 					   0.0f,
-					   WHITE);
+					   Fade(WHITE, Alpha));
 		//TitleLogo.Draw({ 0, 0 }, Fade(WHITE, Alpha));
 
 	if ( Alpha >= 0.9f )
@@ -125,6 +128,7 @@ void TitleState::OnRender()
 						PADDING + Graphics::Get().GetVerticalCenter() + FontSize * i,
 						FontSize,
 						CurrentIndex == i++ ? Fade(WHITE, Alpha) : Fade(SKYBLUE, Alpha));
+
 		}
 	}
 }

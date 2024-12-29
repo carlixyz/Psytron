@@ -77,8 +77,6 @@ void Game::Render()
 	//if (States.IsLoaded())
 	States.CurrentState().OnRender();						/// statesStack.top()->OnRender();
 
-	//DrawText("Congrats! Your Game is up & running!", 190, 200, 20, LIGHTGRAY);
-	
 	VisualDialogManager::Get().Render();
 
 	ConversationManager::Get().Render();
