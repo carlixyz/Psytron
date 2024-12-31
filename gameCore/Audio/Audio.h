@@ -32,7 +32,12 @@ public:
 
 	void PlaySound(const std::string & soundFile);
 
+	void PreloadSound(const std::string& soundFile);
+
 	void PlayMusic(const std::string& musicFile, bool isLooping = true);
+
+	void PlayMusic(Music soundTrack, bool isLooping = true);
+	//void PlayMusic(Music& SoundTrack, bool isLooping = true);
 	void StopMusic();
 	void FadeMusicIn();
 	void FadeMusicOut();

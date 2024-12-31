@@ -11,6 +11,7 @@ struct ApplicationProperties
 	unsigned Height				= 480;
 	unsigned Bits				= 32;
 	unsigned FPS				= 60;
+	float BulletSpeedFactor		= 1.0f;
 
 	bool Fullscreen				= false;
 	bool DebugMode				= false;

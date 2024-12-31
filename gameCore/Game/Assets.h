@@ -64,6 +64,8 @@ private:
 
 #define GetAsset( Name ) Assets::Get().GetSprite( Name )
 #define GetFont( Name ) Assets::Get().GetFont( Name )
+#define GetMusic( Name ) Assets::Get().GetMusic( Name )
+#define GetSound( Name ) Assets::Get().GetSound( Name )
 //#define Stringify(name) #name
 //
 //#define ASSETS Assets::Get()

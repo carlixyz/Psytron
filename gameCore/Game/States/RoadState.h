@@ -46,6 +46,7 @@ private:
 	raylib::Rectangle RoadDestiny;
 	float RoadSpeed = 500;
 
+	bool PlayOnce = false;
 	unsigned IntroState = 0;
 	float CurrentFrameY = 0;
 	float CurrentFrameX = 0;

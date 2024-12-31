@@ -36,8 +36,8 @@ void ThrottleMove::DoUpdate()
 	InitialSpeed += Acceleration;
 	InitialSpeed = Clamp(InitialSpeed, MinSpeed, MaxSpeed);
 
-	BulletOwner->Position.x += Direction.x * InitialSpeed * timeFrame;
-	BulletOwner->Position.y += Direction.y * InitialSpeed * timeFrame;
+	BulletOwner->Position.x += Direction.x * InitialSpeed * timeFrame * GetShotSpeedFactor();
+	BulletOwner->Position.y += Direction.y * InitialSpeed * timeFrame * GetShotSpeedFactor();
 
 	BulletOwner->CollisionRec.x = BulletOwner->Position.x - BulletOwner->CollisionRec.width * 0.5f;
 	BulletOwner->CollisionRec.y = BulletOwner->Position.y - BulletOwner->CollisionRec.height * 0.5f;

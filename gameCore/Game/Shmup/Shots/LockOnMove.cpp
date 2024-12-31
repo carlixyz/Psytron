@@ -69,8 +69,8 @@ void LockOnMove::DoUpdate()
 
 	if (BulletOwner)
 	{
-		BulletOwner->Position.x += Direction.x * Speed * timeLapse;
-		BulletOwner->Position.y += Direction.y * Speed * timeLapse;
+		BulletOwner->Position.x += Direction.x * Speed * timeLapse * GetShotSpeedFactor();
+		BulletOwner->Position.y += Direction.y * Speed * timeLapse * GetShotSpeedFactor();
 
 		BulletOwner->CollisionRec.x = BulletOwner->Position.x - BulletOwner->CollisionRec.width * 0.5f;
 		BulletOwner->CollisionRec.y = BulletOwner->Position.y - BulletOwner->CollisionRec.height * 0.5f;

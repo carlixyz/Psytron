@@ -8,6 +8,7 @@
 #include <sstream>
 #include <string>
 #include "../../Audio/Audio.h"
+#include "../Assets.h"
 #include "reasings.h"
 
 
@@ -186,6 +187,7 @@ void Player::Shoot()
 	{
 		SoundDelay = 0.01f; // = 0.1f; 0.325f;
 		Audio::Get().PlaySound("Data/Sound/MiniGun_A.wav");
+		//PlaySound(GetSound("Fire"));
 	}
 
 }

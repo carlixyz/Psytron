@@ -54,6 +54,9 @@ void ApplicationProperties::LoadConfiguration(const std::string filename)
 								properties["_SkipIntro"].as<bool>() :
 								false;
 
+			BulletSpeedFactor = properties["_BulletSpeedFactor"].IsDefined() ?
+				properties["_BulletSpeedFactor"].as<float>() :
+				1.0f;
 
 			DEBUG_COUT("ApplicationName \t-> "<< ApplicationName << "\n");
 			DEBUG_COUT("Width \t\t\t-> "	<< Width << "\n");

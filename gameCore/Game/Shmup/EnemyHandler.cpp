@@ -8,31 +8,40 @@
 #include "Boss.h"
 
 
+const float screenFactor  = Graphics::Get().GetFactorArea().x;
+const float Size_512  = 256 * screenFactor;
+const float Size_256  = 128 * screenFactor;
+const float Size_128  = 64 * screenFactor;
+const float Size_64   = 32 * screenFactor;
+const float Size_32   = 16 * screenFactor;
+const float Size_320  = 160 * screenFactor;
+const float Size_384  = 192 * screenFactor;
+const float Size_448  = 224 * screenFactor;
+const float Size_200  = 100 * screenFactor;
 
+#define OUT_TOP_CENTER	Vector2(Graphics::Get().GetScreenCenter().x-(Size_128), -Size_512)
+#define OUT_TOP_LEFT	Vector2(Graphics::Get().GetScreenCenter().x-Size_448, -Size_512)
+#define OUT_TOP_RIGHT	Vector2(Graphics::Get().GetScreenCenter().x+Size_200, -Size_512)
+#define OUT_TOP_LEFT_CORNER	    (Vector2(-Size_128, -Size_128))
+#define OUT_TOP_RIGHT_CORNER    (Vector2(Graphics::Get().GetWindowArea().width, -Size_128))
+#define OUT_TOP_LEFT_ROAD	Vector2(Graphics::Get().GetScreenCenter().x-Size_384, -Size_512)
+#define OUT_TOP_RIGHT_ROAD	Vector2(Graphics::Get().GetScreenCenter().x+Size_320, -Size_512)
 
-#define OUT_TOP_CENTER	Vector2(Graphics::Get().GetScreenCenter().x-128, -512)
-#define OUT_TOP_LEFT	Vector2(Graphics::Get().GetScreenCenter().x-448, -512)
-#define OUT_TOP_RIGHT	Vector2(Graphics::Get().GetScreenCenter().x+200, -512)
-#define OUT_TOP_LEFT_CORNER	    (Vector2(-128, -128))
-#define OUT_TOP_RIGHT_CORNER    (Vector2(Graphics::Get().GetWindowArea().width, -128))
-#define OUT_TOP_LEFT_ROAD	Vector2(Graphics::Get().GetScreenCenter().x-384, -512)
-#define OUT_TOP_RIGHT_ROAD	Vector2(Graphics::Get().GetScreenCenter().x+320, -512)
+#define OUT_LOW_CENTER	Vector2(Graphics::Get().GetScreenCenter().x-Size_128, Graphics::Get().GetWindowArea().height)
+#define OUT_LOW_LEFT	Vector2(Graphics::Get().GetScreenCenter().x-Size_320, Graphics::Get().GetWindowArea().height)
+#define OUT_LOW_RIGHT	Vector2(Graphics::Get().GetScreenCenter().x+Size_256, Graphics::Get().GetWindowArea().height)
 
-#define OUT_LOW_CENTER	Vector2(Graphics::Get().GetScreenCenter().x-128, Graphics::Get().GetWindowArea().height)
-#define OUT_LOW_LEFT	Vector2(Graphics::Get().GetScreenCenter().x-320, Graphics::Get().GetWindowArea().height)
-#define OUT_LOW_RIGHT	Vector2(Graphics::Get().GetScreenCenter().x+256, Graphics::Get().GetWindowArea().height)
+#define POS_CENTER		Vector2Add(Graphics::Get().GetScreenCenter(), Vector2(-Size_64, -Size_64))
+#define POS_RIGHT		Vector2Add(POS_CENTER, Vector2( Size_320, 0		    ))
+#define POS_LEFT		Vector2Add(POS_CENTER, Vector2( -(Size_320+Size_64) , 0	))
 
-#define POS_CENTER		Vector2Add(Graphics::Get().GetScreenCenter(), Vector2(-64, -64))
-#define POS_RIGHT		Vector2Add(POS_CENTER, Vector2( 320, 0		    ))
-#define POS_LEFT		Vector2Add(POS_CENTER, Vector2( -(320+64) , 0	))
+#define POS_TOP_CENTER	Vector2Add(Graphics::Get().GetScreenCenter(), Vector2(0, -Size_256))
+#define POS_TOP_RIGHT	Vector2Add(POS_CENTER, Vector2( Size_256 + Size_64, -Size_256	))
+#define POS_TOP_LEFT	Vector2Add(POS_CENTER, Vector2( -(Size_256 + Size_64), -Size_256 ))
 
-#define POS_TOP_CENTER	Vector2Add(Graphics::Get().GetScreenCenter(), Vector2(0, -256))
-#define POS_TOP_RIGHT	Vector2Add(POS_CENTER, Vector2( 256 + 64, -256	))
-#define POS_TOP_LEFT	Vector2Add(POS_CENTER, Vector2( -(256+64), -256 ))
-
-#define POS_LOW_CENTER	Vector2Add(Graphics::Get().GetScreenCenter(), Vector2(-128, 256))
-#define POS_LOW_RIGHT	Vector2Add(POS_CENTER, Vector2( 256 + 64, 256	))
-#define POS_LOW_LEFT	Vector2Add(POS_CENTER, Vector2( -(256+64),256   ))
+#define POS_LOW_CENTER	Vector2Add(Graphics::Get().GetScreenCenter(), Vector2(-Size_128, Size_256))
+#define POS_LOW_RIGHT	Vector2Add(POS_CENTER, Vector2( Size_256 + Size_64, Size_256	))
+#define POS_LOW_LEFT	Vector2Add(POS_CENTER, Vector2( -(Size_256 + Size_64),Size_256   ))
 
 
 #define ROAMER_SPR  (Vector2(0,1))
@@ -65,7 +74,9 @@ void EnemyHandler::Init()
 {
     /// In a real case on a daily basis I should include below here some data driven loading logic 
     /// However I'm just damn tired of this project which I spent time waaay far beyond than meaningful
+    ///
     /// 
+    CurrentWaveIndex = 0;
 
     CreateIntroWave();
 
@@ -93,11 +104,11 @@ void EnemyHandler::CreateIntroWave()
         new StepMoveTowards(POS_TOP_CENTER),
         new StepShoot(BehaviourType::EAimShot, 3, 0.5f),
         new StepWait(0.2f),
-        new StepSlideTowards(Vector2Add(POS_RIGHT, Vector2(0, -100))),
+        new StepSlideTowards(Vector2Add(POS_RIGHT, Vector2(0, -50 * screenFactor))),
         new StepWait(0.2f),
         new StepShoot(BehaviourType::EAimShot, 3, 0.25f),
         new StepWait(0.2f),
-        new StepMoveAbovePlayer(500.f, Vector2(-32, -128)),
+        new StepMoveAbovePlayer(500.f, Vector2(-Size_32, -Size_128)),
         new StepShoot(BehaviourType::EAimShot, 3, 0.25f),
         new StepWait(1.0f)
     };
@@ -119,11 +130,11 @@ void EnemyHandler::CreateFirstWave()
         new StepMoveTowards(POS_CENTER),
         new StepShoot(BehaviourType::EMultiShot, 3, 1.0f),
         new StepWait(0.25f),
-        new StepSlideTowards(Vector2Add(POS_RIGHT, Vector2(0, -100))),
+        new StepSlideTowards(Vector2Add(POS_RIGHT, Vector2(0, -50 * screenFactor))),
         new StepWait(0.5f),
         new StepShoot(BehaviourType::EAimShot, 5, 0.5f),
         new StepWait(0.25f),
-        new StepMoveAbovePlayer(350.f, Vector2(-32, -300))
+        new StepMoveAbovePlayer(350.f, Vector2(-Size_32, -150 * screenFactor))
     };
 
     EnemyProperties BungieStats = BUNGIE(OUT_TOP_CENTER);
@@ -144,12 +155,12 @@ void EnemyHandler::CreateSecondWave()
 {
     std::vector<IStepAction*> StepActionsLeft = {
         new StepWait(5.0f, false),  // 5.0
-        new StepMoveTowards(Vector2(Graphics::Get().GetScreenCenter().x - 340, 256)),
+        new StepMoveTowards(Vector2(Graphics::Get().GetScreenCenter().x - 170 * screenFactor, Size_256)),
         new StepShoot(BehaviourType::EAimShot, 3, 0.5f),
         new StepMoveTowards(OUT_LOW_LEFT),
-        new StepMoveRelative(Vector2(-512, 0)),
+        new StepMoveRelative(Vector2(-Size_512, 0)),
         new StepWait(1.0f),
-        new StepMoveTowards(Vector2(-128, -128))
+        new StepMoveTowards(Vector2(-Size_128, -Size_128))
     };
 
     auto RoamerLeftA = new Enemy({ ROAMER(OUT_TOP_LEFT_CORNER), StepActionsLeft });
@@ -166,11 +177,11 @@ void EnemyHandler::CreateSecondWave()
 
     std::vector<IStepAction*> StepActionsRight = {
         new StepWait(0.0f, false), // 0.0
-        new StepMoveTowards(Vector2(Graphics::Get().GetScreenCenter().x + 256, 128)),
+        new StepMoveTowards(Vector2(Graphics::Get().GetScreenCenter().x + Size_256, Size_128)),
         new StepShoot(BehaviourType::EAimShot, 3, 0.5f),
         new StepMoveTowards(OUT_LOW_RIGHT),
-        new StepMoveRelative(Vector2(+512, 0)),
-        new StepMoveTowards(Vector2(Graphics::Get().GetWindowArea().width, -128)),
+        new StepMoveRelative(Vector2(+Size_512, 0)),
+        new StepMoveTowards(Vector2(Graphics::Get().GetWindowArea().width, -Size_128)),
         new StepWait(1.0f)
     };
     auto RoamerRightA = new Enemy({ ROAMER(OUT_TOP_RIGHT_CORNER), StepActionsRight });
@@ -199,7 +210,7 @@ void EnemyHandler::CreateThirdWave()
 {
     std::vector<IStepAction*> RazorActions {
         new StepWait(1.0f),
-        new StepMoveRelative(Vector2(0, 256)),
+        new StepMoveRelative(Vector2(0, Size_256)),
         new StepWait(1.0f, false),
         new StepEnterScene(POS_CENTER),
         new StepWait(1.0f),
@@ -220,20 +231,20 @@ void EnemyHandler::CreateThirdWave()
         new StepSlideTowards(POS_LEFT),
         new StepShoot(BehaviourType::EAimShot, 5, 0.5f),
         new StepWait(0.25f),
-        new StepMoveRelative(Vector2(0, -256)),
+        new StepMoveRelative(Vector2(0, -Size_256)),
         new StepWait(0.5f),
         new StepShoot(BehaviourType::EAimShot, 5, 0.5f),
         new StepWait(0.25f),
-        new StepMoveRelative(Vector2(0, 512)),
+        new StepMoveRelative(Vector2(0, Size_512)),
     };
 
-    auto BungieA = new Enemy( BUNGIE(Vector2(-512, 1500)), BungieActions);
+    auto BungieA = new Enemy( BUNGIE(Vector2(-Size_512, 750 * screenFactor)), BungieActions);
     delete BungieActions[2];
     BungieActions[2] = new StepSlideTowards(POS_RIGHT);
-    auto BungieB = new Enemy( BUNGIE(Vector2(1500, 1500)), BungieActions);
+    auto BungieB = new Enemy( BUNGIE(Vector2(750 * screenFactor, 750 * screenFactor)), BungieActions);
 
     std::vector<Enemy*> NextSwarm = { 
-        new Enemy(RAZOR(Vector2(Graphics::Get().GetScreenCenter().x-128, -256)), RazorActions),
+        new Enemy(RAZOR(Vector2(Graphics::Get().GetScreenCenter().x- Size_128, -Size_256)), RazorActions),
         BungieA,
         BungieB
     };
@@ -400,41 +411,41 @@ void EnemyHandler::CreateFifthWave()
 void EnemyHandler::CreateSixthWave()
 {
     std::vector<IStepAction*> VolboActions {
-        new StepSlideTowards(Vector2(Graphics::Get().GetWindowArea().width - 64, 64)),      // 0 -
+        new StepSlideTowards(Vector2(Graphics::Get().GetWindowArea().width - Size_64, Size_64)),      // 0 -
         new StepShoot(BehaviourType::ESeekShot, 1, 0.15f),
         new StepWait(0.25f),
 
-        new StepSlideTowards(Vector2(64, Graphics::Get().GetWindowArea().height - 64)),     // 3 -
+        new StepSlideTowards(Vector2(64, Graphics::Get().GetWindowArea().height - Size_64)),     // 3 -
         new StepShoot(BehaviourType::ESeekShot, 1, 0.15f),
         new StepWait(0.25f),
 
-        new StepSlideTowards(Vector2(64, 64)),                                              // 6 -
+        new StepSlideTowards(Vector2(Size_64, Size_64)),                                              // 6 -
         new StepShoot(BehaviourType::ESeekShot, 1, 0.15f),
         new StepWait(0.25f),
 
-        new StepSlideTowards(Vector2(Graphics::Get().GetWindowArea().width - 64,
-                                        Graphics::Get().GetWindowArea().height - 64)),      // 9 -
+        new StepSlideTowards(Vector2(Graphics::Get().GetWindowArea().width - Size_64,
+                                        Graphics::Get().GetWindowArea().height - Size_64)),      // 9 -
         new StepShoot(BehaviourType::ESeekShot, 1, 0.15f),
         new StepWait(0.25f),
     };
 
 
     std::vector<IStepAction*> VolboActionsSpecial{
-        new StepSlideTowards(Vector2(Graphics::Get().GetWindowArea().width - 64, 64)),      // 0 -
+        new StepSlideTowards(Vector2(Graphics::Get().GetWindowArea().width - Size_64, Size_64)),      // 0 -
         new StepWait(0.25f),
 
         new StepSlideTowards(POS_CENTER),                                                   // 2
         new StepShoot(BehaviourType::ERingShot, 3, 1.0f),
         new StepShoot(BehaviourType::EStarShot, 1, 0.1f),
 
-        new StepSlideTowards(Vector2(64, Graphics::Get().GetWindowArea().height - 64)),     // 5 -
+        new StepSlideTowards(Vector2(Size_64, Graphics::Get().GetWindowArea().height - Size_64)),     // 5 -
         new StepWait(0.25f),
 
         new StepSlideTowards(Vector2(64, 64)),                                              // 7 -
         new StepWait(0.25f),
 
-        new StepSlideTowards(Vector2(   Graphics::Get().GetWindowArea().width - 64, 
-                                        Graphics::Get().GetWindowArea().height - 64)),     // 9 -
+        new StepSlideTowards(Vector2(   Graphics::Get().GetWindowArea().width - Size_64,
+                                        Graphics::Get().GetWindowArea().height - Size_64)),     // 9 -
         new StepWait(0.25f),
     };
 
@@ -547,6 +558,8 @@ void EnemyHandler::Deinit()
     }
 
     Swarms.clear();
+
+    CurrentWaveIndex = 0;
 }
 
 const std::optional<std::vector<Enemy*>> EnemyHandler::GetCurrentWave()

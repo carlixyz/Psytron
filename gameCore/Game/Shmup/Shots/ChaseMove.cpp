@@ -38,8 +38,8 @@ void ChaseMove::DoUpdate()
 	if (!Tracking)
 	{
 
-		BulletOwner->Position.x += Direction.x * Speed * GetFrameTime();
-		BulletOwner->Position.y += Direction.y * Speed * GetFrameTime();
+		BulletOwner->Position.x += Direction.x * Speed * GetFrameTime() * GetShotSpeedFactor();
+		BulletOwner->Position.y += Direction.y * Speed * GetFrameTime() * GetShotSpeedFactor();
 
 		BulletOwner->CollisionRec.x = BulletOwner->Position.x - BulletOwner->CollisionRec.width * 0.5f;
 		BulletOwner->CollisionRec.y = BulletOwner->Position.y - BulletOwner->CollisionRec.height * 0.5f;
@@ -54,7 +54,7 @@ void ChaseMove::DoUpdate()
 	Vector2 Distance = Vector2Subtract( TargetPosition, BulletOwner->Position);
 
 	/// Calcular la distancia que se movera el perseguidor teniendo en cuenta su velocidad máxima
-	float displacement = Speed * GetFrameTime();
+	float displacement = Speed * GetFrameTime() * GetShotSpeedFactor();
 
 	/// Si la distancia que el perseguidor se va a desplazar es mayor o igual
 	/// a la distancia que hay a su objetivo, se mueve solo hasta el punto objetivo

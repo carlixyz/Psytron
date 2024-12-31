@@ -39,8 +39,8 @@ void PetalMove::DoUpdate()
 
 	Direction = Vector2Rotate(Direction, RotationOffset * DEG2RAD);
 
-	BulletOwner->Position.x += Direction.x * Speed * TimeFrame;
-	BulletOwner->Position.y += Direction.y * Speed * TimeFrame;
+	BulletOwner->Position.x += Direction.x * Speed * TimeFrame * GetShotSpeedFactor();
+	BulletOwner->Position.y += Direction.y * Speed * TimeFrame * GetShotSpeedFactor();
 
 	BulletOwner->CollisionRec.x = BulletOwner->Position.x - BulletOwner->CollisionRec.width * 0.5f;
 	BulletOwner->CollisionRec.y = BulletOwner->Position.y - BulletOwner->CollisionRec.height * 0.5f;

@@ -1,10 +1,11 @@
 #include "TitleState.h"
 #include "../Game.h"
 #include "../../Graphics/Graphics.h"
-#include "./reasings.h"
 #include "../Assets.h"
+#include "../../Audio/Audio.h"
 #include <iostream>
 #include <string>
+#include "./reasings.h"
 
 #define PADDING 100
 #define SCREEN_CENTER_H (int)(Graphics::Get().GetWindowArea().width * 0.5f)
@@ -31,10 +32,12 @@ void TitleState::OnInit()
 	credits.push_back("Stable Diffusion");
 	credits.push_back("Shmup logic");
 	credits.push_back("ChatGPT");
-	credits.push_back("Soundtrack");
+	credits.push_back("Firestorm Track by");
+	credits.push_back("Doranarasi.com");
+	credits.push_back("General VN Soundtrack by");
 	credits.push_back("Eric Matyas");
-	credits.push_back("										Visit Soundimage.org");
-
+	credits.push_back(" ");
+	credits.push_back("Visit Soundimage.org");
 }
 
 void TitleState::OnDeinit()
@@ -88,7 +91,7 @@ void TitleState::OnRender()
 		int i = 0, j = 0;
 
 		const int LeftColumn = Graphics::Get().GetHorizontalCenter() - 200 * (int)(Graphics::Get().GetFactorArea().x);
-		const int RightColumn = Graphics::Get().GetHorizontalCenter() + 100 * (int)(Graphics::Get().GetFactorArea().x);
+		const int RightColumn = Graphics::Get().GetHorizontalCenter() + 50 * (int)(Graphics::Get().GetFactorArea().x);
 
 		for (auto& credit : credits)
 		{

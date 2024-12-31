@@ -452,12 +452,18 @@
     <ClInclude Include="Game\Shmup\Boss.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="raylib_logo.png">
       <Filter>Archivos de recursos</Filter>
     </Image>
     <Image Include="UV.png">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="Resources\Icon.ico">
       <Filter>Archivos de recursos</Filter>
     </Image>
   </ItemGroup>
@@ -472,5 +478,10 @@
     <None Include="Libraries\yaml-cpp\lib\x64\yaml-cppd.pdb" />
     <None Include="config.yml" />
     <None Include="Data\intro.yml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc">
+      <Filter>Archivos de recursos</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

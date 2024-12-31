@@ -314,11 +314,13 @@
     <ClInclude Include="Libraries\yaml-cpp\include\yaml-cpp\yaml.h" />
     <ClInclude Include="Game\Register.h" />
     <ClInclude Include="Game\States\RoadState.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Utility\Singleton.h" />
     <ClInclude Include="Utility\Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="raylib_logo.png" />
+    <Image Include="Resources\Icon.ico" />
     <Image Include="UV.png" />
   </ItemGroup>
   <ItemGroup>
@@ -332,6 +334,9 @@
     <None Include="Data\intro.yml" />
     <None Include="Libraries\yaml-cpp\lib\Win32\yaml-cppd.pdb" />
     <None Include="Libraries\yaml-cpp\lib\x64\yaml-cppd.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

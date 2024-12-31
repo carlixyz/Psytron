@@ -67,7 +67,6 @@ void Assets::LoadImages()
 		Images[Name] = Image;
 	};
 
-	//Load("Icon", "Images/Cosmic-Hell_Logo.png");
 }
 
 void Assets::LoadFonts()
@@ -100,7 +99,8 @@ void Assets::LoadSounds()
 			Sounds[Name] = Sound;
 		};
 
-	Load("Fire", "Data/Sound/MiniGun.wav");
+	Load("Fire", "Data/Sound/MiniGun_A.wav");
+	Load("Explode", "Data/Sound/Explode.wav");
 	//Load("Fire", "Sounds/BulletFire.wav");
 }
 
@@ -115,14 +115,14 @@ void Assets::UnloadSounds()
 
 void Assets::LoadMusic()
 {
-	const auto Load = [&](const std::string Name, const char* FileName)
+	const auto Load = [&](const std::string Name, const char* FileName, bool loop = true)
 		{
 			const Music Music = LoadMusicStream(FileName);
 			Musics[Name] = Music;
 		};
-
-	//Load("Firer", "Data/Sound/stg_st003_88pro.ogg");
-	//Load("Menu", "Music/Carpenter_Brut-Hang'Em_All.ogg");
+	
+	Load("FireLoop", "Data/Sound/stg_st003_88pro-loop.ogg", false);
+	Load("FireIntro", "Data/Sound/stg_st003_88pro-intro.ogg");
 }
 
 void Assets::UnloadMusic()

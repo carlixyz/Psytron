@@ -23,12 +23,17 @@ public:
 	inline bool IsDebugMode()	{ return appProperties.DebugMode; }
 	inline bool SkipIntro()		{ return appProperties.SkipIntro; }
 	
-	void AddScore()				{ score += 100; }
-	int GetScore()				{ return score; }
+	void AddScore()				{ Score += 100; }
+	int GetScore()				{ return Score; }
+	void ResetScore()			{ TopScore = Score;  Score = 0; }
+	float GetShotSpeedFactor() { return appProperties.BulletSpeedFactor; }
 
 protected:
 	Game() { ; } // Protected Constructor
 
-	int score = 0;
+	int Score = 0;
+	int TopScore = 0;
 };
+
+#define GetShotSpeedFactor() Game::Get().GetShotSpeedFactor()
 

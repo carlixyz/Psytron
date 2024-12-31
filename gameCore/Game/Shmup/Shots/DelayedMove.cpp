@@ -19,8 +19,8 @@ void DelayedMove::DoUpdate()
 {
 	if (CurrentDelay > 0.0f)
 	{
-		BulletOwner->Position.x += Direction.x * Speed * GetFrameTime();
-		BulletOwner->Position.y += Direction.y * Speed * GetFrameTime();
+		BulletOwner->Position.x += Direction.x * Speed * GetFrameTime() * GetShotSpeedFactor();
+		BulletOwner->Position.y += Direction.y * Speed * GetFrameTime() * GetShotSpeedFactor();
 		CurrentDelay -= GetFrameTime();
 
 		BulletOwner->CollisionRec.x = BulletOwner->Position.x - BulletOwner->CollisionRec.width * 0.5f;

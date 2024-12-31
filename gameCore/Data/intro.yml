@@ -510,11 +510,11 @@ EnterPsyTron:
     - 2: Unidad remota de enlace psiquico con capacidad de combate urbano
       time: 5.0
       unskip:
-    - 2: Tecnicamente puede acelerar a mas de 300 Km en 6 segundos
+    - 2: "Tecnicamente puede acelerar a mas de 300 Km en 6 segundos \n soporta impactos de hasta 100 toneladas"
       time: 5.0
-    - 2: "soporta impactos de hasta 100 toneladas \ny Tiene disparo teledirigido con autoaiming"
+    - 2: "y tiene disparo con autoaiming, teledirigido por automatizacion neural"
       time: 5.0
-    - 2: "en este momento reposa sobre su plataforma de carga inalambrica\n y con su bateria completa al 100%"
+    - 2: "Ahora mismo reposa sobre su plataforma de carga inalambrica\n con la bateria completa al 100% y una autonomia de 15 minutos"
       time: 5.0
     - 1: Wow
     - 2: "Tu mision es pilotear esto y patearle el trasero a esas cosas\n que estan en la calle fuera de control"

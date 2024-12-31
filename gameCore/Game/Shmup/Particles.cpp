@@ -24,11 +24,16 @@
 
 void Particles::OnInit()
 {
-	Bullets = std::vector<Bullet*>(TotalAmount);
-	PlayerBullets = std::vector<Bullet*>(TotalPlayerAmount);
+	CurrentTarget = nullptr;
+
+	if (Bullets.empty())
+		Bullets = std::vector<Bullet*>(TotalAmount);
 
 	for (unsigned i = 0; i < TotalAmount; i++)
 		Bullets[i] = new Bullet();
+
+	if (PlayerBullets.empty())
+		PlayerBullets = std::vector<Bullet*>(TotalPlayerAmount);
 
 	for (unsigned i = 0; i < TotalPlayerAmount; i++)
 		PlayerBullets[i] = new Bullet();
@@ -37,12 +42,17 @@ void Particles::OnInit()
 void Particles::OnDeinit()
 {
 	for (unsigned i = 0; i < TotalAmount; i++)
+	{
+		Bullets[i]->Active = false;
 		delete Bullets[i];
+	}
+	Bullets.clear();
 
 	for (unsigned i = 0; i < TotalPlayerAmount; i++)
+	{
+		PlayerBullets[i]->Active = false;
 		delete PlayerBullets[i];
-
-	Bullets.clear();
+	}
 	PlayerBullets.clear();
 }
 
@@ -359,7 +369,7 @@ void Particles::OnUpdate(const std::optional<std::vector<Enemy*>>& enemies)
 {
 	for (Bullet* pBullet : PlayerBullets)
 	{
-		if (pBullet->Active)
+		if (pBullet != nullptr && pBullet->Active)
 		{
 			pBullet->Update();
 
@@ -379,7 +389,7 @@ void Particles::OnUpdate(const std::optional<std::vector<Enemy*>>& enemies)
 	
 	for (Bullet* bullet : Bullets)
 	{
-		if (bullet->Active)
+		if (bullet != nullptr && bullet->Active)
 		{
 			bullet->Update();
 

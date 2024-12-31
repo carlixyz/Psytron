@@ -13,7 +13,9 @@ bool Audio::Init()
 
 bool Audio::Deinit()
 {
-    UnloadMusicStream(SoundTrack);
+    //if (IsMusicReady(SoundTrack))
+    //    UnloadMusicStream(SoundTrack);    
+    /// Let's handle this from Assets Unloading to avoid more issues
 
     for (auto& sound : SoundsMap)
     {
@@ -32,13 +34,19 @@ bool Audio::Deinit()
 void Audio::PlaySound(const std::string& soundFile)
 {
     if (!SoundsMap.contains(soundFile))
+        PreloadSound(soundFile);
+
+    if (SoundsMap[soundFile]->IsReady())
+        SoundsMap[soundFile]->Play();
+}
+
+void Audio::PreloadSound(const std::string& soundFile)
+{
+    if (!SoundsMap.contains(soundFile))
     {
         SoundsMap[soundFile] = new raylib::Sound();
         SoundsMap[soundFile]->Load(soundFile);
     }
-
-    if (SoundsMap[soundFile]->IsReady())
-        SoundsMap[soundFile]->Play();
 }
 
 void Audio::PlayMusic(const std::string& musicFile, bool isLooping)
@@ -50,6 +58,19 @@ void Audio::PlayMusic(const std::string& musicFile, bool isLooping)
     {
         PlayMusicStream(SoundTrack);
         if (IsMusicFading || MusicVolumeNow <= 0.0f )
+            FadeMusicIn();
+    }
+}
+
+void Audio::PlayMusic( Music soundTrack, bool isLooping)
+{
+    SoundTrack = soundTrack;
+    SoundTrack.looping = isLooping;
+
+    if (IsMusicReady(SoundTrack))
+    {
+        PlayMusicStream(SoundTrack);
+        if (IsMusicFading || MusicVolumeNow <= 0.0f)
             FadeMusicIn();
     }
 }

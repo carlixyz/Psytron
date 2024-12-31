@@ -20,11 +20,11 @@ bool Game::Init()
 
 	if (!result) Graphics::Get().Deinit();	// CloseWindow();	// If something fails Kill Window
 
+	result = result && Audio::Get().Init();
+
 	result = result && Assets::Get().Init();
 
 	result = result && States.Init();							//	States.Init(States.introState);
-
-	result = result && Audio::Get().Init();
 
 	return result;
 }
@@ -41,9 +41,9 @@ bool Game::Deinit()
 
 	result = result && Assets::Get().Deinit();
 
-	result = result && Audio::Get().Deinit();
-
 	result = result && Graphics::Get().Deinit();
+
+	result = result && Audio::Get().Deinit();
 
 	return result;
 }

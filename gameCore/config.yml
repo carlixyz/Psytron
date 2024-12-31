@@ -2,11 +2,12 @@
   Window:
     Properties:
       _Name: PsyTron
-      _Width: 1280 # 640 1280 1920
-      _Height: 960 # 480 960 1080
+      _Width: 1280   # 640 1280 1920
+      _Height: 960  # 480 960 1080
       _Bits: 16
       _FPS: 60
       _Fullscreen: false
+      _BulletSpeedFactor: '1.0' # use 0.5 for Resolutions under 1280 * 960
       _DebugMode: false
       _SkipIntro: false
   Resources:
