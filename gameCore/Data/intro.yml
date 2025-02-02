@@ -182,42 +182,43 @@ IntroSchool:
   - 0: " "
     time: 2.0
   - PlaySound: "Data/Sound/zapslat.wav"
-  - 1: Hermosa tarde verdad?
-  - 1: por fin Viernes y otra larga semana que termina...
+  - 1: Lovely afternoon, isn't it? 
+  - 1: Finally Friday and another long week is ending...
   - PlayMusic: "Data/Sound/Video-Game-Brain-Drain_Looping.mp3"
   - SetLeft: Ale
   - FadeIn: Ale
-  - 1: "Soy Alex, tengo 21 años y este es mi ultimo mes \nen el instituto tecnologico."
+  - 1: "I'm Alex, I'm 21 years old and this is my last month \nat the technological institute."
   - FadeIn: School
-  - 1: "Espere años para certificarme y ahora... \ntengo pensamientos mezclados."
-  - 1: "Por fin se terminan los examenes y nunca mas tendre que estudiar \ndurante horas para aprobar asignaturas!"
-  - 1: Pero por otro lado siento que voy a extrañar algunas cosas...
+  - 1: "I waited years to get certified and now... \nI have mixed thoughts."
+  - 1: "Finally the exams are over and I'll never have to study \nfor hours to pass subjects again!"
+  - 1: But on the other hand I feel like I'm going to miss some things...
   - FadeOut: Ale
-  - 1: "Este lugar tiene una energia especial"
+  - 1: "This place has a special energy"
   - SetLeftOut: Hoppy
-  - 1: "Los chistes de Hoppy, mis tontos amigos, locas fiestas Uff... \n Muchas cosas intensas!"
-  - 1: Creo que estoy dejando aqui una parte de mi...
+  - 1: "Hoppy's jokes, my silly friends, crazy parties Uff... \n Lots of intense stuff!"
+  - 1: I think I'm leaving a part of me here...
   - MoveCenter: Hoppy
 
   - SetLeftOut: Ginger2
-  - 1: Mhhh ahi se acerca Hoppy, que estara tramando ahora?
-  - 3: "Hey Al, Donde estabas? \n seguro que otra vez pensando tonterias! jajajaaj" 
-  - 3: No te olvides que me debes una apuesta...
-  - 1: Rayos y ahora que diablos quieres?
+  - 1: Mhhh here comes Hoppy, what's he up to now?
+  - 3: "Hey Al, where were you? \n I'm sure you're thinking nonsense again! LOL"
+  - 3: Don't forget that you owe me a bet...
+  - 1: Damn, what the hell do you want now?
+  - 3: Mhhh
     time: 6.0
   - MoveRight: Ginger2
-  - 3: "Ahi esta saliendo Ginger...\ncreo que ahora puedes acercarte a ella..."
+  - 3: "There's Ginger coming out... \nI think you should talk to her now..."
     time: 6.0
-  - 1: Que quee? No tengo idea de que hablas 
-  - 1: y ya tengo que irme, se me empieza a hacer tarde...
-  - 3: Hey, deja de esconderte, te digo que tiene algo contigo... 
-  - 3: tengo el presentimiento que es ahora...
-  - 3: Sino lo intentas, te arrepentiras para siempre.
+  - 1: What what? I have no idea what you're saying
+  - 1: And I have to go now, I'm running late...
+  - 3: Hey, stop hiding, I'm telling you that she has something on you...
+  - 3: I have a feeling it's today...
+  - 3: If you don't try it, you'll regret it forever.
     time: 6.0
-  - 1: Estas loco? No tengo nada que hacer ahi! 
-  - 1: Es obvio que ella se lleva mejor con tontos como Porter o Lager...
-  - 3: Escucha, Tengo los apuntes de clase del Profe...
-  - 3: Toma, Solo dale el enlace de acceso a ella y nada mas
+  - 1: Are you crazy? I have nothing to talk about
+  - 1: It's obvious that she gets along better with Porter or Lager...
+  - 3: Listen, I have the Professor's class notes...
+  - 3: Here, just give her the access link and nothing else
   - MoveRightOut: Hoppy
   - SetRightOut: Ginger
   - GoTo: GameOfLove
@@ -229,185 +230,186 @@ GameOfLove:
   - SetLeftOut: Amber
   - MoveRight: Ginger
   - FadeOut: Ginger2
-  - 4: Hola Al perdona
-  - 4: Hoppy dijo que tienes el resumen de la clase de hoy, es cierto?
-  - 1: Ehmmm si, asi es...
-  - 1: Toma, Estos son los que necesitamos para la entrega final.
-  - 4: Genial, que  suerte que los conseguiste!
-  - 1: Eh si claro...
-  - 4: Digo, se termina el año, ultima clase y luego adios! 
-  - 1: «Un momento, Dijo adios?»
-  - 1: «tengo que pensar algo para darle charla!»
+  - 4: Hi Al sorry
+  - 4: Hoppy said you have the summary of today's class, is that right?
+  - 1: Uhmmm yes, that's right...
+  - 1: Here, these are the ones we need for the final delivery.
+  - 4: Great, lucky you got them!
+  - 1: Uh yeah right...
+  - 4: I mean, the year is ending, last class and then goodbye!
+  - 1: «Wait, did he say goodbye?»
+  - 1: «I have to think of something to talk to him about!»
   - 1: "«...»"
     time: 2.0
     unskip:
-  - 1: «que mal, no se me ocurre nada!»
-  - 4: Y tu que estas haciendo? 
+  - 1: «Too bad, I can't think of anything!»
+  - 4: And what are you doing?
   - ChooseTalk :
     - Option:
-      - 1: Trabajando en un proyecto secreto muy especial
-      - 4: En serio? puedes contarmelo a mi?
-      - 1: Jejje por esta vez creo que puedo hacer una excepcion
-      - 4: Genial y de que se trata entonces?
-      - 1: "Mmhhh..."
-      - GoTo: GameOfWar
+        - 1: Working on a very special secret project
+        - 4: Really? Can you tell me about it?
+        - 1: Hehehe I think I can make an exception for this time
+        - 4: Great, so what is it about then?
+        - 1: "Mmhhh..."
+        - GoTo: GameOfWar
     
     - Option:
-      - 1: Disfrutando con melancolia estos ultimos dias de clase.
-      - 4: Wow, en serio eso es lo que piensas?
-      - 1: Bueno, no siempre, pero me siento un poco asi estos dias
-      - 4: "Vaya, no sabia que eras tan profundo\n No a todos les gusta mostrar sus emociones"
-      - GoTo: GameOfWar
+        - 1: Enjoying these last days of school with melancholy.
+        - 4: Wow, is that really what you think?
+        - 1: Well, not always, but I feel a little like that these days
+        - 4: "Wow, I didn't know you were so deep\n Not everyone likes to show their emotions"
+        - GoTo: GameOfWar
     
     - Option:
-      - 1: Planificando a que fiestas voy a ir esta noche
-      - 4: Ohh vaya, vaya, pero que loco!
-      - 1: Jejje
-      - 4: Y adonde vas a ir?
-      - 1: "mhhh..."
-      - 1: A ningun lugar realmente, tengo que trabajar
-      - 4: infelizmente jaja
-      - GoTo: GameOfWar
+        - 1: Planning what parties I'm going to go to tonight
+        - 4: Ohh wow, wow, how crazy!
+        - 1: Hehehe
+        - 4: And where are you going to go?
+        - 1: "mhhh..."
+        - 1: Nowhere really, I have to work
+        - 4: unfortunately haha
+        - GoTo: GameOfWar
 
 
 GameOfWar:
-  - 1: "la verdad, no hacia nada en especial \nsolo me estoy despidiendo del instituto y eso."
-  - 4: Nosotros estamos organizando con el grupo para ir a algun lado...
-  - 4: Ah ahi viene Porter...
-  - ShakeImage: School
-  - MoveLeft: Porter
-  - 5: Hey que pasa aca? de que estan hablando?
-  - 1: "..."
-  - 5: Vaya, vaya, Ustedes son amigos? No sabia que ya se conocian eh
-  - 1: Ehhh...
-  - 5: Jajajja es broma, tranquilo, relajate chiquito.
-  - MoveCenter: Amber
-  - 6: Y a ti que te pasa Porter?
-  - 5: Ehh no nada, nada... 
-  - MoveLeft: Honey
-  - 8: Creo que intenta hacerse el Bully de nuevo
-  - 5: no, bueno, no es tan asi...
-  - 8: Porter, ni se te ocurra, ahorranos la verguenza por favor!
-  - 1: «Mhhh debo ser cuidadoso con mis palabras»
-  - 5: Tranquilos, tranquilos, Solo estoy bromeando un poco, perdon...
-  - 6: Ok pero No lo hagas mas...
-  - FadeOut: Porter
-  - 6: Bueno Chicos, basta de perder tiempo y vamos al Viel Glück!
-  - FadeOut: Amber
-  - 8: Oh Yeah! Hay que visitar ese antro, antes que lo cierren jaja
-  - FadeOut: Honey
-  - MoveCenter: Ginger
-  - 4: Al, Nos vamos al Pool, quieres venir con nosotros?
-  - 1: «Es una invitacion? Debo estar alucinando...»
-  - 1: Si claro, me encantaria ir con ustedes y...
-  - 4: y que?
-  - 1: Demonios, me olvide completamente de algo..
-  - 4: Que cosa? que sucede?
-  - 1: Hoy trabajo y tengo que ir hacia otro lugar.
-  - 4: Ohhh Que pena
-  - 4: Bueno, Quiza sera otro dia entonces.
-  - 1: Por supuesto, Diviertanse, si me libero mas tarde, capaz vaya.
-  - 4: Chiao.
-  - StopMusic:
-  - FadeOut: Ginger
-  - 1: «Oh no, no, se esta yendo...»
-  - 1: «Ya se fue, porque soy tan lento»
-  - FadeOut: School
-  - 1: Pero bueno, no tengo opcion, tengo que trabajar...
-    time: 2.0
-    unskip:
-  - GoTo: MiPrimeraChamba
+    - 1: "I wasn't really doing anything special,\n I'm just saying goodbye to school and all that."
+    - 4: We're organizing with the group to go somewhere...
+    - 4: Ah, there comes Porter...
+    - ShakeImage: School
+    - MoveLeft: Porter
+    - 5: Hey, what's going on here? What are you talking about?
+    - 1: "..."
+    - 5: "Wow, wow, you guys are friends? \n I didn't know you already knew each other, huh"
+    - 1: Ehhh...
+    - 5: Hahaha, just kidding, calm down, relax kiddo.
+    - MoveCenter: Amber
+    - 6: What's wrong with you, Porter?
+    - 5: Uhh nothing, nothing...
+    - MoveLeft: Honey
+    - 8: I think he's trying to be a bully again
+    - 5: no, well, it's not like that...
+    - 8: "Porter, don't even think about it, \nplease save us the embarrassment!"
+    - 1: «Mhhh I have to be careful with my words»
+    - 5: Calm down, calm down, I'm just joking a little, sorry...
+    - 6: Ok but don't do it anymore...
+    - FadeOut: Porter
+    - 6: Okay guys, enough wasting time and let's go to Viel Glück!
+    - FadeOut: Amber
+    - 8: Oh Yeah! We have to visit that club, before they close it haha
+    - FadeOut: Honey
+    - MoveCenter: Ginger
+    - 4: Al, we're going to the Pool, do you want to come with us?
+    - 1: «Is this an invitation? I must be hallucinating...
+    - 1: Yeah sure, I'd love to go with you guys and...
+    - 4: So what?
+    - 1: Damn, I completely forgot about something..
+    - 4: What's going on?
+    - 1: I'm working today and I have to go somewhere else.
+    - 4: Ohhh What a shame
+    - 4: Well, maybe it'll be another day then.
+    - 1: Sure, have fun, if I get free later, maybe I will.
+    - 4: Bye.
+    - StopMusic:
+    - FadeOut: Ginger
+    - 1: «Oh no, no, he's leaving...»
+    - 1: «He's already gone, because I'm so slow»
+    - FadeOut: School
+    - 1: But hey, I have no choice, I have to work...
+      time: 2.0
+      unskip:
+    - GoTo: MyFirstJob
   
-MiPrimeraChamba:
-  - SetCenter: Ale
-  - SetLeftOut: Ale2
-  - 1: Que Barbaro
-  - FadeIn: NightCity
-  - ScrollRightEnd: NightCity
-  - 1: Diablos, No Puedo creer lo que acaba de pasar
-  - MoveCenter: Ale2
-  - 1: «Que mala suerte»
-  - PlayMusic: "Data/Sound/Cyber-Streets.mp3"
-  - 1: "«justo el dia que nos cruzamos \n y es justo cuando empiezo a trabajar tambien»"
-    time: 6.0
-  - FadeOut: Ale2
-  - FadeIn: Ale
-  - 1: Ahora que lo pienso, Podria haber intentado hablar un poco mas...
-    time: 4.0
-  - 1: Le podria haber preguntado que va iba a hacer en el verano...
-    time: 5.0
-  - 1: "O quiza que haria el proximo año... \nquiza este buscando trabajo tambien..."
-    time: 6.0
-  - 1: "Ja pero que estoy diciendo"
-  - 1: "Probablemente ya tiene resuelto el futuro."
-  - 1: "Pero bueno, son cosas que pasan"
-    time: 3.0
-  - 1: "y no tiene sentido darle mas vueltas ahora"
-  - MoveRightOut: Ale
-  - SetLeft: TrackClose
-  - 1: "Si, Hice lo que pude, no tenia alternativa, se me hace tarde"
-  - 1: "Es mi primer dia de trabajo y la verdad, necesito dinero."
-  - FadeOut: NightCity
-  - ScrollRightEnd: TrackClose
-  - 1: Ahora lo unico que me queda es aprender de esta situacion
-    time: 6.0
-  - 1: Creo...
-  - 1: Si, si, Mejor no mirar atras y concentrarme en el futuro...
-  - 0: " "
-    time: 3.0
-    unskip:
-  - 1: Por cierto, Creo que ya estoy cerca del lugar...
-  - 1: En esta calle se supone que era el punto de contacto
-  - StopMusic:
-  - 1: El aviso decia algo de un camion... Sera este blanco? 
-    time: 5.0
-    unskip:
-  - SetRight: TrackOpen
-  - 1: Creo que este era el logo que identifica la empresa
-  - 1: Aunque no esta muy claro quienes son los dueños
-    time: 3.0
-  - 1: No se porque en el instructivo insistian con tanta confidencialidad
-  - 1: Que cosa mas misteriosa...
-    time: 3.0
-  - 1: Todo esto es muy raro la verdad
-    time: 5.0
-    unskip:
-  - FadeIn: TrackOpen
-  - PlaySound: "Data/Sound/laser-shot.wav"
-  - 1: Mhhh
-  - 1: Oh, se abrio un acceso posterior.
-  - 1: Parece que hay alguien adentro...
-    time: 4.0
-  - 0: Oye tu eres el nuevo pasante?
-  - 1: ¿!?
-  - 0: Entonces Que estas esperando? Vas a entrar o 
-    time: 4.0
-  - 1: Y Ahora que se supone que tengo que hacer?
-  - ChooseTalk :
-    - Option:
-      - 1: Rechazar la invitacion educadamente
-      - 1: No lo se, este lugar y todo parece demasiado sospechoso...
-      - 0: No seas tonto ni que vendieramos droga, todo es legal aqui
-      - 1: "..."
-      - 0: Vamos deja de perder el tiempo y apurate!
-      - 0: No tengo todo el dia!
-      - JumpBack:
-    - Option:
-      - 1: Entrar en el lugar
-      - 1: Oh, bueno
-      - 1: Alla vamos entonces...
-      - FadeOut: TrackClose
-      - GoTo: InsideLab
-    - Option:
-      - 1: Ignorar la voz y huir del sitio a toda velocidad
-      - 0: Espera adonde vas!? no venias a trabajar??
-      - 1: Adios!
-      - 0: Oh Bueno, largate ya entonces
-      - 1: ¡¿???!
-      - 1: Esto es muy sospechoso... parece una trampa!
-      - 0: Haz lo que quieras, No tengo ganas de perder el tiempo 
-      - JumpBack:
+MyFirstJob:
+    - SetCenter: Ale
+    - SetLeftOut: Ale2
+    - 1: How awesome
+    - FadeIn: NightCity
+    - ScrollRightEnd: NightCity
+    - 1: Damn, I can't believe what just happened
+    - MoveCenter: Ale2
+    - 1: «What bad luck»
+    - PlayMusic: "Data/Sound/Cyber-Streets.mp3"
+    - 1: "«just the day we crossed paths \nand that's when I start work too»"
+      time: 6.0
+    - FadeOut: Ale2
+    - FadeIn: Ale
+    - 1: Now that I think about it, I could have tried to talk a little more...
+      time: 4.0
+    - 1: I could have asked him what he was going to do in the summer...
+      time: 5.0
+    - 1: "Or maybe what he was going to do next year... \nmaybe he's looking for a job also..."
+      time: 6.0
+    - 1: "Ha, but what am I saying?"
+    - 1: "He probably already has the future figured out."
+    - 1: "But well, these things happen."
+      time: 3.0
+    - 1: "and there's no point in thinking about it anymore now."
+    - MoveRightOut: Ale
+    - SetLeft: TrackClose
+    - 1: "Yes, I did what I could, I had no alternative, I'm running late."
+    - 1: "It's my first day at work and the truth is, I need money."
+    - FadeOut: NightCity
+    - ScrollRightEnd: TrackClose
+    - 1: Now the only thing left for me is to learn from this situation
+      time: 6.0
+    - 1: I think...
+    - 1: Yeah, yeah, better not look back and concentrate on the future...
+    - 0: " "
+      time: 3.0
+      unskip:
+    - 1: By the way, I think I'm close to the place...
+    - 1: This street was supposed to be the contact point
+    - StopMusic:
+    - 1: The sign said something about a truck... Is this one white?
+      time: 5.0
+      unskip:
+    - SetRight: TrackOpen
+    - 1: I think this was the logo that identifies the company
+    - 1: Although it is not very clear who the owners are
+      time: 3.0
+    - 1: "I don't know why in the instructions \n they insisted on so much confidentiality"
+    - 1: What a mysterious thing...
+      time: 3.0
+    - 1: This is all very strange, really
+      time: 5.0
+      unskip:
+    - FadeIn: TrackOpen
+    - PlaySound: "Data/Sound/laser-shot.wav"
+    - 1: Mhhh
+    - 1: Oh, a back access opened.
+    - 1: It seems that there is someone inside...
+      time: 4.0
+    - 0: Hey, are you the new intern?
+    - 1: What!?
+    - 0: So what are you waiting for? Are you going in or
+      time: 4.0
+    - 1: And now what am I supposed to do?
+    - ChooseTalk :
+        - Option:
+            - 1: Decline the invitation politely
+            - 1: I don't know, this place and everything seems too suspicious...
+            - 0: "Don't be stupid, as if we were selling drugs, \neverything is legal here"
+            - 1: "..."
+            - 0: Come on, stop wasting time and hurry up!
+            - 0: I don't have all day!
+            - JumpBack:
 
+        - Option:
+            - 1: Enter the place
+            - 1: Oh well
+            - 1: Here we go then...
+            - FadeOut: TrackClose
+            - GoTo: InsideLab
+  
+        - Option:
+            - 1: Ignore the voice and run away from the place at full speed
+            - 0: Wait, where are you going!? Weren't you here to work??
+            - 1: Bye!
+            - 0: Oh well, get out of here already
+            - 1: ???!
+            - 1: This is very suspicious... it seems like a trap!
+            - 0: Do whatever you want, I don't feel like wasting time
+            - JumpBack:
 
 
 InsideLab:
@@ -415,119 +417,119 @@ InsideLab:
     - FadeOut: TrackOpen
     - ScrollBottom: LabIntro
     - SetRightOut: Pilsen
-    - 0: Vaya hasta que por fin te decidiste a entrar!
+    - 0: Wow, you finally decided to come in!
     - MoveRight: Pilsen
-    - 0: Bienvenido a tu primera chamba
-    - 1: ¡???
-    - 2: Yo soy Pilsen, sere tu guia autorizado en el onboarding
+    - 0: Welcome to your first job
+    - 1: ???
+    - 2: I'm Pilsen, I'll be your authorized onboarding guide
       time: 2.0
-    - 1: Y que se supone que eres tu?
-    - 2: Quee queee!?
+    - 1: And what are you supposed to be?
+    - 2: What the hell!?
       unskip:
-    - 2: Mas respeto por favor, soy un Carpincho!
+    - 2: More respect please, I'm a Capybara!
       time: 3.0
       unskip:
-    - 2: Ademas de tu guia de onboarding... 
+    - 2: Besides your onboarding guide...
     - 1: "..."
-    - 2: Me estas escuchando!??
+    - 2: Are you listening to me!??
       time: 2.0
-    - 1: Ehhh perdon, perdon
-    - 1: Es que todo esto es muy repentino...
+    - 1: Uhhh sorry, sorry
+    - 1: This is all so sudden...
       time: 3.0
-    - 2: "Ufff hoy va a ser una noche larga..."
+    - 2: "Ufff today is going to be a long night..."
       time: 2.0
-    - 2: "Mira, ya hay problemas en la ciudad, Estamos retrasados \n y todavia no te explique ni la mitad de las cosas..."
+    - 2: "Look, there are already problems in the city, We are late \nand I still haven't explained half of the things..."
       time: 4.5
       unskip:
-    - 2: Mejor callate y presta bien atencion a todo lo que digo, Ok?
+    - 2: You better shut up and pay attention to everything I say, okay?
       time: 4.0
-    - 1: Si, si perdon!
+    - 1: Yeah, yeah sorry!
       time: 2.0
-    - 2: Bien, vamos de nuevo entonces...
+    - 2: Okay, here we go again then...
     - GoTo: QuickSpecs
   
 
 QuickSpecs:
     - ScrollBottom: LabSpecs
     - FadeOut: LabIntro
-    - 2: Este sera tu dispositivo de interfaz con la unidad PsyTron
+    - 2: This will be your interface device with the PsyTron unit
       time: 4.0
-    - 2: en apariencia parece un simple casco de hyper-realidad
+    - 2: It looks like a simple hyper-reality helmet
       time: 4.0
-    - 2: Pero es capaz de establecer una conexion psiquica de 256 TB/seg
+    - 2: But it is capable of establishing a psychic connection of 256 TB/sec
       time: 3.0
-    - 2: el enlace es muy intenso asi que quiza tengas sensaciones raras
+    - 2: The link is very intense so you might have strange sensations
       time: 3.0
-    - 1: ¿Sensaciones raras?
+    - 1: Strange sensations?
       time: 3.0
-    - 2: Ehh Si, si... como recuerdos ajenos o quiza alucinaciones...
+    - 2: "Uhh Yeah, yeah... like seeing other people's memories \n or maybe hallucinations..."
       time: 4.0
-    - 2: Pero recuerda que nada de todo eso es real.
+    - 2: But remember that none of that is real.
       time: 2.0
-    - 2: Asi que no le prestes demasiada atencion nada mas...
+    - 2: So don't pay too much attention to anything else...
     - 1: "..."
       time: 2.0
-    - 2: Y por cierto, aqui abajo tenemos tu butaca de enlace...
+    - 2: And by the way, down here we have your link chair...
       time: 3.0
       unskip:
-    - 2: "Tus signos vitales seran monitoreados constantemente \npara asegurar el mejor vinculo"
+    - 2: "Your vital signs will be constantly monitored \nto ensure the best link"
       time: 5.0
-    - 2: "Basicamente tu cuerpo real queda aqui recostado \nmientras tu piloteas tu unidad sin riesgo"
+    - 2: "Basically your real body remains here lying \nwhile you pilot your unit safely"
       time: 5.0
-    - 2: "Por eso digo que mas alla de lo que suceda alla afuera en la calle\nno te lo tomes demasiado en serio..."
+    - 2: "That's why I say that beyond what happens out there on the street\ndon't take it too seriously..."
       time: 5.0
-    - 2: "Por ahora solo concentrate en todo esto que te explico"
+    - 2: "For now just concentrate on all this that I explained to you"
       time: 4.0
     - 1: "Ok"
       time: 3.0
-    - 2: Entonces, Esta todo claro hasta aqui o necesitas que repita algo?
+    - 2: So, is everything clear up to here or do you need me to repeat something?
     - ChooseTalk:
         - Option:
-            - 1: Si señor, todo esta clarisimo
-            - 2: Excelente, veo que eres rapido
+            - 1: Yes sir, everything is crystal clear
+            - 2: Excellent, I see you are fast
             - MoveLeftOut: Pilsen
-            - 2: Pasemos a lo siguiente entonces
+            - 2: Let's move on to the next thing then
               unskip:
             - GoTo: EnterPsyTron
+  
         - Option:
-            - 1: Ehhh momento, que era lo que dijiste antes?
-            - 1: Hay algo que no me quedo claro
+            - 1: Hey wait, what did you say before?
+            - 1: There is something that is not clear to me
             - 2: Oh noo
               time: 1.5
               unskip:
-            - 2: Bueno, vamos de vuelta entonces...
+            - 2: Well, let's go back then...
             - GoTo: QuickSpecs
 
   
 EnterPsyTron:
     - ScrollVertical: RechargeStation
     - FadeOut: LabSpecs
-    - 2: Por ultimo te presento al PsyTron
+    - 2: Finally, I present to you the PsyTron
       time: 3.0
     - 0: " "
       time: 5.0
       unskip:
-    - 2: Unidad remota de enlace psiquico con capacidad de combate urbano
+    - 2: Remote psychic link unit with urban combat capability
       time: 5.0
       unskip:
-    - 2: "Tecnicamente puede acelerar a mas de 300 Km en 6 segundos \n soporta impactos de hasta 100 toneladas"
+    - 2: "Technically it can accelerate to over 300 km in 6 seconds \n withstands impacts of up to 100 tons"
       time: 5.0
-    - 2: "y tiene disparo con autoaiming, teledirigido por automatizacion neural"
+    - 2: "and has auto-aiming, remote-controlled neural automation"
       time: 5.0
-    - 2: "Ahora mismo reposa sobre su plataforma de carga inalambrica\n con la bateria completa al 100% y una autonomia de 15 minutos"
+    - 2: "Right now it rests on its wireless charging pad \n with a full battery at 100% and a range of 15 minutes"
       time: 5.0
     - 1: Wow
-    - 2: "Tu mision es pilotear esto y patearle el trasero a esas cosas\n que estan en la calle fuera de control"
+    - 2: "Your mission is to pilot this and kick the ass of those things\nthat are out of control on the street"
       time: 5.0
-    - 2: Eso es todo y mas que suficiente por ahora
-    - 2: Alguna pregunta?
+    - 2: That's all and more than enough for now
+    - 2: Any questions?
       time: 4.0
-    - 1: Bueno, cuando empezamos el trabajo?
+    - 1: Well, when do we start the work?
       time: 4.0
     - StopMusic:
     - FadeOut: RechargeStation
-    - 2: Ahora mismo!
+    - 2: Right now!
       time: 5.0
       unskip:
     - CleanUp: All
-     

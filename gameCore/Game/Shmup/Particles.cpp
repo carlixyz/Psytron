@@ -18,6 +18,7 @@
 #include <optional>
 
 #include <../../../Utility/Utils.h>
+#include "../../Audio/Audio.h"
 
 
 //#include <memory>
@@ -125,6 +126,7 @@ void Particles::Create(Vector2 position, BehaviourType bType)
 
 			bulletRef.Type = EntityType::EEnemyShot;
 			bulletRef.Active = true;
+			Audio::Get().PlaySound("Data/Sound/fx/shot-single-gun.mp3");
 		}
 		break;
 
@@ -206,6 +208,8 @@ void Particles::Create(Vector2 position, BehaviourType bType)
 				bulletRef.Type = EntityType::EEnemyShot;
 				bulletRef.Active = true;
 			}
+
+			Audio::Get().PlaySound("Data/Sound/fx/hit-fx.mp3");
 		}
 		break;
 
@@ -230,6 +234,9 @@ void Particles::Create(Vector2 position, BehaviourType bType)
 				bulletRef.Type = EntityType::EEnemyShot;
 				bulletRef.Active = true;
 			}
+
+			Audio::Get().PlaySound("Data/Sound/fx/shot-obliterator.mp3");
+
 		}
 		break;
 
@@ -313,6 +320,8 @@ void Particles::Create(Vector2 position, BehaviourType bType)
 					CurrentAngle += BurstAngleOffset;
 				}
 			}
+
+			Audio::Get().PlaySound("Data/Sound/fx/shot-reverb.mp3");
 		}
 		break;
 

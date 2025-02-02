@@ -123,6 +123,14 @@ void Assets::LoadMusic()
 	
 	Load("FireLoop", "Data/Sound/stg_st003_88pro-loop.ogg", false);
 	Load("FireIntro", "Data/Sound/stg_st003_88pro-intro.ogg");
+
+	Load("Start", "Data/Sound/fx/game-start.mp3");
+	Load("GameOver", "Data/Sound/fx/game-over-classic.mp3");
+	Load("ui", "Data/Sound/fx/game-ui.mp3");
+
+	Load("Reverb", "Data/Sound/fx/shot-reverb.mp3");
+	Load("Single", "Data/Sound/fx/shot-single-gun.mp3");
+	Load("Obli", "Data/Sound/fx/shot-obliterator.mp3");
 }
 
 void Assets::UnloadMusic()

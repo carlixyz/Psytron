@@ -38,6 +38,13 @@ void TitleState::OnInit()
 	credits.push_back("Eric Matyas");
 	credits.push_back(" ");
 	credits.push_back("Visit Soundimage.org");
+
+
+	Audio::Get().PreloadSound("Data/Sound/Explode.wav");
+	Audio::Get().PreloadSound("Data/Sound/fx/hit-fx.mp3");
+	Audio::Get().PreloadSound("Data/Sound/fx/shot-obliterator.mp3");
+	Audio::Get().PreloadSound("Data/Sound/fx/shot-single-gun.mp3");
+	Audio::Get().PreloadSound("Data/Sound/fx/shot-reverb.mp3");
 }
 
 void TitleState::OnDeinit()
@@ -51,9 +58,15 @@ void TitleState::OnUpdate()
 	if (!ShowCredits)
 	{
 		if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_W))
+		{
+			Audio::Get().PlaySound("Data/Sound/fx/game-ui.mp3");
 			CurrentIndex--;
+		}
 		if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_S))
+		{
+			Audio::Get().PlaySound("Data/Sound/fx/game-ui.mp3");
 			CurrentIndex++;
+		}
 		CurrentIndex = (int)Clamp((float)CurrentIndex, 0.f, MenuOptions.size() - 1.f);
 	}
 
@@ -73,13 +86,17 @@ void TitleState::OnUpdate()
 				Game::Get().States.PushState(Game::Get().States.dialogState);
 				break;
 			case 1:	
-
+				
 				Game::Get().States.PushState(Game::Get().States.roadState);
 				break;
 			case 2:
 				ShowCredits = !ShowCredits;	// Toogle show Credits mode
 				break;
 		}
+
+		//PlaySound(Assets::Get().GetSound("Start"));
+		Audio::Get().PlaySound("Data/Sound/fx/game-start.mp3");
+
 	}
 
 }

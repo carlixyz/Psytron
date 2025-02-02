@@ -336,7 +336,7 @@
     <None Include="Libraries\yaml-cpp\lib\x64\yaml-cppd.pdb" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Resource.rc" />
+    <ResourceCompile Include="PsyTron.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

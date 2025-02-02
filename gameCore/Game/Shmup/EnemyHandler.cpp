@@ -49,15 +49,17 @@ const float Size_200  = 100 * screenFactor;
 #define RAZOR_SPR   (Vector2(2,1))
 #define VOLBO_SPR   (Vector2(3,1))
 #define SEEKER_SPR  (Vector2(4,1))
+#define SWEPER_SPR  (Vector2(5,1))
 #define CUSTOM_SPR  (Vector2Zero())
 #define BOSS_SPR    (Vector2(0,3))
 
-#define BUNGIE(x)  { x, BUNGIE_SPR, 120, 2, Vector2(.35f,.35f)  }
-#define ROAMER(x)  { x, ROAMER_SPR, 200, 5, Vector2(.45f,.45f)  }
-#define RAZOR(x)   { x, RAZOR_SPR, 500, 2, Vector2(.3f, .3f)    }
+#define BUNGIE(x)  { x, BUNGIE_SPR, 120, 4, Vector2(.35f,.35f)  }
+#define ROAMER(x)  { x, ROAMER_SPR, 150, 5, Vector2(.45f,.45f)  }
+#define SWEPER(x)  { x, SWEPER_SPR, 60, 5, Vector2(.45f,.45f)  }
+#define RAZOR(x)   { x, RAZOR_SPR, 300, 2, Vector2(.3f, .3f)    }
 #define VOLBO(x)   { x, VOLBO_SPR, 100, 5, Vector2(.35f, .35f)  }
-#define SEEKER(x)  { x, SEEKER_SPR, 500, 2, Vector2(.35f, .35f) }
-#define BOSS(x)    { x, BOSS_SPR, 1000, 2, Vector2(.45f, .45f), 0, 4 }
+#define SEEKER(x)  { x, SEEKER_SPR, 400, 4, Vector2(.35f, .35f) }
+#define BOSS(x)    { x, BOSS_SPR, 500, 2, Vector2(.45f, .45f), 0, 4 }
 
 #define CAR_A(x)  { x, CUSTOM_SPR, 100, 10, Vector2(0.75f, 0.6f), 0, 1, "Car1" }
 #define CAR_B(x)  { x, CUSTOM_SPR, 100, 10, Vector2(0.75f, 0.7f), 0, 1, "Car2" }
@@ -114,7 +116,7 @@ void EnemyHandler::CreateIntroWave()
     };
 
     EnemyProperties BungieStats = 
-        { OUT_TOP_RIGHT_CORNER, BUNGIE_SPR, 150, 3, Vector2(.3f, .3f) };
+        { OUT_TOP_RIGHT_CORNER, BUNGIE_SPR, 150, 4, Vector2(.3f, .3f) };
 
     std::vector<Enemy*> IntroSwarm = {
         new Enemy(BungieStats, BungieActions)
@@ -241,7 +243,7 @@ void EnemyHandler::CreateThirdWave()
     auto BungieA = new Enemy( BUNGIE(Vector2(-Size_512, 750 * screenFactor)), BungieActions);
     delete BungieActions[2];
     BungieActions[2] = new StepSlideTowards(POS_RIGHT);
-    auto BungieB = new Enemy( BUNGIE(Vector2(750 * screenFactor, 750 * screenFactor)), BungieActions);
+    auto BungieB = new Enemy( BUNGIE(Vector2(750 * screenFactor, 1280 * screenFactor)), BungieActions);
 
     std::vector<Enemy*> NextSwarm = { 
         new Enemy(RAZOR(Vector2(Graphics::Get().GetScreenCenter().x- Size_128, -Size_256)), RazorActions),
@@ -328,34 +330,56 @@ void EnemyHandler::CreateFourthWave()
         new StepExit()
     };
 
-    auto romaer_3 = new Enemy({ ROAMER(OUT_TOP_CENTER), EnemiesActions });
+
+    auto romaer_3 = new Enemy({ SWEPER(OUT_TOP_CENTER), EnemiesActions });
 
     StepWait * enemyWaitTime = (StepWait *)EnemiesActions[0];
     enemyWaitTime->WaitTime = 15.0f;
-    auto romaer_1 = new Enemy({ ROAMER(OUT_TOP_LEFT_ROAD), EnemiesActions });
+    auto romaer_1 = new Enemy({ SWEPER(OUT_TOP_LEFT_ROAD), EnemiesActions });
     enemyWaitTime->WaitTime = 16.0f;
-    auto romaer_2 = new Enemy({ ROAMER(OUT_TOP_RIGHT_ROAD), EnemiesActions });
+    auto romaer_2 = new Enemy({ SWEPER(OUT_TOP_RIGHT_ROAD), EnemiesActions });
 
+
+
+
+    std::vector<IStepAction*> customActions_A{
+    new StepWait(23.f),
+    new StepMoveRelative(Vector2(0, 512 + 256)),
+    new StepShoot(BehaviourType::ERingShot, 2, 0.35f),
+    new StepExit()
+    };
     enemyWaitTime->WaitTime = 23.0f;
-    auto romaer_4 = new Enemy({ ROAMER(OUT_TOP_LEFT_ROAD), EnemiesActions });
+    auto romaer_4 = new Enemy({ SWEPER(OUT_TOP_LEFT_ROAD), customActions_A });
 
     enemyWaitTime->WaitTime = 27.0f;
-    auto romaer_5 = new Enemy({ ROAMER(OUT_TOP_CENTER), EnemiesActions });
+    auto romaer_5 = new Enemy({ SWEPER(OUT_TOP_CENTER), EnemiesActions });
 
     enemyWaitTime->WaitTime = 30.0f;
-    auto romaer_6 = new Enemy({ ROAMER(OUT_TOP_CENTER), EnemiesActions });
+    auto romaer_6 = new Enemy({ SWEPER(OUT_TOP_CENTER), EnemiesActions });
 
     enemyWaitTime->WaitTime = 36.0f;
-    auto romaer_7 = new Enemy({ ROAMER(OUT_TOP_RIGHT_ROAD), EnemiesActions });
+
+
+
+    auto romaer_7 = new Enemy({ SWEPER(OUT_TOP_RIGHT_ROAD), EnemiesActions });
 
     enemyWaitTime->WaitTime = 42.0f;
-    auto romaer_8 = new Enemy({ ROAMER(OUT_TOP_RIGHT_ROAD), EnemiesActions });
+    auto romaer_8 = new Enemy({ SWEPER(OUT_TOP_RIGHT_ROAD), EnemiesActions });
 
+
+    std::vector<IStepAction*> customActions_B{
+    new StepWait(36.0f),
+    new StepMoveRelative(Vector2(0, 512 + 256)),
+    new StepShoot(BehaviourType::EStarShot, 2, 0.35f),
+    new StepExit()
+    };
     enemyWaitTime->WaitTime = 55.0f;
-    auto romaer_9 = new Enemy({ ROAMER(OUT_TOP_CENTER), EnemiesActions });
+    auto romaer_9 = new Enemy({ SWEPER(OUT_TOP_CENTER), EnemiesActions });
+
+
     enemyWaitTime->WaitTime = 56.0f;
-    auto romaer_10 = new Enemy({ ROAMER(OUT_TOP_LEFT_ROAD), EnemiesActions });
-    auto romaer_11 = new Enemy({ ROAMER(OUT_TOP_RIGHT_ROAD), EnemiesActions });
+    auto romaer_10 = new Enemy({ SWEPER(OUT_TOP_LEFT_ROAD), EnemiesActions });
+    auto romaer_11 = new Enemy({ SWEPER(OUT_TOP_RIGHT_ROAD), customActions_B });
 
     std::vector<Enemy*> RushSwarm = {
 

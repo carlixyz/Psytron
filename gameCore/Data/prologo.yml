@@ -1,0 +1,531 @@
+Characters:
+  0: Narrator
+  1: Ale    # Main char
+  2: Pilsen # Guide Tutor
+  3: Hoppy  # Best Friend
+  4: Ginger # Love interest
+  5: Porter # Muscle Guy
+  6: Amber  # Afro Lady
+  7: Lager  # Cool Guy
+  8: Honey  # Funny Girl
+  9: AnchorGirl
+
+
+Setup:
+  # StartEntry: InfoNews       # Define First Entry point
+  PreLoad:
+    - SetImage: News1
+      # visible: true       # not visible by default thus not needed
+      file: Data/Scenes/Intro/InfoNews_1.png
+      # size: Proportion
+    - SetFullHeight: News1
+    - SetImage: News2
+      file: "Data/Scenes/Intro/InfoNews_2.png"
+    - SetFullHeight: News2
+    - SetImage: News3            
+      file: "Data/Scenes/Intro/InfoNews_3.png"
+    - SetFullHeight: News3
+    - SetImage: News4
+      file: "Data/Scenes/Intro/InfoNews_4.png"
+    - SetFullHeight: News4
+    - SetImage: News5
+      file: "Data/Scenes/Intro/InfoNews_5.png"
+    - SetFullHeight: News5
+    - SetImage: News6
+      file: "Data/Scenes/Intro/InfoNews_6.png"
+    - SetFullHeight: News6
+    - SetImage: News7
+      file: "Data/Scenes/Intro/InfoNews_7.png"
+    - SetFullHeight: News7
+    - SetImage: News8
+      file: "Data/Scenes/Intro/InfoNews_8.png"
+    - SetFullHeight: News8
+    - SetImage: News9
+      file: "Data/Scenes/Intro/InfoNews_9.png"
+    - SetFullHeight: News9
+    - SetImage: School
+      file: "Data/Scenes/School.png"
+      size: Proportion
+    # - SetFullHeight: School
+
+    - SetImage: TrackSide
+      file: "Data/Scenes/Track/Track_Side.png"
+    - SetImage: TrackClose
+      file: "Data/Scenes/Track/Track_Close.png"
+    - SetImage: TrackOpen
+      file: "Data/Scenes/Track/Track_Open.png"
+    - SetImage: NightCity
+      file: "Data/Scenes/NightCity.png"
+
+    - SetImage: LabIntro
+      file: "Data/Scenes/Track/LabInside.png"
+    - SetImage: RechargeStation
+      file: "Data/Scenes/Track/RechargeStation.png"
+    - SetImage: LabSpecs
+      file: "Data/Scenes/Track/LabSpecs.png"
+
+    - SetImage: Ale
+      file: "Data/Actors/Ale.png"
+    - SetImage: Ale2
+      file: "Data/Actors/Ale2.png"
+    - SetImage: Ginger2
+      file: "Data/Actors/Ginger2.png"
+    - SetImage: Amber
+      file: "Data/Actors/Amber.png"
+    - SetImage: Ginger
+      file: "Data/Actors/Ginger.png"
+    - SetImage: Porter
+      file: "Data/Actors/Porter.png"
+    - SetImage: Honey
+      file: "Data/Actors/Honey.png"
+    - SetImage: Hoppy
+      file: "Data/Actors/Hoppy.png"
+    - SetImage: Pilsen
+      file: "Data/Actors/Pilsen.png"
+
+
+InfoNews:
+  - PlaySound: "Data/Sound/zapslat.wav"
+  - 0: NeoChaco 20XX
+    time: 3.0
+    unskip:
+  - 0: Buenas noches ciudadanos...
+    time: 2.0
+  - 9: El clima de hoy es una noche clara con estrellas y 32% hecto-pascales
+    time: 4.0
+
+# エナマ人休体働元光写刃前友口名命問国土学山布師年心怒悪手日曜書月木校楽死気水法泣火獣理画病目知石砂笑算糸紙習耳船花草葉虫言話語読足車金鉄雨雲革音頭風魚鳥鼻一七万三上下中九乾事二五京低作健億兆全八六具内円冬冷分則力動医十千半厚原古右同四地坂塩壁夏外多夜大天奏女官家寝小少屋島川左市帰平広床座康後忘思恵想慮戸操教数文料
+
+  - PlayMusic: "Data/Sound/High-Tech-City_Looping.mp3"
+  - FadeIn: News1
+  - ScrollLoop: News1
+  - 9: Bienvenidos a la cadena de noticias Info News edicion 20XX!
+    time: 4.0
+    unskip:
+
+    # unskip:
+  - 9: el cambio actual esta 40% blue and 60% 1000:1 para leliqs
+    time: 3.0
+    unskip:
+
+  - 9: La curva de proyeccion apunta a alcanzar el nivel 9000 para fin de año
+    time: 3.0
+    unskip:
+
+  - 9: Finalmente el calentamiento global esta en su pico desde comienzos de primavera
+    time: 4.0
+    unskip:
+
+  - ShowImage: News2
+  - FadeOut: News1
+  - 9: En otro orden de noticias, esta es la historia principal de esta noche
+    time: 4.0
+    unskip:
+
+  - 9: Anoche, nuevos disturbios sucedieron en Boedo 808
+    time: 4.0
+    unskip:
+
+  # - PauseMusic:
+
+  - ShowImage: News3
+  - FadeOut: News2
+  - 9: Aparentemente ellos podrian estar relacionados con otra unidad sintetica
+    time: 3.0
+    unskip:
+  - 9: De clase E mayormente utilizado para tareas de limpieza y barrido publico.
+    time: 3.0
+    unskip:
+  - FadeOut: News3
+  # - ResumeMusic:
+
+  - ShowImage: News4
+  - ShakeImage: News4
+  - 9: Esto genero una situacion muy tensa con desbordes extremos
+
+  - ShowImage: News5
+  - FadeOut: News4
+  - 9: Luego otro modelo se sacrifica a si mismo dispersando un gran incendio...
+  - 9: Todo esto resultando en un saldo de 5 muertos y 12 heridos.
+
+  - ShowImage: News6
+  - FadeOut: News5
+  - 9: consultando a los laboratorios del grupo DaliDavros group acerca de esto
+  - 9: El foro ya ha expresado que no se trata mas que de un caso aislado
+
+  - ShowImage: News7
+  - FadeOut: News6
+  - 9: Debido a la tipica falta de chequeos generales de la prefectura
+  - 9: por mantenimiento inapropiado de los subsistemas respectivo
+
+  - ShowImage: News8
+  - FadeOut: News7
+  - 9: y de ninguna manera relacionado con desviaciones en el aprendizaje automaton # Neural link automaton
+  - 9: como algunos rumores infundados de algunas minorias disidentes sugieren.
+
+  - ShowImage: News9
+  - FadeOut: News8
+  - 9: Pero esa es toda la informacion que tenemos por ahora.
+  - FadeOut: News9
+  - 9: Daremos mas detalles al respecto con el correr de las horas.
+  - StopMusic:
+  # - GoTo: IntroSchool
+  
+    
+IntroSchool:
+  - 0: " "
+    time: 2.0
+    unskip:
+  - 0: " "
+    time: 2.0
+  - PlaySound: "Data/Sound/zapslat.wav"
+  - 1: Hermosa tarde verdad?
+  - 1: por fin Viernes y otra larga semana que termina...
+  - PlayMusic: "Data/Sound/Video-Game-Brain-Drain_Looping.mp3"
+  - SetLeft: Ale
+  - FadeIn: Ale
+  - 1: "Soy Alex, tengo 21 años y este es mi ultimo mes \nen el instituto tecnologico."
+  - FadeIn: School
+  - 1: "Espere años para certificarme y ahora... \ntengo pensamientos mezclados."
+  - 1: "Por fin se terminan los examenes y nunca mas tendre que estudiar \ndurante horas para aprobar asignaturas!"
+  - 1: Pero por otro lado siento que voy a extrañar algunas cosas...
+  - FadeOut: Ale
+  - 1: "Este lugar tiene una energia especial"
+  - SetLeftOut: Hoppy
+  - 1: "Los chistes de Hoppy, mis tontos amigos, locas fiestas Uff... \n Muchas cosas intensas!"
+  - 1: Creo que estoy dejando aqui una parte de mi...
+  - MoveCenter: Hoppy
+
+  - SetLeftOut: Ginger2
+  - 1: Mhhh ahi se acerca Hoppy, que estara tramando ahora?
+  - 3: "Hey Al, Donde estabas? \n seguro que otra vez pensando tonterias! jajajaaj" 
+  - 3: No te olvides que me debes una apuesta...
+  - 1: Rayos y ahora que diablos quieres?
+  - 3: Mhhh
+    time: 6.0
+  - MoveRight: Ginger2
+  - 3: "Ahi esta saliendo Ginger...\ncreo que ahora deberias hablarle..."
+    time: 6.0
+  - 1: Que quee? No tengo idea de que estas diciendo
+  - 1: y ya tengo que irme, se me hace tarde...
+  - 3: Hey, deja de esconderte, te digo que tiene algo contigo... 
+  - 3: tengo el presentimiento de que es hoy...
+  - 3: Sino lo intentas, te arrepentiras para siempre.
+    time: 6.0
+  - 1: Estas loco? No tengo nada que hablar 
+  - 1: Es obvio que ella se lleva mejor con Porter o Lager...
+  - 3: Escucha, Tengo los apuntes de clase del Profe...
+  - 3: Toma, Solo dale el enlace de acceso a ella y nada mas
+  - MoveRightOut: Hoppy
+  - SetRightOut: Ginger
+  - GoTo: GameOfLove
+  
+    
+GameOfLove:
+  - SetLeftOut: Porter
+  - SetRightOut: Honey
+  - SetLeftOut: Amber
+  - MoveRight: Ginger
+  - FadeOut: Ginger2
+  - 4: Hola Al perdona
+  - 4: Hoppy dijo que tienes el resumen de la clase de hoy, es cierto?
+  - 1: Ehmmm si, asi es...
+  - 1: Toma, Estos son los que necesitamos para la entrega final.
+  - 4: Genial, que  suerte que los conseguiste!
+  - 1: Eh si claro...
+  - 4: Digo, se termina el año, ultima clase y luego adios! 
+  - 1: «Un momento, Dijo adios?»
+  - 1: «tengo que pensar algo para darle charla!»
+  - 1: "«...»"
+    time: 2.0
+    unskip:
+  - 1: «que mal, no se me ocurre nada!»
+  - 4: Y tu que estas haciendo? 
+  - ChooseTalk :
+    - Option:
+      - 1: Trabajando en un proyecto secreto muy especial
+      - 4: En serio? puedes contarmelo a mi?
+      - 1: Jejje por esta vez creo que puedo hacer una excepcion
+      - 4: Genial y de que se trata entonces?
+      - 1: "Mmhhh..."
+      - GoTo: GameOfWar
+    
+    - Option:
+      - 1: Disfrutando con melancolia estos ultimos dias de clase.
+      - 4: Wow, en serio eso es lo que piensas?
+      - 1: Bueno, no siempre, pero me siento un poco asi estos dias
+      - 4: "Vaya, no sabia que eras tan profundo\n No a todos les gusta mostrar sus emociones"
+      - GoTo: GameOfWar
+    
+    - Option:
+      - 1: Planificando a que fiestas voy a ir esta noche
+      - 4: Ohh vaya, vaya, pero que loco!
+      - 1: Jejje
+      - 4: Y adonde vas a ir?
+      - 1: "mhhh..."
+      - 1: A ningun lugar realmente, tengo que trabajar
+      - 4: infelizmente jaja
+      - GoTo: GameOfWar
+
+
+GameOfWar:
+  - 1: "la verdad, no hacia nada en especial \nsolo me estoy despidiendo del instituto y eso."
+  - 4: Nosotros estamos organizando con el grupo para ir a algun lado...
+  - 4: Ah ahi viene Porter...
+  - ShakeImage: School
+  - MoveLeft: Porter
+  - 5: Hey que pasa aca? de que estan hablando?
+  - 1: "..."
+  - 5: Vaya, vaya, Ustedes son amigos? No sabia que ya se conocian eh
+  - 1: Ehhh...
+  - 5: Jajajja es broma, tranquilo, relajate chiquito.
+  - MoveCenter: Amber
+  - 6: Y a ti que te pasa Porter?
+  - 5: Ehh no nada, nada... 
+  - MoveLeft: Honey
+  - 8: Creo que intenta hacerse el Bully de nuevo
+  - 5: no, bueno, no es tan asi...
+  - 8: Porter, ni se te ocurra, ahorranos la verguenza por favor!
+  - 1: «Mhhh debo ser cuidadoso con mis palabras»
+  - 5: Tranquilos, tranquilos, Solo estoy bromeando un poco, perdon...
+  - 6: Ok pero No lo hagas mas...
+  - FadeOut: Porter
+  - 6: Bueno Chicos, basta de perder tiempo y vamos al Viel Glück!
+  - FadeOut: Amber
+  - 8: Oh Yeah! Hay que visitar ese antro, antes que lo cierren jaja
+  - FadeOut: Honey
+  - MoveCenter: Ginger
+  - 4: Al, Nos vamos al Pool, quieres venir con nosotros?
+  - 1: «Es una invitacion? Debo estar alucinando...»
+  - 1: Si claro, me encantaria ir con ustedes y...
+  - 4: y que?
+  - 1: Demonios, me olvide completamente de algo..
+  - 4: Que cosa? que sucede?
+  - 1: Hoy trabajo y tengo que ir hacia otro lugar.
+  - 4: Ohhh Que pena
+  - 4: Bueno, Quiza sera otro dia entonces.
+  - 1: Por supuesto, Diviertanse, si me libero mas tarde, capaz vaya.
+  - 4: Chiao.
+  - StopMusic:
+  - FadeOut: Ginger
+  - 1: «Oh no, no, se esta yendo...»
+  - 1: «Ya se fue, porque soy tan lento»
+  - FadeOut: School
+  - 1: Pero bueno, no tengo opcion, tengo que trabajar...
+    time: 2.0
+    unskip:
+  - GoTo: MiPrimeraChamba
+  
+MiPrimeraChamba:
+  - SetCenter: Ale
+  - SetLeftOut: Ale2
+  - 1: Que Barbaro
+  - FadeIn: NightCity
+  - ScrollRightEnd: NightCity
+  - 1: Diablos, No Puedo creer lo que acaba de pasar
+  - MoveCenter: Ale2
+  - 1: «Que mala suerte»
+  - PlayMusic: "Data/Sound/Cyber-Streets.mp3"
+  - 1: "«justo el dia que nos cruzamos \n y es justo cuando empiezo a trabajar tambien»"
+    time: 6.0
+  - FadeOut: Ale2
+  - FadeIn: Ale
+  - 1: Ahora que lo pienso, Podria haber intentado hablar un poco mas...
+    time: 4.0
+  - 1: Le podria haber preguntado que va iba a hacer en el verano...
+    time: 5.0
+  - 1: "O quiza que haria el proximo año... \nquiza este buscando trabajo tambien..."
+    time: 6.0
+  - 1: "Ja pero que estoy diciendo"
+  - 1: "Probablemente ya tiene resuelto el futuro."
+  - 1: "Pero bueno, son cosas que pasan"
+    time: 3.0
+  - 1: "y no tiene sentido darle mas vueltas ahora"
+  - MoveRightOut: Ale
+  - SetLeft: TrackClose
+  - 1: "Si, Hice lo que pude, no tenia alternativa, se me hace tarde"
+  - 1: "Es mi primer dia de trabajo y la verdad, necesito dinero."
+  - FadeOut: NightCity
+  - ScrollRightEnd: TrackClose
+  - 1: Ahora lo unico que me queda es aprender de esta situacion
+    time: 6.0
+  - 1: Creo...
+  - 1: Si, si, Mejor no mirar atras y concentrarme en el futuro...
+  - 0: " "
+    time: 3.0
+    unskip:
+  - 1: Por cierto, Creo que ya estoy cerca del lugar...
+  - 1: En esta calle se supone que era el punto de contacto
+  - StopMusic:
+  - 1: El aviso decia algo de un camion... Sera este blanco? 
+    time: 5.0
+    unskip:
+  - SetRight: TrackOpen
+  - 1: Creo que este era el logo que identifica la empresa
+  - 1: Aunque no esta muy claro quienes son los dueños
+    time: 3.0
+  - 1: No se porque en el instructivo insistian con tanta confidencialidad
+  - 1: Que cosa mas misteriosa...
+    time: 3.0
+  - 1: Todo esto es muy raro la verdad
+    time: 5.0
+    unskip:
+  - FadeIn: TrackOpen
+  - PlaySound: "Data/Sound/laser-shot.wav"
+  - 1: Mhhh
+  - 1: Oh, se abrio un acceso posterior.
+  - 1: Parece que hay alguien adentro...
+    time: 4.0
+  - 0: Oye tu eres el nuevo pasante?
+  - 1: ¿!?
+  - 0: Entonces Que estas esperando? Vas a entrar o 
+    time: 4.0
+  - 1: Y Ahora que se supone que tengo que hacer?
+  - ChooseTalk :
+    - Option:
+      - 1: Rechazar la invitacion educadamente
+      - 1: No lo se, este lugar y todo parece demasiado sospechoso...
+      - 0: No seas tonto ni que vendieramos droga, todo es legal aqui
+      - 1: "..."
+      - 0: Vamos deja de perder el tiempo y apurate!
+      - 0: No tengo todo el dia!
+      - JumpBack:
+    - Option:
+      - 1: Entrar en el lugar
+      - 1: Oh, bueno
+      - 1: Alla vamos entonces...
+      - FadeOut: TrackClose
+      - GoTo: InsideLab
+    - Option:
+      - 1: Ignorar la voz y huir del sitio a toda velocidad
+      - 0: Espera adonde vas!? no venias a trabajar??
+      - 1: Adios!
+      - 0: Oh Bueno, largate ya entonces
+      - 1: ¡¿???!
+      - 1: Esto es muy sospechoso... parece una trampa!
+      - 0: Haz lo que quieras, No tengo ganas de perder el tiempo 
+      - JumpBack:
+
+
+
+InsideLab:
+    - PlayMusic: "Data/Sound/Too-Cool-for-Words.mp3"
+    - FadeOut: TrackOpen
+    - ScrollBottom: LabIntro
+    - SetRightOut: Pilsen
+    - 0: Vaya hasta que por fin te decidiste a entrar!
+    - MoveRight: Pilsen
+    - 0: Bienvenido a tu primera chamba
+    - 1: ¡???
+    - 2: Yo soy Pilsen, sere tu guia autorizado en el onboarding
+      time: 2.0
+    - 1: Y que se supone que eres tu?
+    - 2: Quee queee!?
+      unskip:
+    - 2: Mas respeto por favor, soy un Carpincho!
+      time: 3.0
+      unskip:
+    - 2: Ademas de tu guia de onboarding... 
+    - 1: "..."
+    - 2: Me estas escuchando!??
+      time: 2.0
+    - 1: Ehhh perdon, perdon
+    - 1: Es que todo esto es muy repentino...
+      time: 3.0
+    - 2: "Ufff hoy va a ser una noche larga..."
+      time: 2.0
+    - 2: "Mira, ya hay problemas en la ciudad, Estamos retrasados \n y todavia no te explique ni la mitad de las cosas..."
+      time: 4.5
+      unskip:
+    - 2: Mejor callate y presta bien atencion a todo lo que digo, Ok?
+      time: 4.0
+    - 1: Si, si perdon!
+      time: 2.0
+    - 2: Bien, vamos de nuevo entonces...
+    - GoTo: QuickSpecs
+  
+
+QuickSpecs:
+    - ScrollBottom: LabSpecs
+    - FadeOut: LabIntro
+    - 2: Este sera tu dispositivo de interfaz con la unidad PsyTron
+      time: 4.0
+    - 2: en apariencia parece un simple casco de hyper-realidad
+      time: 4.0
+    - 2: Pero es capaz de establecer una conexion psiquica de 256 TB/seg
+      time: 3.0
+    - 2: el enlace es muy intenso asi que quiza tengas sensaciones raras
+      time: 3.0
+    - 1: ¿Sensaciones raras?
+      time: 3.0
+    - 2: Ehh Si, si... como recuerdos ajenos o quiza alucinaciones...
+      time: 4.0
+    - 2: Pero recuerda que nada de todo eso es real.
+      time: 2.0
+    - 2: Asi que no le prestes demasiada atencion nada mas...
+    - 1: "..."
+      time: 2.0
+    - 2: Y por cierto, aqui abajo tenemos tu butaca de enlace...
+      time: 3.0
+      unskip:
+    - 2: "Tus signos vitales seran monitoreados constantemente \npara asegurar el mejor vinculo"
+      time: 5.0
+    - 2: "Basicamente tu cuerpo real queda aqui recostado \nmientras tu piloteas tu unidad sin riesgo"
+      time: 5.0
+    - 2: "Por eso digo que mas alla de lo que suceda alla afuera en la calle\nno te lo tomes demasiado en serio..."
+      time: 5.0
+    - 2: "Por ahora solo concentrate en todo esto que te explico"
+      time: 4.0
+    - 1: "Ok"
+      time: 3.0
+    - 2: Entonces, Esta todo claro hasta aqui o necesitas que repita algo?
+    - ChooseTalk:
+        - Option:
+            - 1: Si señor, todo esta clarisimo
+            - 2: Excelente, veo que eres rapido
+            - MoveLeftOut: Pilsen
+            - 2: Pasemos a lo siguiente entonces
+              unskip:
+            - GoTo: EnterPsyTron
+        - Option:
+            - 1: Ehhh momento, que era lo que dijiste antes?
+            - 1: Hay algo que no me quedo claro
+            - 2: Oh noo
+              time: 1.5
+              unskip:
+            - 2: Bueno, vamos de vuelta entonces...
+            - GoTo: QuickSpecs
+
+  
+EnterPsyTron:
+    - ScrollVertical: RechargeStation
+    - FadeOut: LabSpecs
+    - 2: Por ultimo te presento al PsyTron
+      time: 3.0
+    - 0: " "
+      time: 5.0
+      unskip:
+    - 2: Unidad remota de enlace psiquico con capacidad de combate urbano
+      time: 5.0
+      unskip:
+    - 2: "Tecnicamente puede acelerar a mas de 300 Km en 6 segundos \n soporta impactos de hasta 100 toneladas"
+      time: 5.0
+    - 2: "y tiene disparo con autoaiming, teledirigido por automatizacion neural"
+      time: 5.0
+    - 2: "Ahora mismo reposa sobre su plataforma de carga inalambrica\n con la bateria completa al 100% y una autonomia de 15 minutos"
+      time: 5.0
+    - 1: Wow
+    - 2: "Tu mision es pilotear esto y patearle el trasero a esas cosas\n que estan en la calle fuera de control"
+      time: 5.0
+    - 2: Eso es todo y mas que suficiente por ahora
+    - 2: Alguna pregunta?
+      time: 4.0
+    - 1: Bueno, cuando empezamos el trabajo?
+      time: 4.0
+    - StopMusic:
+    - FadeOut: RechargeStation
+    - 2: Ahora mismo!
+      time: 5.0
+      unskip:
+    - CleanUp: All
+     

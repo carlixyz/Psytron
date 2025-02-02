@@ -132,6 +132,7 @@ bool Player::ApplyDamage()
 		const Vector2 explotion(Position.x + FrameOutput.width * 0.5f, Position.y + FrameOutput.height * 0.5f);
 		Particles::Get().Create(explotion, BehaviourType::EExplotion);
 		Audio::Get().PlaySound("Data/Sound/Explode.wav");
+		Audio::Get().PlaySound("Data/Sound/fx/game-over-classic.mp3");
 		Active = false;
 	}
 	return true;

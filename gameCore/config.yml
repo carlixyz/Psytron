@@ -11,22 +11,8 @@
       _DebugMode: false
       _SkipIntro: false
   Resources:
-    Language: Spanish
-    DialogFile: Data/intro.yml
-    Material:
-     _name: Test
-     _effect: Simple
-     _technique: Technique0
-    Scene:
-     - _name: Dragon
-       _file: ./Src/Data/Scene/dragonsmall.DAE
-       _info: staticModel
-     - _name: LoadFailed
-       _file: ./Src/Data/Scene/fail.DAE
-       _info: staticModel
-     - _name: Ring
-       _file: ./Src/Data/Scene/RingO.dae
-       _info: staticModel
+    DialogFile: Data/intro.yml      # use this file for English version
+    # DialogFile: Data/prologo.yml  # uncomment this  for Spanish version
     Font:
       _name: Font1
       _file: ./Src/Data/Fonts/Test1.fnt

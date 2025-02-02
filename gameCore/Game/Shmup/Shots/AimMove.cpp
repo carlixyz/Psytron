@@ -2,6 +2,8 @@
 #include <raylib-cpp.hpp>
 #include <raymath.h>
 #include "../../../Graphics/Graphics.h"
+#include "../../../Audio/Audio.h"
+
 
 void AimMove::DoInit()
 {
@@ -30,6 +32,7 @@ void AimMove::DoInit()
 			BulletOwner->Position.y - ColliderSide * 0.5f,
 			ColliderSide, ColliderSide
 		};
+
 	}
 }
 

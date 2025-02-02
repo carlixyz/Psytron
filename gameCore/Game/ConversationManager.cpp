@@ -648,9 +648,9 @@ void ConversationManager::Update()
 
 		CharIndex++;
 			
-		if (IsKeyPressed(KEY_UP) && ChooseOption > 0)
+		if ((IsKeyPressed(KEY_W) || IsKeyPressed(KEY_UP)) && ChooseOption > 0)
 			ChooseOption--;
-		if (IsKeyPressed(KEY_DOWN) && ChooseOption < (DisplayedChildren.size() - 1))
+		if ((IsKeyPressed(KEY_S) ||  IsKeyPressed(KEY_DOWN)) && ChooseOption < (DisplayedChildren.size() - 1))
 			ChooseOption++;
 		if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE))
 		{			
