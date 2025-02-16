@@ -8,7 +8,7 @@ Characters:
   6: Amber  # Afro Lady
   7: Lager  # Cool Guy
   8: Honey  # Funny Girl
-  9: AnchorGirl
+  9: Reporter
 
 
 Setup:
@@ -207,7 +207,7 @@ IntroSchool:
   - 3: Mhhh
     time: 6.0
   - MoveRight: Ginger2
-  - 3: "There's Ginger coming out... \nI think you should talk to her now..."
+  - 3: "There's Ginger coming out... I think you should talk to her now..."
     time: 6.0
   - 1: What what? I have no idea what you're saying
   - 1: And I have to go now, I'm running late...
@@ -238,7 +238,7 @@ GameOfLove:
   - 1: Uh yeah right...
   - 4: I mean, the year is ending, last class and then goodbye!
   - 1: «Wait, did he say goodbye?»
-  - 1: «I have to think of something to talk to him about!»
+  - 1: «I have to think of something to talk to her about!»
   - 1: "«...»"
     time: 2.0
     unskip:
@@ -279,7 +279,7 @@ GameOfWar:
     - MoveLeft: Porter
     - 5: Hey, what's going on here? What are you talking about?
     - 1: "..."
-    - 5: "Wow, wow, you guys are friends? \n I didn't know you already knew each other, huh"
+    - 5: Wow, wow, you guys are friends? I didn't know you already knew each other, huh
     - 1: Ehhh...
     - 5: Hahaha, just kidding, calm down, relax kiddo.
     - MoveCenter: Amber
@@ -288,7 +288,7 @@ GameOfWar:
     - MoveLeft: Honey
     - 8: I think he's trying to be a bully again
     - 5: no, well, it's not like that...
-    - 8: "Porter, don't even think about it, \nplease save us the embarrassment!"
+    - 8: Porter, don't even think about it, please save us the embarrassment!
     - 1: «Mhhh I have to be careful with my words»
     - 5: Calm down, calm down, I'm just joking a little, sorry...
     - 6: Ok but don't do it anymore...
@@ -311,10 +311,10 @@ GameOfWar:
     - 4: Bye.
     - StopMusic:
     - FadeOut: Ginger
-    - 1: «Oh no, no, he's leaving...»
-    - 1: «He's already gone, because I'm so slow»
+    - 1: «Oh no, no, She's leaving...»
+    - 1: «She's already gone, why I'd have to be so slow»
     - FadeOut: School
-    - 1: But hey, I have no choice, I have to work...
+    - 1: Oh well, I have no choice, I have to work...
       time: 2.0
       unskip:
     - GoTo: MyFirstJob
@@ -335,18 +335,18 @@ MyFirstJob:
     - FadeIn: Ale
     - 1: Now that I think about it, I could have tried to talk a little more...
       time: 4.0
-    - 1: I could have asked him what he was going to do in the summer...
+    - 1: I could have asked what She was going to do in the summer...
       time: 5.0
-    - 1: "Or maybe what he was going to do next year... \nmaybe he's looking for a job also..."
+    - 1: "Or maybe what She was going to do next year... \nmaybe She's looking for a job also..."
       time: 6.0
     - 1: "Ha, but what am I saying?"
-    - 1: "He probably already has the future figured out."
+    - 1: "She probably already has the future figured out."
     - 1: "But well, these things happen."
       time: 3.0
     - 1: "and there's no point in thinking about it anymore now."
     - MoveRightOut: Ale
     - SetLeft: TrackClose
-    - 1: "Yes, I did what I could, I had no alternative, I'm running late."
+    - 1: "Yes, I did what I could and had no alternative, I was running late."
     - 1: "It's my first day at work and the truth is, I need money."
     - FadeOut: NightCity
     - ScrollRightEnd: TrackClose
@@ -367,7 +367,7 @@ MyFirstJob:
     - 1: I think this was the logo that identifies the company
     - 1: Although it is not very clear who the owners are
       time: 3.0
-    - 1: "I don't know why in the instructions \n they insisted on so much confidentiality"
+    - 1: I don't know why they insisted on so much confidentiality
     - 1: What a mysterious thing...
       time: 3.0
     - 1: This is all very strange, really
@@ -388,7 +388,7 @@ MyFirstJob:
         - Option:
             - 1: Decline the invitation politely
             - 1: I don't know, this place and everything seems too suspicious...
-            - 0: "Don't be stupid, as if we were selling drugs, \neverything is legal here"
+            - 0: "Don't be stupid, as if we were selling drugs,\n everything is legal here"
             - 1: "..."
             - 0: Come on, stop wasting time and hurry up!
             - 0: I don't have all day!
@@ -462,7 +462,7 @@ QuickSpecs:
       time: 3.0
     - 1: Strange sensations?
       time: 3.0
-    - 2: "Uhh Yeah, yeah... like seeing other people's memories \n or maybe hallucinations..."
+    - 2: Uhh Yeah... like other people's memories or maybe hallucinations...
       time: 4.0
     - 2: But remember that none of that is real.
       time: 2.0
@@ -482,7 +482,7 @@ QuickSpecs:
       time: 4.0
     - 1: "Ok"
       time: 3.0
-    - 2: So, is everything clear up to here or do you need me to repeat something?
+    - 2: "So, is everything clear up to here? \n or do you need me to repeat everything?"
     - ChooseTalk:
         - Option:
             - 1: Yes sir, everything is crystal clear
