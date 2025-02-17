@@ -3,7 +3,7 @@
 
 ## Images
 
-![Your job is to control a hot robot.](/works_17.png "destroy everything on the screen!")
+[![Your job is to control a hot robot.](/works_17.png)](https://www.sunhouse.com.ar/games/Psytron/Psytron.html "Go to game section on sunhouse.com.ar")
 
 ## Summary
 
