@@ -12,7 +12,7 @@ You can change the language setup to Spanish by uncommenting the line _"DialogFi
 ## Links
 
 A full running build of the game can be found here 
-[Psytron.Zip](https://drive.google.com/file/d/1MwiKKg_xmkjoCQsSBUNAeMbdteO-aVVh/view?usp=drive_link).
+[Psytron.Zip](https://drive.google.com/file/d/1U1FQ0cYy9pTyFm2FecHVtEDDuH8XZdY-/view?usp=sharing).
 
 ## Inputs:
 
